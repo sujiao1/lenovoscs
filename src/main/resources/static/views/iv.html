@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Procument</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../views/css/container.css" type="text/css">
+    <!--&lt;!&ndash; 引入样式 &ndash;&gt;
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    &lt;!&ndash; 引入组件库 &ndash;&gt;
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+
+        body{
+            font:15px/1.3 'Open Sans', sans-serif;
+            color: #5e5b64;
+            text-align:center;
+        }
+
+        a, a:visited {
+            outline:none;
+            color:#389dc1;
+        }
+
+        a:hover{
+            text-decoration:none;
+        }
+
+        section, footer, header, aside, nav{
+            display: block;
+        }
+        .img{
+            width: 20px;
+            height: 20px;
+        }
+
+        .upload{
+            width: 300px;
+            height: 30px;
+        }
+
+        .bg{
+            background-color: #cccccc;
+        }
+        /*-------------------------
+                    导航栏属性
+                --------------------------*/
+
+        nav{
+            display:inline-block;
+            margin:60px auto 45px;
+            background-color:#5597b4;
+            box-shadow:0 1px 1px #ccc;
+            border-radius:2px;
+        }
+
+        nav a{
+            display:inline-block;
+            padding: 18px 100px;
+            color:#fff !important;
+            font-weight:bold;
+            font-size:16px;
+            text-decoration:none !important;
+            line-height:1;
+            text-transform: uppercase;
+            background-color:transparent;
+
+            -webkit-transition:background-color 0.25s;
+            -moz-transition:background-color 0.25s;
+            transition:background-color 0.25s;
+        }
+
+        nav a:first-child{
+            border-radius:2px 0 0 2px;
+        }
+
+        nav a:last-child{
+            border-radius:0 2px 2px 0;
+        }
+
+        nav.home .home,
+        nav.Procument .Procument,
+        nav.ASN .ASN,
+        nav.IV .IV{
+            background-color:#e35885;
+        }
+
+        p{
+            font-size:22px;
+            font-weight:bold;
+            color:#7d9098;
+        }
+
+        p b{
+            color:#ffffff;
+            display:inline-block;
+            padding:5px 10px;
+            background-color:#c4d7e0;
+            border-radius:2px;
+            text-transform:uppercase;
+            font-size:18px;
+        }
+
+        /*-------------------------
+                搜索输入框
+            --------------------------*/
+
+        .bar{
+            background-color:#5c9bb7;
+
+            background-image:-webkit-linear-gradient(top, #5c9bb7, #5392ad);
+            background-image:-moz-linear-gradient(top, #5c9bb7, #5392ad);
+            background-image:linear-gradient(top, #5c9bb7, #5392ad);
+
+            box-shadow: 0 1px 1px #ccc;
+            border-radius: 2px;
+            width: 400px;
+            padding: 14px;
+            margin: 45px auto 20px;
+            position:relative;
+        }
+
+        .bar input{
+            background:#fff no-repeat 13px 13px;
+            background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkU5NEY0RTlFMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkU5NEY0RTlGMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTk0RjRFOUMxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTk0RjRFOUQxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4DjA/RAAABK0lEQVR42pTSQUdEURjG8dOY0TqmPkGmRcqYD9CmzZAWJRHVRIa0iFYtM6uofYaiEW2SRJtEi9YxIklp07ZkWswu0v/wnByve7vm5ee8M+85zz1jbt9Os+WiGkYdYxjCOx5wgFeXUHmtBSzpcCGa+5BJTCjEP+0nKWAT8xqe4ArPGEEVC1hHEbs2oBwdXkM7mj/JLZrad437sCGHOfUtcziutuYu2v8XUFF/4f6vMK/YgAH1HxkBYV60AR31gxkBYd6xAeF3VzMCwvzOBpypX8V4yuFRzX2d2gD/l5yjH4fYQEnzkj4fae5rJulF2sMXVrAsaTWttRFu4Osb+1jEDT71/ZveyhouTch2fINQL9hKefKjuYFfuznXWzXMTabyrvfyIV3M4vhXgAEAUMs7K0J9UJAAAAAASUVORK5CYII=);
+
+            border: none;
+            width: 100%;
+            line-height: 19px;
+            padding: 11px 0;
+
+            border-radius: 2px;
+            box-shadow: 0 2px 8px #c4c4c4 inset;
+            text-align: left;
+            font-size: 14px;
+            font-family: inherit;
+            color: #738289;
+            font-weight: bold;
+            outline: none;
+            text-indent: 40px;
+        }
+
+        ul{
+            list-style: none;
+            width: 428px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        ul li{
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        ul li img{
+            width:60px;
+            height:60px;
+            float:left;
+            border:none;
+        }
+
+        ul li p{
+            margin-left: 75px;
+            font-weight: bold;
+            padding-top: 12px;
+            color:#6e7a7f;
+        }
+
+        .page{
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!--搜索框-->
+    <!--<div class="row">
+        <br><br>
+        <div class="col-xs-2" id="logo">
+            <img v-bind:src="imageU">
+        </div>
+        <div class="col-xs-10">
+            <form id="search" v-cloak>
+                <div class="bar">
+                    &lt;!&ndash; searchString 模型与文本域创建绑定 &ndash;&gt;
+
+                    <input type="text" v-model="searchString" placeholder="输入搜索内容" />
+                </div>
+
+                &lt;!&ndash;<ul>
+                    &lt;!&ndash; 循环输出数据 &ndash;&gt;
+
+                    <li v-for="article in filteredArticles">
+                        <a v-bind:href="article.url"><img v-bind:src="article.image" /></a>
+                        <p>{{article.title}}</p>
+                    </li>
+                </ul>&ndash;&gt;
+
+            </form>
+        </div>
+    </div>-->
+    <!--导航条-->
+    <div id="bar" class="row">
+        <!-- 激活的菜单样式为  active 类 -->
+        <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
+        <nav v-bind:class="active">
+
+            <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
+
+            <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
+            <a href="procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
+            <a href="asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
+            <a href="iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+        </nav>
+
+        <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
+
+        <!--<p>您选择了 <b>{{active}} 菜单</b></p>-->
+    </div>
+    <!--home标题--><!--selected下拉框-->
+    <div class="row">
+        <div class="col-xs-1">
+            <img v-bind:src="../../../static/images/upload.png">
+        </div>
+        <div class="col-xs-2">
+            <h5>order</h5><h3>IV#</h3>
+        </div>
+        <div class="col-xs-1"><p>View:</p></div>
+        <div class="col-xs-1">
+            <div id="app">
+                <select v-model="selected" name="POSelect" id="input_select">
+                    <option value="">All</option>
+                    <option value="Product Line-SMP">Product Line-SMP</option>
+                    <option value="Product Line-TAB">Product Line-TAB</option>
+                    <option value="Status">Status</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <button onclick="selectAll()">go!</button>
+        </div>
+        <div class="col-xs-4"></div>
+    </div>
+    <!--横线-->
+    <div class="row">
+        <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+    </div>
+    <!--Po display-->
+    <div class="row">
+        <div class="col-xs-2"><p>PO Display</p></div>
+        <div class="col-xs-3"></div>
+        <div class="col-xs-2"><!--Recent Order--></div>
+        <div class="col-xs-2">
+            <!--<div id="selected">
+                <select v-model="selected" name="fruit">
+                    <option value="">Recently Upload</option>
+                    <option value="Recently Viewed">Recently Viewed</option>
+                    <option value="Recently Modified">Recently Modified</option>
+                </select>
+            </div>-->
+        </div>
+        <!--<div class="col-xs-1">
+            <button onclick="window.location.href='ivdetail.html'">new</button>
+        </div>-->
+    </div>
+    <br>
+    <!--table display-->
+    <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-11">
+            <table class="table-bordered table table-hover" id="IV_List_table">
+                <thead>
+                <tr>
+                    <th>IV#</th>
+                    <th>Sold to</th>
+                    <th>IV Data</th>
+                    <th>Net Due Data</th>
+                    <th>Status</th>
+                    <th>action</th>
+                </tr>
+                </thead>
+                <tbody id="myBody">
+                <tr v-for="list in lists">
+                    <td v-text="list.ponumber" id="ponumber"></td>
+                    <td v-text="list.soldTo"></td>
+                    <td v-text="list.poDate"></td>
+                    <td v-text="list.netDueDate"></td>
+                    <td v-text="list.flag"></td>
+                    <td><button onclick="EditPOSelect(this)" type="button">Information</button></td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--显示分页信息-->
+    <!--<div class="row">
+        <div class="col-xs-6" id="page_info_area">
+
+        </div>
+        <div class="col-xs-6">
+            <nav aria-label="Page navigation" id="page_nav_area">
+                <ul class="pagination">
+
+                </ul>
+            </nav>
+        </div>
+    </div>-->
+</div>
+
+<script>
+    // 创建一个新的 Vue导航条 实例
+    var bar = new Vue({
+        // DOM 元素，挂载视图模型
+        el: '#bar',
+
+        // 定义属性，并设置初始值
+        data: {
+            active: 'home'
+        },
+
+        // 点击菜单使用的函数
+        methods: {
+            makeActive: function(item){
+                // 模型改变，视图会自动更新
+                this.active = item;
+            }
+        }
+    });
+
+    //创建一个新的Vue搜索框实例
+    var search = new Vue({
+        el: '#search',
+        data: {
+            searchString: "",
+
+            // 数据模型，实际环境你可以根据 Ajax 来获取
+
+            articles: [
+                {
+                    "title": "What You Need To Know About CSS Variables",
+                    "url": "https://www.runoob.com/css/css-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css.png"
+                },
+                {
+                    "title": "Freebie: 4 Great Looking Pricing Tables",
+                    "url": "https://www.runoob.com/html/html-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                },
+                {
+                    "title": "20 Interesting JavaScript and CSS Libraries for February 2016",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Quick Tip: The Easiest Way To Make Responsive Headers",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Learn SQL In 20 Minutes",
+                    "url": "https://www.runoob.com/sql/sql-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/sql.png"
+                },
+                {
+                    "title": "Creating Your First Desktop App With HTML, JS and Electron",
+                    "url": "https://www.runoob.com/js/js-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                }
+            ]
+        },
+        computed: {
+            // 计算数学，匹配搜索
+            filteredArticles: function () {
+                var articles_array = this.articles,
+                    searchString = this.searchString;
+
+                if(!searchString){
+                    return articles_array;
+                }
+
+                searchString = searchString.trim().toLowerCase();
+
+                articles_array = articles_array.filter(function(item){
+                    if(item.title.toLowerCase().indexOf(searchString) !== -1){
+                        return item;
+                    }
+                })
+
+                // 返回过来后的数组
+                return articles_array;;
+            }
+        }
+    });
+
+    new Vue({
+        el: '#app',
+        data: {
+            selected: ''
+        }
+    })
+
+    new Vue({
+        el: '#selected',
+        data: {
+            selected: ''
+        }
+    })
+
+    //初始化
+    $(function () {
+        $.ajax({
+            url:"../views/getAllIV",
+            type: "POST",
+            success:function (result) {
+                new Vue({
+                    el:"#IV_List_table",
+                    data:{
+                        lists:result.extend.poList
+                    }
+
+                })
+            }
+        });
+    });
+
+    var totalRecord,currentPage;
+    //var inputField = document.getElementById("input_select");
+    /*function selectAll() {
+        to_page(1);
+    };*/
+
+    //解析显示分页信息
+    function build_page_info(result) {
+        $("#page_info_area").empty();
+        $("#page_info_area").append("当前为第" + result.extend.pageInfo.pageNum + "页，共" + result.extend.pageInfo.pages +
+            "页,共" + result.extend.pageInfo.total + "条记录");
+        totalRecord = result.extend.pageInfo.total;
+        currentPage = result.extend.pageInfo.pageNum;
+    }
+
+    //解析显示分页条
+    function build_pages_nav(result) {
+        $("#page_nav_area").empty();
+        var ul = $("<ul></ul>").addClass("pagination");
+        //page_nav_area
+        var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href", "#"));
+        var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;").attr("href", "#"));
+
+        if (result.extend.pageInfo.hasPreviousPage == false) {
+            firstPageLi.addClass("disabled");
+            prePageLi.addClass("disabled");
+        } else {
+            firstPageLi.click(function () {
+                to_page(1);
+            });
+
+            prePageLi.click(function () {
+                to_page(result.extend.pageInfo.pageNum - 1);
+            });
+        }
+
+
+        var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;").attr("href", "#"));
+        var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href", "#"));
+
+        if (result.extend.pageInfo.hasNextPage == false) {
+            nextPageLi.addClass("disabled");
+            lastPageLi.addClass("disabled");
+        } else {
+            nextPageLi.click(function () {
+                to_page(result.extend.pageInfo.pageNum + 1);
+            });
+
+            lastPageLi.click(function () {
+                to_page(result.extend.pageInfo.pages);
+            });
+        }
+
+
+        ul.append(firstPageLi).append(prePageLi);
+        $.each(result.extend.pageInfo.navigatepageNums, function (index, item) {
+            var numLi = $("<li></li>").append($("<a></a>").append(item));
+            if (result.extend.pageInfo.pageNum == item) {
+                numLi.addClass("active");
+            }
+            numLi.click(function () {
+                to_page(item);
+            });
+            ul.append(numLi);
+        });
+        ul.append(nextPageLi).append(lastPageLi);
+        var navEle = $("<nav></nav>").append(ul);
+
+        navEle.appendTo("#page_nav_area");
+    }
+
+    function build_PO_table(result) {
+        //清空table表格
+        $("#PO_List_table tbody").empty();
+
+        // var ListPO = result.extend.pageInfo.list;
+        console.log(111111);
+        console.log(ListPO);
+        new Vue({
+            el:'#PO_List_table',
+            data:{
+                lists:result
+            }
+        })
+    }
+
+    //将信息在表格中显示
+    function to_page(pn) {
+        console.log(pn);
+        var ajax = $.ajax({
+            url: "../lenovoscs_Web_exploded/views/getAllPO",
+            data:"pn="+pn,
+            type:"GET",
+            success:function (result,state) {
+                new Vue({
+                    el:'#PO_List_table',
+                    data:{
+                        lists:result.extend.pageInfo.list
+                    }
+                })
+                console.log(result);
+                //build_PO_table(result);
+                build_page_info(result);
+                build_pages_nav(result);
+            }
+        });
+    }
+
+    //编辑PO信息
+    /*function EditPOSelect() {
+        /!*编辑单头信息*!/
+        var Top_Edit = document.getElementsByClassName("Top_Edit");
+
+        for (var i = 0; i < Top_Edit.length; i++) {
+
+            Top_Edit[i].index = i;
+
+            Top_Edit[i].onclick = function () {
+
+                var table = document.getElementById("PO_List_table");
+
+                /!*获取选中的行 *!/
+                var child = table.getElementsByTagName("tr")[this.index+1];
+                console.log("ssssssffsfsfdsf"+this.index)
+                /!*获取选择行的所有列*!/
+                var SZ_col = child.getElementsByTagName("td");
+                var span_col = child.getElementsByTagName("span");
+
+                var ponumber = span_col[0].innerHTML;
+                console.log("dfsfsdfsfsf"+ponumber);
+                window.location.href = encodeURI("views/podetail.html?value=" + ponumber);;
+
+            }
+        }
+
+    }*/
+
+    function EditPOSelect(obj) {
+        var $td = $(obj).parents('tr').children('td');
+        var ivnumber = $td.eq(0).text();
+        window.location.href = encodeURI("ivdetail.html?value=" + ivnumber);
+    }
+
+</script>
+</body>
+</html>

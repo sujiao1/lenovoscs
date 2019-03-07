@@ -1,0 +1,134 @@
+<div class="container">
+
+    <div class="row">
+        <br><br>
+        <div class="col-xs-2">
+            <img v-bind:src="../../../static/images/logo.png">
+        </div>
+        <div class="col-xs-10">
+            <form id="search" v-cloak>
+                <div class="bar">
+                    <!-- searchString 模型与文本域创建绑定 -->
+
+                    <input type="text" v-model="searchString" placeholder="输入搜索内容" />
+                </div>
+
+                <!--<ul>
+                    &lt;!&ndash; 循环输出数据 &ndash;&gt;
+
+                    <li v-for="article in filteredArticles">
+                        <a v-bind:href="article.url"><img v-bind:src="article.image" /></a>
+                        <p>{{article.title}}</p>
+                    </li>
+                </ul>-->
+
+            </form>
+        </div>
+    </div>
+
+    <div id="bar" class="row">
+        <!-- 激活的菜单样式为  active 类 -->
+        <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
+        <div class="col-xs-12">
+            <nav v-bind:class="active" v-on:click.prevent>
+
+                <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
+
+                <a href="#" class="home" v-on:click="makeActive('home')">Home</a>
+                <a href="#" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
+                <a href="#" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
+                <a href="#" class="IV" v-on:click="makeActive('IV')">IV</a>
+            </nav>
+        </div>
+
+        <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
+
+        <!--<p>您选择了 <b>{{active}} 菜单</b></p>-->
+    </div>
+</div>
+<script>
+    // 创建一个新的 Vue导航条 实例
+    var bar = new Vue({
+        // DOM 元素，挂载视图模型
+        el: '#bar',
+
+        // 定义属性，并设置初始值
+        data: {
+            active: 'home'
+        },
+
+        // 点击菜单使用的函数
+        methods: {
+            makeActive: function(item){
+                // 模型改变，视图会自动更新
+                this.active = item;
+            }
+        }
+    });
+
+    //创建一个新的Vue搜索框实例
+    var search = new Vue({
+        el: '#search',
+        data: {
+            searchString: "",
+
+            // 数据模型，实际环境你可以根据 Ajax 来获取
+
+            articles: [
+                {
+                    "title": "What You Need To Know About CSS Variables",
+                    "url": "https://www.runoob.com/css/css-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css.png"
+                },
+                {
+                    "title": "Freebie: 4 Great Looking Pricing Tables",
+                    "url": "https://www.runoob.com/html/html-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                },
+                {
+                    "title": "20 Interesting JavaScript and CSS Libraries for February 2016",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Quick Tip: The Easiest Way To Make Responsive Headers",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Learn SQL In 20 Minutes",
+                    "url": "https://www.runoob.com/sql/sql-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/sql.png"
+                },
+                {
+                    "title": "Creating Your First Desktop App With HTML, JS and Electron",
+                    "url": "https://www.runoob.com/js/js-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                }
+            ]
+        },
+        computed: {
+            // 计算数学，匹配搜索
+            filteredArticles: function () {
+                var articles_array = this.articles,
+                    searchString = this.searchString;
+
+                if(!searchString){
+                    return articles_array;
+                }
+
+                searchString = searchString.trim().toLowerCase();
+
+                articles_array = articles_array.filter(function(item){
+                    if(item.title.toLowerCase().indexOf(searchString) !== -1){
+                        return item;
+                    }
+                })
+
+                // 返回过来后的数组
+                return articles_array;;
+            }
+        }
+    });
+
+</script>

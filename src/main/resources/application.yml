@@ -1,0 +1,11 @@
+mapper:
+  mappers:
+    com.lenovo.lenovoscs.dao
+  not-empty: false
+identity: MYSQL
+
+#pagehelper:
+#  helper-dialect: mysql
+#  reasonable: true
+#  support-methods-arguments: true
+#  params: count=countSql

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html xmlns:v-for="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>procumnet</title>
+		<link rel="stylesheet" href="../css/amazeui.css" />
+        <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../views/css/container.css" type="text/css">-->
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../css/core.css" />
+		<link rel="stylesheet" href="../css/menu.css" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/admin.css" />
+		<link rel="stylesheet" href="../css/page/typography.css" />
+		<link rel="stylesheet" href="../css/page/form.css" />
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <style>
+        li{
+            float: left;
+            margin-left: 50px;
+        }
+    </style>
+    </head>
+	<body>
+		<!-- Begin page -->
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-topbar-left am-hide-sm-only">
+                <a href="index.html" class="logo"><span>Lenovo</span></span><i class="zmdi zmdi-layers"></i></a>
+            </div>
+
+			<div class="contain">
+				<ul class="am-nav am-navbar-nav am-navbar-left">
+                    <li><a href="../hello" class="home" v-on:click="makeActive('home')"><h4 class="page-title">Index</h4></a></li>
+                    <li><a href="procument.html" class="Procument" v-on:click="makeActive('Procument')"><h4 class="page-title">Procument</h4></a></li>
+                    <li><a href="asn.html" class="ASN" v-on:click="makeActive('ASN')"><h4 class="page-title">ASN</h4></a></li>
+                    <li><a href="iv.html" class="IV" v-on:click="makeActive('IV')"><h4 class="page-title">IV</h4></a></li>
+				</ul>
+
+				<!--<ul class="am-nav am-navbar-nav am-navbar-right">
+					&lt;!&ndash;<li class="inform"><i class="am-icon-bell-o" aria-hidden="true"></i></li>&ndash;&gt;
+					<li class="hidden-xs am-hide-sm-only">
+                        <form role="search" class="app-search">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <a href=""><img src="../img/search.png"></a>
+                        </form>
+                    </li>
+				</ul>-->
+			</div>
+		</header>
+		<!-- end page -->
+
+		<div class="admin">
+		<div class="content-page">
+			<!-- Start content -->
+			<div class="content">
+				<div class="card-box">
+					<!-- Row start -->
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-6">
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" class="am-btn am-btn-default" onclick="window.location.href='podetail.html'">
+                                        <span class="am-icon-plus"></span> Add
+                                    </button>
+                                    <button type="button" class="am-btn am-btn-default">
+                                        <a href="../views/exportTemplate">
+                                            <span class="am-icon-cloud-download"></span> Download Template
+                                        </a>
+                                    </button>
+                                    <button type="button" class="am-btn am-btn-default">
+                                        <a href="../views/export">
+                                            <span class="am-icon-cloud-download"></span> Download
+                                        </a>
+                                    </button>
+                                    <form id="excelUpload" action="../views/import" enctype="multipart/form-data" method="post">
+                                        <input id="filename" class="upload" type="file" name="filename">
+                                        <button id="excel_button"  onclick="upload()" class="am-btn am-btn-default">
+                                            <span class="am-icon-cloud-upload"></span> Upload
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="am-u-sm-12 am-u-md-3">
+                            <!--<div class="am-input-group am-input-group-sm">
+                              <input type="text" class="am-form-field">
+                            <span class="am-input-group-btn">
+                              <button class="am-btn am-btn-default" type="button">搜索</button>
+                            </span>
+                            </div>-->
+                            <ul class="am-nav am-navbar-nav am-navbar-right">
+                                <!--<li class="inform"><i class="am-icon-bell-o" aria-hidden="true"></i></li>-->
+                                <li class="hidden-xs am-hide-sm-only">
+                                    <form role="search" class="app-search">
+                                        <input type="text" placeholder="Search..." class="form-control">
+                                        <a href=""><img src="../img/search.png"></a>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Row end -->
+
+					  <!-- Row start -->
+					  	<div class="am-g">
+        <div class="am-u-sm-12">
+            <table class="am-table am-table-striped am-table-hover table-main" id="PO_List_table">
+              <thead>
+              <tr>
+                  <!--<th class="table-check"><input type="checkbox" /></th>-->
+                  <th class="table-id">PO#</th>
+                  <th class="table-title">Ship to</th>
+                  <th class="table-type">Sold to</th>
+                  <th class="table-author am-hide-sm-only">Order Type</th>
+                  <th class="table-date am-hide-sm-only">Drop Order Time</th>
+                  <th class="table-date am-hide-sm-only">ConditionItem</th>
+                  <th class="table-set">Remark</th>
+                  <th class="table-set">Carrier</th>
+                  <th class="table-set">Custom</th>
+                  <th class="table-set">action</th>
+              </tr>
+              </thead>
+              <tbody id="myBody">
+              <tr v-for="list in lists">
+                  <td v-text="list.ponumber" id="ponumber"></td>
+                  <td v-text="list.shipTo"></td>
+                  <td v-text="list.soldTo"></td>
+                  <td v-text="list.orderType"></td>
+                  <td v-text="list.dropOrderTime"></td>
+                  <td v-text="list.conditionItem"></td>
+                  <td v-text="list.remark"></td>
+                  <td v-text="list.carrier"></td>
+                  <td v-text="list.customer"></td>
+                  <td>
+                  <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <button class="am-btn am-btn-default am-btn-xs am-text-secondary" onclick="EditPOSelect(this)">
+                          <span class="am-icon-pencil-square-o"></span> edit
+                      </button>
+                      <!--<button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>
+                      <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"><span class="am-icon-trash-o"></span> 删除</button>
+                    -->
+                    </div>
+                  </div>
+                </td>
+                  <!--<td id="ponumber"><a v-bind="{title:list.ponumber}">
+                            <span class=grid-check-box>{{list.ponumber}}</span>
+                        </a>
+                        </td>
+                        <td><a v-bind="{title:list.shipTo}">{{list.shipTo}}</a></td>
+                        <td><a v-bind="{title:list.soldTo}">{{list.soldTo}}</a></td>
+                        <td><a v-bind="{title:list.orderType}">{{list.orderType}}</a></td>
+                        <td><a v-bind="{title:list.dropOrderTime}">{{list.dropOrderTime}}</a></td>
+                        <td><a v-bind="{title:list.conditionItem}">{{list.conditionItem}}</a></td>
+                        <td><a v-bind="{title:list.remark}">{{list.remark}}</a></td>
+                        <td><a v-bind="{title:list.carrier}">{{list.carrier}}</a></td>
+                        <td><a v-bind="{title:list.customer}">{{list.customer}}</a></td>
+                        &lt;!&ndash;<td><a @onclick="EditPOSelect">Edit</a></td>&ndash;&gt;
+                        <td><button onclick="EditPOSelect()" id="editButton" type="button" class="Top_Edit" onload='init()'>Edit</button></td>
+
+                    -->
+              </tr>
+              </tbody>
+            </table>
+            <div class="am-cf">
+              共 15 条记录
+              <div class="am-fr">
+                <ul class="am-pagination">
+                  <li class="am-disabled"><a href="#">«</a></li>
+                  <li class="am-active"><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li><a href="#">»</a></li>
+                </ul>
+              </div>
+            </div>
+            <hr />
+            <!--显示分页信息-->
+            <!--<div class="row">
+                <div class="col-xs-6" id="page_info_area">
+
+                </div>
+                <div class="col-xs-6">
+                    <nav aria-label="Page navigation" id="page_nav_area">
+                        <ul class="pagination">
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>-->
+
+
+        </div>
+      </div><!-- Row end -->
+                </div>
+            </div>
+        </div>
+		</div>
+		<!-- end right Content here -->
+		<!--</div>-->
+		</div>
+		</div>
+		<!-- navbar -->
+		<a href="admin-offcanvas" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+            <!--<i class="fa fa-bars" aria-hidden="true"></i></a>-->
+
+    <script>
+        $(function () {
+            to_page(1);
+        });
+        //查询PO信息
+        function to_page(pn) {
+            console.log(pn);
+            var ajax = $.ajax({
+                url: "../views/getAllPO",
+                data:"pn="+pn,
+                type:"GET",
+                success:function (result,state) {
+                    new Vue({
+                        el:'#PO_List_table',
+                        data:{
+                            lists:result.extend.pageInfo.list
+                        }
+                    });
+                    console.log(result);
+                    //build_PO_table(result);
+                    build_page_info(result);
+                    build_pages_nav(result);
+                }
+            });
+        }
+
+        //解析显示分页信息
+        function build_page_info(result) {
+            $("#page_info_area").empty();
+            $("#page_info_area").append("当前为第" + result.extend.pageInfo.pageNum + "页，共" + result.extend.pageInfo.pages +
+                "页,共" + result.extend.pageInfo.total + "条记录");
+            totalRecord = result.extend.pageInfo.total;
+            currentPage = result.extend.pageInfo.pageNum;
+        }
+
+        //解析显示分页条
+        function build_pages_nav(result) {
+            $("#page_nav_area").empty();
+            var ul = $("<ul></ul>").addClass("pagination");
+            //page_nav_area
+            var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href", "#"));
+            var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;").attr("href", "#"));
+
+            if (result.extend.pageInfo.hasPreviousPage == false) {
+                firstPageLi.addClass("disabled");
+                prePageLi.addClass("disabled");
+            } else {
+                firstPageLi.click(function () {
+                    to_page(1);
+                });
+
+                prePageLi.click(function () {
+                    to_page(result.extend.pageInfo.pageNum - 1);
+                });
+            }
+
+
+            var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;").attr("href", "#"));
+            var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href", "#"));
+
+            if (result.extend.pageInfo.hasNextPage == false) {
+                nextPageLi.addClass("disabled");
+                lastPageLi.addClass("disabled");
+            } else {
+                nextPageLi.click(function () {
+                    to_page(result.extend.pageInfo.pageNum + 1);
+                });
+
+                lastPageLi.click(function () {
+                    to_page(result.extend.pageInfo.pages);
+                });
+            }
+
+
+            ul.append(firstPageLi).append(prePageLi);
+            $.each(result.extend.pageInfo.navigatepageNums, function (index, item) {
+                var numLi = $("<li></li>").append($("<a></a>").append(item));
+                if (result.extend.pageInfo.pageNum == item) {
+                    numLi.addClass("active");
+                }
+                numLi.click(function () {
+                    to_page(item);
+                });
+                ul.append(numLi);
+            });
+            ul.append(nextPageLi).append(lastPageLi);
+            var navEle = $("<nav></nav>").append(ul);
+
+            navEle.appendTo("#page_nav_area");
+        }
+
+        function build_PO_table(result) {
+            //清空table表格
+            $("#PO_List_table tbody").empty();
+
+            // var ListPO = result.extend.pageInfo.list;
+            console.log(111111);
+            console.log(ListPO);
+            /*var poListData = result.data;
+            for (var p=0;p<poListData.length;p++){
+                var pon = getDataPO(poListData[p]);
+                tbody.appendChild(pon);
+            }
+
+            function getDataPO(poo){
+                var poData = document.createElement("tr");
+                var ponumber = document.createElement("td");
+                ponumber.innerHTML = poo.ponumber;
+                poData.appendChild(ponumber);
+                var shipTo = document.createElement("td");
+                shipTo.innerHTML = poo.shipTo;
+                poData.appendChild(shipTo);
+                var soldTo = document.createElement("td");
+                soldTo.innerHTML = poo.soldTo;
+                poData.appendChild(soldTo);
+                var orderType = document.createElement("td");
+                orderType.innerHTML = poo.orderType;
+                poData.appendChild(orderType);
+                var dropOrderTime = document.createElement("td");
+                dropOrderTime.innerHTML = poo.dropOrderTime;
+                poData.appendChild(dropOrderTime);
+                var conditionItem = document.createElement("td");
+                conditionItem.innerHTML = poo.conditionItem;
+                poData.appendChild(conditionItem);
+                var remark = document.createElement("td");
+                remark.innerHTML = poo.remark;
+                poData.appendChild(remark);
+                var carrier = document.createElement("td");
+                carrier.innerHTML = poo.carrier;
+                poData.appendChild(carrier);
+                var customer = document.createElement("td");
+                customer.innerHTML = poo.customer;
+                poData.appendChild(customer);
+
+            }*/
+            /*$.each(ListPO, function (index, item) {
+                console.log("item"+JSON.stringify(item));
+                var ponumber = $("<td></td>").append(item.ponumber);
+                var shipTo = $("<td></td>").append(item.shipTo);
+                var soldTo = $("<td></td>").append(item.soldTo);
+                var orderType = $("<td></td>").append(item.orderType);
+                var dropOrderTime = $("<td></td>").append(item.dropOrderTime);
+                var conditionItem = $("<td></td>").append(item.conditionItem);
+                var remark = $("<td></td>").append(item.remark);
+                var carrier = $("<td></td>").append(item.carrier);
+                var customer = $("<td></td>").append(item.customer);
+                var editBtn = $("<button></button>").addClass("btn btn-primary btn-sm")
+                    .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("编辑");
+                //为编辑按钮添加一个自定义的属性来表示当前PO的id
+                editBtn.attr("edit-id", item.ponumber);
+                var delBtn = $("<button></button>").addClass("btn btn-danger btn-sm")
+                    .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除");
+                //为删除按钮添加一个自定义的属性来表示当前PO的id
+                delBtn.attr("del-id", item.ponumber);
+                var btnBtn = $("<td></td>").append(editBtn).append(" ").append(delBtn);
+                $("<tr></tr>").append(ponumber).append(shipTo).append(soldTo).append(orderType).append(dropOrderTime)
+                    .append(conditionItem).append(remark).append(carrier).append(customer).append(btnBtn).appendTo("#emps_tables tbody");
+            });*/
+            new Vue({
+                el:'#PO_List_table',
+                data:{
+                    lists:result
+                }
+            })
+        }
+
+        //上传Excel
+        function upload() {
+            var params = $("#excelUpload").serializeArray();
+            $("#excelUpload").ajaxSubmit({
+                method: 'post',
+                data:params,
+                url: '/views/import',
+                async: false,
+                success: function (result) {
+                    if (result) {
+                        var txt = "批量导入成功！";
+                        var option = {
+                            onOk: function () {
+                                window.location.href = "/views/procument.html";
+                            }
+                        };
+                        //window.wxc.xcConfirm(txt, "success", option);
+                    } /*else {
+                    if (data.code == 1) {
+                        var txt = data.msg;
+                        var option = {
+                            onOk: function () {
+                                window.location.href = "/admin/ImportStu.jsp";
+                            }
+                        };
+                        window.wxc.xcConfirm(txt, "error", option);
+                    }
+                }*/
+                }
+            });
+        }
+
+        //编辑po信息
+        function EditPOSelect(obj) {
+            var $td = $(obj).parents('tr').children('td');
+            var ponumber = $td.eq(0).text();
+            window.location.href = encodeURI("podetail.html?value=" + ponumber);;
+        }
+
+    </script>
+        <script type="text/javascript" src="../js/jquery-2.1.0.js" ></script>
+        <script type="text/javascript" src="../js/amazeui.min.js"></script>
+        <script type="text/javascript" src="../js/app.js" ></script>
+        <script type="text/javascript" src="../js/blockUI.js" ></script>
+    </body>
+</html>

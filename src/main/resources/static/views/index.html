@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lenovoscs_Home</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/container.css" type="text/css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+        }
+
+        body{
+            font:15px/1.3 'Open Sans', sans-serif;
+            color: #5e5b64;
+            text-align:center;
+        }
+
+        a, a:visited {
+            outline:none;
+            color:#389dc1;
+        }
+
+        a:hover{
+            text-decoration:none;
+        }
+
+        section, footer, header, aside, nav{
+            display: block;
+        }
+
+        .img{
+            width: 20px;
+            height: 20px;
+        }
+
+        .bg{
+            background-color: #cccccc;
+        }
+        /*-------------------------
+                    导航栏属性
+                --------------------------*/
+
+        nav{
+            display:inline-block;
+            margin:60px auto 45px;
+            background-color:#5597b4;
+            box-shadow:0 1px 1px #ccc;
+            border-radius:2px;
+        }
+
+        nav a{
+            display:inline-block;
+            padding: 18px 100px;
+            color:#fff !important;
+            font-weight:bold;
+            font-size:16px;
+            text-decoration:none !important;
+            line-height:1;
+            text-transform: uppercase;
+            background-color:transparent;
+
+            -webkit-transition:background-color 0.25s;
+            -moz-transition:background-color 0.25s;
+            transition:background-color 0.25s;
+        }
+
+        nav a:first-child{
+            border-radius:2px 0 0 2px;
+        }
+
+        nav a:last-child{
+            border-radius:0 2px 2px 0;
+        }
+
+        nav.home .home,
+        nav.Procument .Procument,
+        nav.ASN .ASN,
+        nav.IV .IV{
+            background-color:#e35885;
+        }
+
+        p{
+            font-size:22px;
+            font-weight:bold;
+            color:#7d9098;
+        }
+
+        p b{
+            color:#ffffff;
+            display:inline-block;
+            padding:5px 10px;
+            background-color:#c4d7e0;
+            border-radius:2px;
+            text-transform:uppercase;
+            font-size:18px;
+        }
+
+        /*-------------------------
+                搜索输入框
+            --------------------------*/
+
+        .bar{
+            background-color:#5c9bb7;
+
+            background-image:-webkit-linear-gradient(top, #5c9bb7, #5392ad);
+            background-image:-moz-linear-gradient(top, #5c9bb7, #5392ad);
+            background-image:linear-gradient(top, #5c9bb7, #5392ad);
+
+            box-shadow: 0 1px 1px #ccc;
+            border-radius: 2px;
+            width: 400px;
+            padding: 14px;
+            margin: 45px auto 20px;
+            position:relative;
+        }
+
+        .bar input{
+            background:#fff no-repeat 13px 13px;
+            background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkU5NEY0RTlFMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkU5NEY0RTlGMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTk0RjRFOUMxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTk0RjRFOUQxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4DjA/RAAABK0lEQVR42pTSQUdEURjG8dOY0TqmPkGmRcqYD9CmzZAWJRHVRIa0iFYtM6uofYaiEW2SRJtEi9YxIklp07ZkWswu0v/wnByve7vm5ee8M+85zz1jbt9Os+WiGkYdYxjCOx5wgFeXUHmtBSzpcCGa+5BJTCjEP+0nKWAT8xqe4ArPGEEVC1hHEbs2oBwdXkM7mj/JLZrad437sCGHOfUtcziutuYu2v8XUFF/4f6vMK/YgAH1HxkBYV60AR31gxkBYd6xAeF3VzMCwvzOBpypX8V4yuFRzX2d2gD/l5yjH4fYQEnzkj4fae5rJulF2sMXVrAsaTWttRFu4Osb+1jEDT71/ZveyhouTch2fINQL9hKefKjuYFfuznXWzXMTabyrvfyIV3M4vhXgAEAUMs7K0J9UJAAAAAASUVORK5CYII=);
+
+            border: none;
+            width: 100%;
+            line-height: 19px;
+            padding: 11px 0;
+
+            border-radius: 2px;
+            box-shadow: 0 2px 8px #c4c4c4 inset;
+            text-align: left;
+            font-size: 14px;
+            font-family: inherit;
+            color: #738289;
+            font-weight: bold;
+            outline: none;
+            text-indent: 40px;
+        }
+
+        ul{
+            list-style: none;
+            width: 428px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        ul li{
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        ul li img{
+            width:60px;
+            height:60px;
+            float:left;
+            border:none;
+        }
+
+        ul li p{
+            margin-left: 75px;
+            font-weight: bold;
+            padding-top: 12px;
+            color:#6e7a7f;
+        }
+
+        .page{
+            float: left;
+        }
+
+    </style>
+
+</head>
+<body>
+<div class="container">
+
+    <div class="row">
+        <br><br>
+        <!--<div class="col-xs-2" id="logo">
+            <img v-bind:src="imageU">
+        </div>-->
+        <div class="col-xs-10">
+            <form id="search">
+                <div class="bar">
+                    <!-- searchString 模型与文本域创建绑定 -->
+
+                    <input type="text" v-model="searchString" placeholder="输入搜索内容" />
+                </div>
+
+                <!--<ul>
+                    &lt;!&ndash; 循环输出数据 &ndash;&gt;
+
+                    <li v-for="article in filteredArticles">
+                        <a v-bind:href="article.url"><img v-bind:src="article.image" /></a>
+                        <p>{{article.title}}</p>
+                    </li>
+                </ul>-->
+
+            </form>
+        </div>
+    </div>
+
+    <div id="bar" class="row">
+        <!-- 激活的菜单样式为  active 类 -->
+        <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。v-on:click.prevent -->
+         <div class="col-xs-12">
+            <nav v-bind:class="active">
+
+                <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
+                <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
+                <a href="views/procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
+                <a href="views/asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
+                <a href="views/iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+            </nav>
+         </div>
+
+        <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
+
+        <!--<p>您选择了 <b>{{active}} 菜单</b></p>-->
+    </div>
+
+    <!--<div class="row" id="upload">
+        <div class="col-xs-5"></div>
+        <div class="col-xs-7 img">
+            <img src="image">
+        </div>
+    </div>-->
+</div>
+
+<script>
+    // 创建一个新的 Vue导航条 实例
+    var bar = new Vue({
+        // DOM 元素，挂载视图模型
+        el: '#bar',
+
+        // 定义属性，并设置初始值
+        data: {
+            active: 'home'
+        },
+
+        // 点击菜单使用的函数
+        methods: {
+            makeActive: function(item){
+                // 模型改变，视图会自动更新
+                this.active = item;
+            }
+        }
+    });
+
+    //创建一个新的Vue搜索框实例
+    var search = new Vue({
+        el: '#search',
+        data: {
+            searchString: "",
+
+            // 数据模型，实际环境你可以根据 Ajax 来获取
+
+            articles: [
+                {
+                    "title": "What You Need To Know About CSS Variables",
+                    "url": "https://www.runoob.com/css/css-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css.png"
+                },
+                {
+                    "title": "Freebie: 4 Great Looking Pricing Tables",
+                    "url": "https://www.runoob.com/html/html-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                },
+                {
+                    "title": "20 Interesting JavaScript and CSS Libraries for February 2016",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Quick Tip: The Easiest Way To Make Responsive Headers",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Learn SQL In 20 Minutes",
+                    "url": "https://www.runoob.com/sql/sql-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/sql.png"
+                },
+                {
+                    "title": "Creating Your First Desktop App With HTML, JS and Electron",
+                    "url": "https://www.runoob.com/js/js-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                }
+            ]
+        },
+        computed: {
+            // 计算数学，匹配搜索
+            filteredArticles: function () {
+                var articles_array = this.articles,
+                    searchString = this.searchString;
+
+                if(!searchString){
+                    return articles_array;
+                }
+
+                searchString = searchString.trim().toLowerCase();
+
+                articles_array = articles_array.filter(function(item){
+                    if(item.title.toLowerCase().indexOf(searchString) !== -1){
+                        return item;
+                    }
+                })
+
+                // 返回过来后的数组
+                return articles_array;;
+            }
+        }
+    });
+    /*var upload = new Vue({
+        el: '#upload',
+        data: {
+          image:'../static/images/upload.png',
+        },
+    });
+
+    var logo = new Vue({
+        el: '#logo',
+        data:{
+            imageU:'../images/lenovo.jpg',
+        },
+    });*/
+</script>
+</body>
+</html>

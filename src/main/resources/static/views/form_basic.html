@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>PO Detail</title>
+		<link rel="stylesheet" href="../css/amazeui.css" />
+		<!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../views/css/container.css" type="text/css">-->
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="../css/core.css" />
+		<link rel="stylesheet" href="../css/menu.css" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/admin.css" />
+		<link rel="stylesheet" href="../css/page/typography.css" />
+		<link rel="stylesheet" href="../css/page/form.css" />
+		<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+		<style>
+			li{
+				float: left;
+				margin-left: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Begin page -->
+		<header class="am-topbar am-topbar-fixed-top">
+			<div class="am-topbar-left am-hide-sm-only">
+				<a href="index.html" class="logo"><span>Lenovo</span></span><i class="zmdi zmdi-layers"></i></a>
+			</div>
+
+			<div class="contain">
+				<ul class="am-nav am-navbar-nav am-navbar-left">
+					<li><a href="../hello" class="home" v-on:click="makeActive('home')"><h4 class="page-title">Index</h4></a></li>
+					<li><a href="procument.html" class="Procument" v-on:click="makeActive('Procument')"><h4 class="page-title">Procument</h4></a></li>
+					<li><a href="asn.html" class="ASN" v-on:click="makeActive('ASN')"><h4 class="page-title">ASN</h4></a></li>
+					<li><a href="iv.html" class="IV" v-on:click="makeActive('IV')"><h4 class="page-title">IV</h4></a></li>
+				</ul>
+
+				<!--<ul class="am-nav am-navbar-nav am-navbar-right">
+					&lt;!&ndash;<li class="inform"><i class="am-icon-bell-o" aria-hidden="true"></i></li>&ndash;&gt;
+					<li class="hidden-xs am-hide-sm-only">
+						<form role="search" class="app-search">
+							<input type="text" placeholder="Search..." class="form-control">
+							<a href=""><img src="../img/search.png"></a>
+						</form>
+					</li>
+				</ul>-->
+			</div>
+		</header>
+		<!-- end page -->
+		<div class="admin">
+			<!--<div class="am-g">-->
+			<!--	<div class="am-g">-->
+		<!-- ============================================================== -->
+		<!-- Start right Content here -->
+		<div class="content-page">
+			<!-- Start content -->
+			<div class="content">
+				<div class="am-g">
+					<form method="POST" id="POdataForm" name="POdataForm">
+					<!-- Row start -->
+						<div class="am-u-sm-12">
+							<div class="card-box">
+
+								<h4 class="header-title m-t-0 m-b-30">PO Detail</h4>
+								<!-- Row start -->
+								<div class="am-g">
+									<div class="am-u-sm-12 am-u-md-6">
+										<div class="am-btn-toolbar">
+											<div class="am-btn-group am-btn-group-xs">
+												<button type="button" class="am-btn am-btn-default" id="EditPO" onclick="editForm()">
+													<span class="am-icon-pencil-square-o"></span> Edit
+												</button>
+												<button type="button" class="am-btn am-btn-default" id="deletePO" onclick="deleteForm()">
+														<span class="am-icon-trash-o"></span> Delete
+												</button>
+												<button type="button" class="am-btn am-btn-default" id="ConfirmPO" onclick="ConfirmPOForm()">
+														<span class="am-icon-check"></span> confirm
+												</button>
+												<button type="button" class="am-btn am-btn-default" id="savePO" onclick="saveForm()">
+														<span class="am-icon-plus"></span> save
+												</button>
+											</div>
+										</div>
+									</div>
+
+									<div class="am-u-sm-12 am-u-md-3">
+										<div class="am-input-group am-input-group-sm">
+                                          <input type="text" class="am-form-field">
+                                        <span class="am-input-group-btn">
+                                          <button class="am-btn am-btn-default" type="button">search</button>
+                                        </span>
+                                        </div>
+										<!--<ul class="am-nav am-navbar-nav am-navbar-right">
+											&lt;!&ndash;<li class="inform"><i class="am-icon-bell-o" aria-hidden="true"></i></li>&ndash;&gt;
+											<li class="hidden-xs am-hide-sm-only">
+												<form role="search" class="app-search">
+													<input type="text" placeholder="Search..." class="form-control">
+													<a href=""><img src="../img/search.png"></a>
+												</form>
+											</li>
+										</ul>-->
+									</div>
+								</div>
+								<!-- Row end -->
+								<br>
+								<form class="am-form am-text-sm" >
+								    <div class="am-g">
+									<div class="am-u-md-6">
+											<div class="am-form-group">
+												<div class="am-g">
+											      <label class="am-u-md-2 am-md-text-right am-padding-left-0" for="ponumber">PO#</label>
+											      <input class="am-u-md-10 form-control" name="ponumber" id="ponumber" placeholder="PO#">
+										      </div>
+										    </div>
+
+										    <div class="am-form-group">
+										    	<div class="am-g">
+											      <label class="am-u-md-2 am-md-text-right am-padding-left-0" for="remark">remark</label>
+											      <input class="am-u-md-10 form-control"  id="remark" name="remark" placeholder="remark">
+											    </div>
+										    </div>
+
+										    <div class="am-form-group">
+										    	<div class="am-g">
+											      <label class="am-u-md-2 am-md-text-right am-padding-left-0" for="shipTo">shipTo</label>
+											      <input class="am-u-md-10 form-control"  id="shipTo" name="shipTo" placeholder="shipTo">
+											    </div>
+										    </div>
+
+										    <div class="am-form-group">
+										    	<div class="am-g">
+											      <label class="am-u-md-2 am-md-text-right am-padding-left-0" for="carrier">carrier</label>
+											      <input class="am-u-md-10 form-control"  id="carrier" name="carrier" placeholder="carrier">
+											    </div>
+										    </div>
+
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="soldTo">soldTo</label>
+													<input class="am-u-md-10 form-control"  id="soldTo" name="soldTo" placeholder="soldTo">
+												</div>
+											</div>
+									</div>
+									<div class="am-u-md-6">
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="customer">customer</label>
+													<input class="am-u-md-10 form-control"  id="customer" name="customer" placeholder="customer">
+												</div>
+											</div>
+
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="orderType">orderType</label>
+													<input class="am-u-md-10 form-control"  id="orderType" name="orderType" placeholder="orderType">
+												</div>
+											</div>
+
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="orderType">exchange<br/>ProvisionItem</label>
+													<input class="am-u-md-10 form-control"  id="exchangeProvisionItem" name="exchangeProvisionItem" placeholder="exchangeProvisionItem">
+												</div>
+											</div>
+
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="conditionItem">conditionItem</label>
+													<input class="am-u-md-10 form-control"  id="conditionItem" name="conditionItem" placeholder="conditionItem">
+												</div>
+											</div>
+									</div>
+									</div>
+								</form>
+								<!--横线-->
+								<div class="row">
+									<hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+								</div>
+								<h4 class="header-title m-t-0 m-b-30">Data</h4>
+								<form class="am-form am-text-sm" >
+									<div class="am-g">
+										<div class="am-u-md-6">
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="poDate">poDate</label>
+													<input class="am-u-md-10 form-control"  type="date" id="poDate" name="poDate" placeholder="poDate">
+												</div>
+											</div>
+
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="deliveryDate">deliveryDate</label>
+													<input class="am-u-md-10 form-control"  type="date" id="deliveryDate" name="deliveryDate" placeholder="deliveryDate">
+												</div>
+											</div>
+										</div>
+										<div class="am-u-md-6">
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="dropOrderTime">dropOrderTime</label>
+													<input class="am-u-md-10 form-control"  type="date" id="dropOrderTime" name="dropOrderTime" placeholder="dropOrderTime">
+												</div>
+											</div>
+
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="targetDate">targetDate<br/>ProvisionItem</label>
+													<input class="am-u-md-10 form-control"  type="date" id="targetDate" name="targetDate" placeholder="targetDate">
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								<!--横线-->
+								<div class="row">
+									<hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+								</div>
+								<h4 class="header-title m-t-0 m-b-30">System Information</h4>
+								<form class="am-form am-text-sm" >
+									<div class="am-g">
+										<div class="am-u-md-6">
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="createdBy">createdBy</label>
+													<input class="am-u-md-10 form-control"  id="createdBy" name="createdBy" placeholder="createdBy">
+												</div>
+											</div>
+										</div>
+										<div class="am-u-md-6">
+											<div class="am-form-group">
+												<div class="am-g">
+													<label class="am-u-md-2 am-md-text-right am-padding-left-0" for="lastModifiedBy">lastModifiedBy</label>
+													<input class="am-u-md-10 form-control"  id="lastModifiedBy" name="lastModifiedBy" placeholder="lastModifiedBy">
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</form>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="am-g">
+					<div class="am-u-sm-12 am-u-md-6">
+						<div class="am-btn-toolbar">
+							<div class="am-btn-group am-btn-group-xs">
+								<button type="button" href="javascript:void(0);" class="am-btn am-btn-primary handle-btn"
+										onclick="PN_Add('{{= lat_id}}')" id="PN_add_Button">
+									<span class="am-icon-plus"></span> Add
+								</button>
+								<button type="button" class="am-btn am-btn-default">
+									<a href="../views/exportPNTemplate">
+										<span class="am-icon-cloud-download"></span> Download Template
+									</a>
+								</button>
+								<button type="button" class="am-btn am-btn-default">
+									<a href="../views/exportPN">
+										<span class="am-icon-cloud-download"></span> Download
+									</a>
+								</button>
+								<form id="excelUpload" action="../views/ImportPN" enctype="multipart/form-data" method="post">
+									<input id="filename" class="upload" type="file" name="filename">
+									<button id="excel_button"  onclick="upload()" class="am-btn am-btn-default">
+										<span class="am-icon-cloud-upload"></span> Upload
+									</button>
+								</form>
+
+							</div>
+						</div>
+					</div>
+				</div>
+					<!-- Row end -->
+					<!--Row Start-->
+				<div class="am-g">
+					<div class="am-u-sm-12">
+						<table class="am-table am-table-striped am-table-hover table-main" id="PN_List_table">
+							<thead>
+							<tr>
+								<!--<th class="table-check"><input type="checkbox" /></th>-->
+								<th class="table-id">PN#</th>
+								<th class="table-title">PN Des</th>
+								<th class="table-type">Categroy</th>
+								<th class="table-author am-hide-sm-only">Unit</th>
+								<th class="table-date am-hide-sm-only">Price</th>
+								<th class="table-date am-hide-sm-only">PN Quantity</th>
+								<th class="table-set">Parts Amount</th>
+								<th class="table-set">PN Status</th>
+								<th class="table-set">action</th>
+							</tr>
+							</thead>
+							<tbody id="myBody">
+							<tr v-for="list in lists">
+								<td v-text="list.pnnumber"></td>
+								<td v-text="list.pnDes"></td>
+								<td v-text="list.category"></td>
+								<td v-text="list.unit"></td>
+								<td v-text="list.price"></td>
+								<td v-text="list.pnQuantity"></td>
+								<td v-text="list.partsAmount"></td>
+								<td v-text="list.flag"></td>
+								<td>
+									<div class="am-btn-toolbar">
+										<div class="am-btn-group am-btn-group-xs">
+											<button class="am-btn am-btn-default am-btn-xs am-text-secondary" id="editBtn" onclick="editPN(this)">
+												<span class="am-icon-pencil-square-o"></span> edit
+											</button>
+											<!--<button class="am-btn am-btn-default am-btn-xs am-hide-sm-only"><span class="am-icon-copy"></span> 复制</button>-->
+                                            <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" id="deleteBtn" onclick="deletePN(this)">
+												<span class="am-icon-trash-o"></span> delete</button>
+
+										</div>
+									</div>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+		</div>
+		<!-- end right Content here -->
+		<!--</div>弹出框-->
+		<div class="am-g">
+			<!--new弹出框-->
+			<div class="modal fade" id="PNAddModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">Add PN</h4>
+						</div>
+						<div class="modal-body">
+							<form class="form-horizontal">
+								<!--<div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">#</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="empID" class="form-control" id="inputEmail3" placeholder="#">
+                                    </div>
+                                </div>-->
+
+								<div class="form-group">
+									<label for="price_add_input" class="col-sm-2 control-label">price</label>
+									<div class="col-sm-10">
+										<input type="text" name="price" class="form-control" id="price_add_input"
+											   placeholder="price">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="pnQuantity_add_input" class="col-sm-2 control-label">pnQuantity</label>
+									<div class="col-sm-10">
+										<input type="text" name="pnQuantity" class="form-control" id="pnQuantity_add_input"
+											   placeholder="pnQuantity">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="partsAmount_add_input" class="col-sm-2 control-label">partsAmount</label>
+									<div class="col-sm-10">
+										<input type="text" name="partsAmount" class="form-control" id="partsAmount_add_input"
+											   placeholder="partsAmount">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<!--<div class="form-group">
+                                    <label for="flag_add_input" class="col-sm-2 control-label">flag</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="flag" class="form-control" id="flag_add_input"
+                                               placeholder="flag">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>-->
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label">flag</label>
+									<div class="col-sm-4">
+										<select class="form-control" name="flag">
+
+										</select>
+									</div>
+								</div>
+
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+							<button type="button" class="btn btn-primary" id="PN_save_btn">save</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--edit弹出框-->
+			<div class="modal fade" id="PNEditModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="EditModalLabel">Edit PN</h4>
+						</div>
+						<div class="modal-body">
+							<form class="form-horizontal">
+								<!--<div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">#</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="empID" class="form-control" id="inputEmail3" placeholder="#">
+                                    </div>
+                                </div>-->
+								<div class="form-group">
+									<label for="PN_Edit_input" class="col-sm-2 control-label">PN#</label>
+									<div class="col-sm-10">
+										<input type="text" name="pnnumber" class="form-control" id="PN_Edit_input"
+											   placeholder="pnnumber">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="PN_PO_Edit_input" class="col-sm-2 control-label">PO#</label>
+									<div class="col-sm-10">
+										<input type="text" name="number" class="form-control" id="PN_PO_Edit_input"
+											   placeholder="number" readonly="readonly">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="PN_Des_Edit_input" class="col-sm-2 control-label">PN Des</label>
+									<div class="col-sm-10">
+										<input type="text" name="pnDes" class="form-control" id="PN_Des_Edit_input"
+											   placeholder="pnDes">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="category_Edit_input" class="col-sm-2 control-label">category</label>
+									<div class="col-sm-10">
+										<input type="text" name="category" class="form-control" id="category_Edit_input"
+											   placeholder="category">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="unit_Edit_input" class="col-sm-2 control-label">unit</label>
+									<div class="col-sm-10">
+										<input type="text" name="unit" class="form-control" id="unit_Edit_input"
+											   placeholder="unit">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="price_Edit_input" class="col-sm-2 control-label">price</label>
+									<div class="col-sm-10">
+										<input type="text" name="price" class="form-control" id="price_Edit_input"
+											   placeholder="price">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="pnQuantity_Edit_input" class="col-sm-2 control-label">pnQuantity</label>
+									<div class="col-sm-10">
+										<input type="text" name="pnQuantity" class="form-control" id="pnQuantity_Edit_input"
+											   placeholder="pnQuantity">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="partsAmount_Edit_input" class="col-sm-2 control-label">partsAmount</label>
+									<div class="col-sm-10">
+										<input type="text" name="partsAmount" class="form-control" id="partsAmount_Edit_input"
+											   placeholder="partsAmount">
+										<span class="help-block"></span>
+									</div>
+								</div>
+
+								<!--<div class="form-group">
+                                    <label for="flag_add_input" class="col-sm-2 control-label">flag</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="flag" class="form-control" id="flag_add_input"
+                                               placeholder="flag">
+                                        <span class="help-block"></span>
+                                    </div>
+                                </div>-->
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label">flag</label>
+									<div class="col-sm-4">
+										<select class="form-control" name="flag">
+
+										</select>
+									</div>
+								</div>
+
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+							<button type="button" class="btn btn-primary" id="PN_update_btn" >updata</button>
+							<!--onclick="editPN(this)"-->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- start modal new弹出框-->
+		<div class="am-modal am-modal-prompt form-am-modal" tabindex="-1" id="handle-form-modal-credit">
+			<div class="am-modal-dialog">
+				<div class="am-modal-hd">PN</div>
+				<div class="am-modal-bd">
+					<form class="am-form am-form-horizontal" id="handle-form-credit">
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">PN#</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="pnnumber" id="PN_add_input"
+									   placeholder="pnnumber"  class="am-modal-prompt-input">
+								<span class="help-block"></span>
+							</div>
+						</div>
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">PO#</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="number" id="PN_PO_input"
+									   placeholder="number" class="am-modal-prompt-input" readonly>
+							</div>
+						</div>
+
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">PO Des</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="pnDes" id="PN_Des_input"
+									   placeholder="pnDes" class="am-modal-prompt-input">
+							</div>
+						</div>
+
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">category</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="category" id="category_add_input"
+									   placeholder="category" class="am-modal-prompt-input">
+							</div>
+						</div>
+
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">unit</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="unit" id="unit_add_input"
+									   placeholder="unit" class="am-modal-prompt-input">
+							</div>
+						</div>
+
+						<!--<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">price</label>
+							<div class="am-u-sm-9">
+								<input type="text" name="unit" id="unit_add_input"
+									   placeholder="unit" class="am-modal-prompt-input">
+							</div>
+						</div>-->
+
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">XXX</label>
+							<div class="am-u-sm-9">
+								<select data-am-selected id="table-item-capital-source" name="capital_source">
+									<option value="0">XXX</option>
+									<option value="1">XXX</option>
+									<option value="2">XXX</option>
+									<option value="3">XXX</option>
+									<option value="4">XXX</option>
+									<option value="5">XXX</option>
+								</select>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="am-modal-footer">
+					<span class="am-modal-btn" data-am-modal-cancel>取消</span>
+					<span class="am-modal-btn" data-am-modal-confirm>提交</span>
+				</div>
+			</div>
+		</div><!-- end modal-->
+		</div>
+		</div>
+
+		<!-- navbar -->
+		<script type="text/javascript" src="../js/jquery-2.1.0.js" ></script>
+		<script type="text/javascript" src="../js/amazeui.min.js"></script>
+		<script type="text/javascript" src="../js/app.js" ></script>
+		<script type="text/javascript" src="../js/blockUI.js" ></script>
+	<script>
+		// url传递的信息
+		/*var urlMsg = parseUrl(window.location.search);
+        $.ajax({
+            url:'/attend/getByDept?deptCode='+urlMsg.deptCode+'&month='+urlMsg.month,
+            method: 'get'
+        }).done{
+
+        }*/
+		$(function(){
+			var Editponumber = oneValues();
+			console.log("22222="+Editponumber);
+			$.ajax({
+				url: "../views/selectPOByponumber/" + Editponumber,
+				type: "GET",
+				success: function (result) {
+					// console.log(result.extend.po);
+					var poData = result.extend.po;
+					//  $("#ponumber").text(poData.ponumber);
+					$("#ponumber").text=poData.ponumber;
+					document.getElementById("ponumber").value = poData.ponumber;
+					document.getElementById("remark").value = poData.remark;
+					document.getElementById("shipTo").value = poData.shipTo;
+					document.getElementById("carrier").value = poData.carrier;
+					document.getElementById("soldTo").value = poData.soldTo;
+					document.getElementById("customer").value = poData.customer;
+					document.getElementById("orderType").value = poData.orderType;
+					document.getElementById("exchangeProvisionItem").value = poData.exchangeProvisionItem;
+					document.getElementById("conditionItem").value = poData.conditionItem;
+					document.getElementById("poDate").value = poData.poDate;
+					document.getElementById("deliveryDate").value = poData.deliveryDate;
+					document.getElementById("dropOrderTime").value = poData.dropOrderTime;
+					document.getElementById("targetDate").value = poData.targetDate;
+					document.getElementById("createdBy").value = poData.createdBy;
+					document.getElementById("lastModifiedBy").value = poData.lastModifiedBy;
+				}
+			});
+
+			$.ajax({
+				url:"../views/getPNequal/"+Editponumber,
+				type:"POST",
+				//data:Editponumber,
+				success:function (result) {
+					console.log(result);
+					//console.log(result.extend.pnList.flag.value);
+					//build_emps_table(result);
+					new Vue({
+						el:'#PN_List_table',
+						data:{
+							lists:result.extend.pnList,
+						}
+					})
+				}
+			});
+		});
+
+		function oneValues() {
+			var result;
+			var url=window.location.search; //获取url中"?"符后的字串
+			if(url.indexOf("?")!=-1){
+				result = url.substr(url.indexOf("=")+1);
+				console.log("1111=   "+result);
+			}
+			return result;
+		}
+
+		/**
+		 * 保存PO信息
+		 */
+		function saveForm() {
+			var ponumber = document.getElementById("ponumber").value;
+			if (ponumber == "") {
+				alert("产品编号不能为空！");
+				document.getElementById("ponumber").focus();
+				return;
+			}
+			with (document.getElementById("POdataForm")) {
+				method = "post";
+				action = "insertPO";
+				submit();
+				//window.location.href="podetail.html"
+				reset_form("#po_information");
+			}
+		}
+
+		function parseUrl(url){
+			if(url.indexOf("?") == -1) {
+				return {};
+			}
+			var query = url.split("?")[1];
+			var queryArr = query.split("&");
+			var obj = {};
+			queryArr.forEach(function(item){
+				var key = item.split("=")[0];
+				var value = item.split("=")[1];
+				obj[key] = decodeURIComponent(value);
+			});
+			return obj;
+		}
+
+		function editForm() {
+			var ponumber = document.getElementById("ponumber").value;
+			console.log(ponumber);
+			var Editponumber = oneValues();
+			console.log(Editponumber);
+			with (document.getElementById("POdataForm")) {
+				// method = "post";
+				type = 'post';
+				console.log("123")
+				contentType="application/json;charset=utf-8";
+				console.log("321")
+				action = "../views/updatePOByponumber/";
+				submit();
+				//window.location.href="podetail.html"
+				reset_form("#po_information");
+				// success=Function(result)
+				console.log(Function(result));
+				/*if(result){
+                    window.location.href="podetail.html"
+                }*/
+			}
+		}
+
+		//确认提交改变flag状态
+		function ConfirmPOForm() {
+			var ponumber = document.getElementById("ponumber").value;
+			console.log(ponumber);
+			var Editponumber = oneValues();
+			console.log(Editponumber);
+			with (document.getElementById("POdataForm")) {
+				// method = "post";
+				type = 'post';
+				console.log("123")
+				contentType="application/json;charset=utf-8";
+				console.log("321")
+				action = "../views/updatePOFlag/";
+				submit();
+				//window.location.href="podetail.html"
+				reset_form("#po_information");
+				// success=Function(result)
+				console.log(Function(result));
+			}
+		}
+
+		function deleteForm() {
+			var Editponumber = oneValues();
+			console.log(Editponumber);
+			with (document.getElementById("POdataForm")) {
+				// method = "post";
+				type = 'post';
+				console.log("123")
+				contentType="application/json;charset=utf-8";
+				console.log("321")
+				action = "../views/deletePOByponumber/"+Editponumber;
+				submit();
+				//window.location.href="podetail.html"
+				reset_form("#po_information");
+			}
+		}
+
+		//点击新增按钮，弹出模态框
+		/*$("#PN_add_Button").click(function () {
+			//清除表单数据
+			reset_form("#PNAddModel form");
+			$("#PNAddModel form")[0].reset();
+			// $("")[0].reset();
+			var Editponumber = oneValues();
+			$("#PN_PO_input").val(Editponumber);
+			getFlags("#PNAddModel select");
+
+			//弹出模态框
+			$("#PNAddModel").modal({
+				backdrop: "static"
+			});
+		});*/
+
+		//添加PN
+		$("#PN_save_btn").click(function () {
+			console.log("111");
+			/*var PNFormData = $("#PNAddModel").val();
+            console.log(PNFormData);*/
+			document.getElementById("PNAddModel");
+			//document.get
+			if(!PNnumber_validate()){
+				show_validate_msg("#PN_add_input","error","Form's data are incorrect!")
+			}
+			$.ajax({
+				url:"../views/savePN",
+				type:"POST",
+				data:$("#PNAddModel form").serialize(),
+				success:function (result) {
+					if(result){
+						$("#PNAddModel").modal('hide');
+						//alert("Insert Success!")
+						//$("#PNAddModel").style.display = "none";
+					}else {
+						$("#PNAddModel").modal('hide');
+						alert("Insert fail");
+					}
+				}
+			})
+
+		});
+
+		//校验PN表单数据
+		function PNnumber_validate() {
+			var PN_add_input = $("#PN_add_input").val();
+			if(PN_add_input == null){
+				show_validate_msg("#PN_add_input","error","Form's data are incorrect!")
+			}
+			return true;
+		}
+
+		//展示校验信息
+		function show_validate_msg(ele, status, msg) {
+			//清除校验状态
+			$(ele).parent().removeClass("has-success has-error");
+			$(ele).next().text("");
+			if("success"==status){
+				$(ele).parent().addClass("has-success");
+				$(ele).next().text(msg);
+			}else {
+				if ("error" == status) {
+					$(ele).parent().addClass("has-error");
+					$(ele).next().text(msg);
+				}
+			}
+		}
+
+
+		//查出所有的flag信息并显示出来
+		function getFlags(flag) {
+			$(flag).empty();
+			$.ajax({
+				url: "../views/getFlag",
+				type: "GET",
+				success: function (result) {
+					// console.log(result);
+					// $("#dept_add_select");
+					$.each(result.extend.flagList, function () {
+						var optionEle = $("<option></option>").append(this.status).attr("value", this.flag);
+						optionEle.appendTo(flag);
+					});
+				}
+			});
+		}
+
+		//检验PN数据框的格式
+		$("#PN_add_input").change(function () {
+			//发生ajax请求
+			var pnnumber = this.value;
+			$.ajax({
+				url:"../views/checkPNnumber",
+				data:"pnnumber="+pnnumber,
+				type:"POST",
+				success:function (result) {
+					if(result.code == 100){
+						show_validate_msg("#PN_add_input","success","This PNNumber can be use.");
+						$("#PN_add_input").attr("ajax-va", "success");
+					}else {
+						show_validate_msg("#PN_add_input","error","This PNNumber can not be use!");
+						$("#PN_add_input").attr("ajax-va","error");
+					}
+				}
+			});
+		});
+
+		//清空表单样式及内容
+		function reset_form(ele) {
+			$(ele)[0].reset();
+			//清空表单样式
+			$(ele).find("*").removeClass("has-success has-error");
+			$(ele).find(".help-block").text("");
+		}
+
+		//编辑form内容
+		function editPN(obj) {
+			var $td = $(obj).parents('tr').children('td');
+			var pnnumber = $td.eq(0).text();
+			//getFlags(flag);
+			$("#PNEditModel").modal({
+				backdrop: "static"
+			});
+			console.log("PNnumber="+pnnumber);
+			$.ajax({
+				url:"../views/selectPnBypnnumber/"+pnnumber,
+				//data:"pnnumber="+pnnumber,
+				type:"GET",
+				success:function (result) {
+					var pn = result.extend.pn;
+					console.log(pn);
+					var Editponumber = oneValues();
+					$("#PN_PO_Edit_input").val(Editponumber);
+					$("#PN_Edit_input").val(pn.pnnumber);
+					$("#PN_Des_Edit_input").val(pn.pnDes);
+					$("#category_Edit_input").val(pn.category);
+					$("#unit_Edit_input").val(pn.unit);
+					$("#price_Edit_input").val(pn.price);
+					$("#pnQuantity_Edit_input").val(pn.pnQuantity);
+					$("#partsAmount_Edit_input").val(pn.partsAmount);
+					$("#PNEditModel select").val([pn.flag]);
+				}
+			});
+		}
+
+		function deletePN(obj){
+			var $td = $(obj).parents('tr').children('td');
+			var pnnumber = $td.eq(0).text();
+			if(confirm("确认删除["+pnnumber+"]吗?")){
+				$.ajax({
+					url:"../views/deletePNByPNnumber/"+pnnumber,
+					type:'POST',
+					data:pnnumber,
+					//  新增content-type头部属性
+					headers : {/*application/x-www-form-urlencoded; charset=UTF-8*/
+						'content-type' : 'application/json;charset=utf-8'
+					},
+					success:function (result) {
+						if(result){
+							alert(pnnumber+"Delete Success");
+						}
+					}
+				})
+			}
+		}
+
+		//更新PN
+		$("#PN_update_btn").click(function () {
+			var pnnumber = document.getElementById("PN_Edit_input").value;
+			var pn = $("#PNEditModel form").serialize();
+			console.log(pn);
+			console.log(pnnumber);
+			$.ajax({
+				url: "../views/updataPNBypnnumber/"+pnnumber,
+				type: "GET",
+				data:$("#PNEditModel form").serialize(),
+				//dataType:JSON,
+				//  新增content-type头部属性
+				headers : {/*application/x-www-form-urlencoded; charset=UTF-8*/
+					'content-type' : 'application/json;charset=utf-8'
+				},
+				success: function (result) {
+					if (result) {
+						console.log(result);
+						console.log("更新成功");
+						$("#PNEditModel").modal('hide');
+					}
+				}
+			});
+		});
+
+		//上传PNExcel
+		function upload() {
+			var params = $("#excelUpload").serializeArray();
+			$("#excelUpload").ajaxSubmit({
+				method: 'post',
+				data:params,
+				url: '/views/import',
+				async: false,
+				success: function (result) {
+					if (result) {
+						var txt = "批量导入成功！";
+						var option = {
+							onOk: function () {
+								window.location.href = "/views/procument.html";
+							}
+						};
+						//window.wxc.xcConfirm(txt, "success", option);
+					} /*else {
+                    if (data.code == 1) {
+                        var txt = data.msg;
+                        var option = {
+                            onOk: function () {
+                                window.location.href = "/admin/ImportStu.jsp";
+                            }
+                        };
+                        window.wxc.xcConfirm(txt, "error", option);
+                    }
+                }*/
+				}
+			});
+		}
+
+		//Amaze UI 模态框
+		//按钮触发
+		function PN_Add(id) {
+
+			//页面处理按钮的提交
+			$('#handle-form-modal-credit').modal({
+				relatedTarget: this,
+				closeViaDimmer:false,//点击遮罩层时关闭 Modal
+				closeOnConfirm:false,//点击确认时不关闭窗口
+				onConfirm: function(e) {
+					var apply_amount = $("#creditApplyAmount1").val();
+					var capital_source  =  $("#table-item-capital-source").val();
+					$.ajax({
+						type:"POST",
+						// contentType:"application/json", //WebService 会返回Json类型
+						url:basePath+"credit/updateLoanApplyCredit",
+						data:
+								{"id":id,"apply_amount":apply_amount,"capital_source":capital_source},
+						dataType:"json",
+						success:function(data){
+							if(data==1){
+								$('#handle-form-modal-credit').modal('close');
+								$("#creditApplyAmount1").val("");
+								$("#table-item-capital-source  option[value='0']").attr("selected",true);
+								alert("成功!");
+								//刷新页面
+								commitAjax({'url':getDataUrl(),
+									'param':getQueryCondition()});
+
+							}else{
+
+								alert("失败!");
+							}
+						},
+						error:function(){
+
+							alert("异常");
+						}
+					});
+
+				},
+				onCancel: function(e) {
+					var apply_amount = $("#creditApplyAmount1").val("");
+					$("#table-item-capital-source  option[value='0'] ").attr("selected",true);
+					//alert('你取消提交了!');
+				}
+			});
+
+		}
+
+	</script>
+	</body>
+
+</html>

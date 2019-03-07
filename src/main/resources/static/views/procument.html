@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="" xmlns:v-text="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Procument</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../views/css/container.css" type="text/css">
+    <!--&lt;!&ndash; 引入样式 &ndash;&gt;
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    &lt;!&ndash; 引入组件库 &ndash;&gt;
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+<style>
+    *{
+        margin:0;
+        padding:0;
+    }
+
+    body{
+        font:15px/1.3 'Open Sans', sans-serif;
+        color: #5e5b64;
+        text-align:center;
+    }
+
+    a, a:visited {
+        outline:none;
+        color:#389dc1;
+    }
+
+    a:hover{
+        text-decoration:none;
+    }
+
+    section, footer, header, aside, nav{
+        display: block;
+    }
+    .img{
+        width: 20px;
+        height: 20px;
+    }
+
+    .upload{
+        width: 300px;
+        height: 30px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <!--<header class="am-topbar am-topbar-fixed-top"></header>-->
+    <!--搜索框-->
+    <!--<div class="row">
+        <br><br>
+        <div class="col-xs-2" id="logo">
+            <img v-bind:src="imageU">
+        </div>
+        <div class="col-xs-10">
+            <form id="search" v-cloak>
+                <div class="bar">
+                    &lt;!&ndash; searchString 模型与文本域创建绑定 &ndash;&gt;
+
+                    <input type="text" v-model="searchString" placeholder="输入搜索内容" />
+                </div>
+
+                &lt;!&ndash;<ul>
+                    &lt;!&ndash; 循环输出数据 &ndash;&gt;
+
+                    <li v-for="article in filteredArticles">
+                        <a v-bind:href="article.url"><img v-bind:src="article.image" /></a>
+                        <p>{{article.title}}</p>
+                    </li>
+                </ul>&ndash;&gt;
+
+            </form>
+        </div>
+    </div>-->
+    <!--导航条-->
+    <div id="bar" class="row">
+        <!-- 激活的菜单样式为  active 类 -->
+        <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
+            <nav v-bind:class="active">
+
+                <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
+
+                <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
+                <a href="procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
+                <a href="asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
+                <a href="iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+            </nav>
+
+        <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
+
+        <!--<p>您选择了 <b>{{active}} 菜单</b></p>-->
+    </div>
+    <!--home标题--><!--selected下拉框-->
+    <div class="row">
+        <div class="col-xs-1">
+            <img v-bind:src="../../../static/images/upload.png">
+        </div>
+        <div class="col-xs-2">
+           <h5>order</h5><h3>Home</h3>
+        </div>
+        <div class="col-xs-1"><p>View:</p></div>
+        <div class="col-xs-1">
+            <div id="app">
+                <select v-model="selected" name="POSelect" id="input_select">
+                    <option value="">All</option>
+                    <option value="Product Line-SMP">Product Line-SMP</option>
+                    <option value="Product Line-TAB">Product Line-TAB</option>
+                    <option value="Status">Status</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <button onclick="selectAll()">go!</button>
+        </div>
+        <div class="col-xs-4"></div>
+    </div>
+    <!--横线-->
+    <div class="row">
+        <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+    </div>
+    <!--upload download-->
+    <div class="row">
+        <div class="col-xs-2"><p>upload</p></div>
+        <div class="col-xs-5">
+            <form id="excelUpload" action="../views/import" enctype="multipart/form-data" method="post">
+                <div class="row">
+                    <h5>Select a CSV or Excel file to import</h5>
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-4">
+                        <input id="filename" class="upload" type="file" name="filename">
+                    </div>
+                    <div class="col-xs-4">
+                        <button id="excel_button" class="button-bar" onclick="upload()">upload</button>
+                    </div>
+                    <div class="col-xs-2"></div>
+                </div>
+            </form>
+            <br>
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-5"><h5><a href="../views/exportTemplate"><u>Template Download</u></a></h5></div>
+                <div class="col-xs-2"><a href="../views/export"><button class="button-bar">download</button></a></div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+        <div class="col-xs-5"></div>
+    </div>
+    <!--横线-->
+    <div class="row">
+        <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+    </div>
+    <!--Po display-->
+    <div class="row">
+        <div class="col-xs-2"><p>PO Display</p></div>
+        <div class="col-xs-3"></div>
+        <div class="col-xs-2"><!--Recent Order--></div>
+        <div class="col-xs-2">
+            <!--<div id="selected">
+                <select v-model="selected" name="fruit">
+                    <option value="">Recently Upload</option>
+                    <option value="Recently Viewed">Recently Viewed</option>
+                    <option value="Recently Modified">Recently Modified</option>
+                </select>
+            </div>-->
+        </div>
+        <div class="col-xs-1">
+            <button onclick="window.location.href='podetail.html'">new</button>
+        </div>
+    </div>
+        <br>
+    <!--table display-->
+    <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-11">
+            <table class="table-bordered table table-hover" id="PO_List_table">
+                <thead>
+                    <tr>
+                        <th>PO#</th>
+                        <th>Ship to</th>
+                        <th>Sold to</th>
+                        <th>Order Type</th>
+                        <th>Drop Order Time</th>
+                        <th>Condition and items</th>
+                        <th>Remark</th>
+                        <th>Carrier</th>
+                        <th>Custom</th>
+                        <th>action</th>
+                    </tr>
+                </thead>
+                <tbody id="myBody">
+                    <tr v-for="list in lists">
+                        <td v-text="list.ponumber" id="ponumber"></td>
+                        <td v-text="list.shipTo"></td>
+                        <td v-text="list.soldTo"></td>
+                        <td v-text="list.orderType"></td>
+                        <td v-text="list.dropOrderTime"></td>
+                        <td v-text="list.conditionItem"></td>
+                        <td v-text="list.remark"></td>
+                        <td v-text="list.carrier"></td>
+                        <td v-text="list.customer"></td>
+                        <td><button onclick="EditPOSelect(this)" type="button">information</button></td>
+                        <!--<td id="ponumber"><a v-bind="{title:list.ponumber}">
+                            <span class=grid-check-box>{{list.ponumber}}</span>
+                        </a>
+                        </td>
+                        <td><a v-bind="{title:list.shipTo}">{{list.shipTo}}</a></td>
+                        <td><a v-bind="{title:list.soldTo}">{{list.soldTo}}</a></td>
+                        <td><a v-bind="{title:list.orderType}">{{list.orderType}}</a></td>
+                        <td><a v-bind="{title:list.dropOrderTime}">{{list.dropOrderTime}}</a></td>
+                        <td><a v-bind="{title:list.conditionItem}">{{list.conditionItem}}</a></td>
+                        <td><a v-bind="{title:list.remark}">{{list.remark}}</a></td>
+                        <td><a v-bind="{title:list.carrier}">{{list.carrier}}</a></td>
+                        <td><a v-bind="{title:list.customer}">{{list.customer}}</a></td>
+                        &lt;!&ndash;<td><a @onclick="EditPOSelect">Edit</a></td>&ndash;&gt;
+                        <td><button onclick="EditPOSelect()" id="editButton" type="button" class="Top_Edit" onload='init()'>Edit</button></td>
+
+                    --> </tr>
+                    <!--<tr v-for="item in list">
+                        <td>{{item.ponumber}}</td>
+                        &lt;!&ndash;<a style="float:right;color:DarkGray;font-size:13px" v-show="showEdit" @click=EditPOSelect()></a></td>&ndash;&gt;
+                        <td>{{item.shipTo}}</td>
+                        <td>{{item.soldTo}}</td>
+                        <td>{{item.orderType}}</td>
+                        <td>{{item.dropOrderTime}}</td>
+                        <td>{{item.conditionItem}}</td>
+                        <td>{{item.remark}}</td>
+                        <td>{{item.carrier}}</td>
+                        <td>{{item.customer}}</td>
+                        <td><button onclick="EditPOSelect()" type="button">Edit</button></td>
+                    </tr>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--显示分页信息-->
+    <!--<div class="row">
+        <div class="col-xs-6" id="page_info_area">
+
+        </div>
+        <div class="col-xs-6">
+            <nav aria-label="Page navigation" id="page_nav_area">
+                <ul class="pagination">
+
+                </ul>
+            </nav>
+        </div>
+    </div>-->
+
+</div>
+
+<script>
+    // 创建一个新的 Vue导航条 实例
+    var bar = new Vue({
+        // DOM 元素，挂载视图模型
+        el: '#bar',
+
+        // 定义属性，并设置初始值
+        data: {
+            active: 'home'
+        },
+
+        // 点击菜单使用的函数
+        methods: {
+            makeActive: function(item){
+                // 模型改变，视图会自动更新
+                this.active = item;
+            }
+        }
+    });
+
+    //创建一个新的Vue搜索框实例
+    var search = new Vue({
+        el: '#search',
+        data: {
+            searchString: "",
+
+            // 数据模型，实际环境你可以根据 Ajax 来获取
+
+            articles: [
+                {
+                    "title": "What You Need To Know About CSS Variables",
+                    "url": "https://www.runoob.com/css/css-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css.png"
+                },
+                {
+                    "title": "Freebie: 4 Great Looking Pricing Tables",
+                    "url": "https://www.runoob.com/html/html-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                },
+                {
+                    "title": "20 Interesting JavaScript and CSS Libraries for February 2016",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Quick Tip: The Easiest Way To Make Responsive Headers",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Learn SQL In 20 Minutes",
+                    "url": "https://www.runoob.com/sql/sql-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/sql.png"
+                },
+                {
+                    "title": "Creating Your First Desktop App With HTML, JS and Electron",
+                    "url": "https://www.runoob.com/js/js-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                }
+            ]
+        },
+        computed: {
+            // 计算数学，匹配搜索
+            filteredArticles: function () {
+                var articles_array = this.articles,
+                    searchString = this.searchString;
+
+                if(!searchString){
+                    return articles_array;
+                }
+
+                searchString = searchString.trim().toLowerCase();
+
+                articles_array = articles_array.filter(function(item){
+                    if(item.title.toLowerCase().indexOf(searchString) !== -1){
+                        return item;
+                    }
+                })
+
+                // 返回过来后的数组
+                return articles_array;;
+            }
+        }
+    });
+
+    new Vue({
+        el: '#app',
+        data: {
+            selected: ''
+        }
+    })
+
+    new Vue({
+        el: '#selected',
+        data: {
+            selected: ''
+        }
+    })
+
+    var totalRecord,currentPage;
+    //var inputField = document.getElementById("input_select");
+    $(function () {
+        to_page(1);
+    });
+
+    //解析显示分页信息
+    function build_page_info(result) {
+        $("#page_info_area").empty();
+        $("#page_info_area").append("当前为第" + result.extend.pageInfo.pageNum + "页，共" + result.extend.pageInfo.pages +
+            "页,共" + result.extend.pageInfo.total + "条记录");
+        totalRecord = result.extend.pageInfo.total;
+        currentPage = result.extend.pageInfo.pageNum;
+    }
+
+    //解析显示分页条
+    function build_pages_nav(result) {
+        $("#page_nav_area").empty();
+        var ul = $("<ul></ul>").addClass("pagination");
+        //page_nav_area
+        var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href", "#"));
+        var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;").attr("href", "#"));
+
+        if (result.extend.pageInfo.hasPreviousPage == false) {
+            firstPageLi.addClass("disabled");
+            prePageLi.addClass("disabled");
+        } else {
+            firstPageLi.click(function () {
+                to_page(1);
+            });
+
+            prePageLi.click(function () {
+                to_page(result.extend.pageInfo.pageNum - 1);
+            });
+        }
+
+
+        var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;").attr("href", "#"));
+        var lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href", "#"));
+
+        if (result.extend.pageInfo.hasNextPage == false) {
+            nextPageLi.addClass("disabled");
+            lastPageLi.addClass("disabled");
+        } else {
+            nextPageLi.click(function () {
+                to_page(result.extend.pageInfo.pageNum + 1);
+            });
+
+            lastPageLi.click(function () {
+                to_page(result.extend.pageInfo.pages);
+            });
+        }
+
+
+        ul.append(firstPageLi).append(prePageLi);
+        $.each(result.extend.pageInfo.navigatepageNums, function (index, item) {
+            var numLi = $("<li></li>").append($("<a></a>").append(item));
+            if (result.extend.pageInfo.pageNum == item) {
+                numLi.addClass("active");
+            }
+            numLi.click(function () {
+                to_page(item);
+            });
+            ul.append(numLi);
+        });
+        ul.append(nextPageLi).append(lastPageLi);
+        var navEle = $("<nav></nav>").append(ul);
+
+        navEle.appendTo("#page_nav_area");
+    }
+
+    function build_PO_table(result) {
+        //清空table表格
+        $("#PO_List_table tbody").empty();
+
+       // var ListPO = result.extend.pageInfo.list;
+       console.log(111111);
+        console.log(ListPO);
+        /*var poListData = result.data;
+        for (var p=0;p<poListData.length;p++){
+            var pon = getDataPO(poListData[p]);
+            tbody.appendChild(pon);
+        }
+
+        function getDataPO(poo){
+            var poData = document.createElement("tr");
+            var ponumber = document.createElement("td");
+            ponumber.innerHTML = poo.ponumber;
+            poData.appendChild(ponumber);
+            var shipTo = document.createElement("td");
+            shipTo.innerHTML = poo.shipTo;
+            poData.appendChild(shipTo);
+            var soldTo = document.createElement("td");
+            soldTo.innerHTML = poo.soldTo;
+            poData.appendChild(soldTo);
+            var orderType = document.createElement("td");
+            orderType.innerHTML = poo.orderType;
+            poData.appendChild(orderType);
+            var dropOrderTime = document.createElement("td");
+            dropOrderTime.innerHTML = poo.dropOrderTime;
+            poData.appendChild(dropOrderTime);
+            var conditionItem = document.createElement("td");
+            conditionItem.innerHTML = poo.conditionItem;
+            poData.appendChild(conditionItem);
+            var remark = document.createElement("td");
+            remark.innerHTML = poo.remark;
+            poData.appendChild(remark);
+            var carrier = document.createElement("td");
+            carrier.innerHTML = poo.carrier;
+            poData.appendChild(carrier);
+            var customer = document.createElement("td");
+            customer.innerHTML = poo.customer;
+            poData.appendChild(customer);
+
+        }*/
+        $.each(ListPO, function (index, item) {
+            console.log("item"+JSON.stringify(item));
+            var ponumber = $("<td></td>").append(item.ponumber);
+            var shipTo = $("<td></td>").append(item.shipTo);
+            var soldTo = $("<td></td>").append(item.soldTo);
+            var orderType = $("<td></td>").append(item.orderType);
+            var dropOrderTime = $("<td></td>").append(item.dropOrderTime);
+            var conditionItem = $("<td></td>").append(item.conditionItem);
+            var remark = $("<td></td>").append(item.remark);
+            var carrier = $("<td></td>").append(item.carrier);
+            var customer = $("<td></td>").append(item.customer);
+            var editBtn = $("<button></button>").addClass("btn btn-primary btn-sm")
+                .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("edit");
+            //为编辑按钮添加一个自定义的属性来表示当前PO的id
+            editBtn.attr("edit-id", item.ponumber);
+            var delBtn = $("<button></button>").addClass("btn btn-danger btn-sm")
+                .append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("delete");
+            //为删除按钮添加一个自定义的属性来表示当前PO的id
+            delBtn.attr("del-id", item.ponumber);
+            var btnBtn = $("<td></td>").append(editBtn).append(" ").append(delBtn);
+            $("<tr></tr>").append(ponumber).append(shipTo).append(soldTo).append(orderType).append(dropOrderTime)
+                .append(conditionItem).append(remark).append(carrier).append(customer).append(btnBtn).appendTo("#emps_tables tbody");
+        });
+        /*new Vue({
+            el:'#PO_List_table',
+            data:{
+                lists:result
+            }
+        })*/
+    }
+
+    //将信息在表格中显示
+    function to_page(pn) {
+        console.log(pn);
+        var ajax = $.ajax({
+            url: "../views/getAllPO",
+            data:"pn="+pn,
+            type:"GET",
+            success:function (result,state) {
+                new Vue({
+                    el:'#PO_List_table',
+                    data:{
+                        lists:result.extend.pageInfo.list,
+                    }
+                });
+                console.log(result);
+                //build_PO_table(result);
+                build_page_info(result);
+                build_pages_nav(result);
+            }
+        });
+    }
+
+    function build_PO_table(result) {
+        //清空table表格
+        $("#PO_List_table tbody").empty();
+
+    }
+    //编辑PO信息
+//     function EditPOSelect() {
+//
+//         var ponumber = document.getElementById("ponumber").innerText;
+//         console.log(ponumber);
+//
+//     var ajax = $.ajax({
+//         url:"../lenovoscs_Web_exploded/views/selectPOByponumber/"+ponumber,
+//         //data:"ponumber"+list.ponumber,
+//         type:"GET",
+//         success:function (result,state) {
+//             console.log(result);
+//         }
+//     });
+//
+// }
+    /*PO_List_table.ChangeA = function (rowData) {
+        window.location.href="views/podetail.html?ponumber=" + rowData.ponumber
+            + '&remark=' + rowData.remark+'&shipTo'+rowData.shipTo+'&carrier'+rowData.carrier
+            +'&soldTo'+rowData.soldTo+'&customer'+rowData.customer+'&orderType'+rowData.orderType
+            +'&exchangeProvisionItem'+rowData.exchangeProvisionItem+'&conditionItem'+rowData.conditionItem
+            +'&poDate'+rowData.poDate+'&deliveryDate'+rowData.deliveryDate+'&dropOrderTime'+rowData.dropOrderTime
+            +'&targetDate'+rowData.targetDate+'&createdBy'+rowData.createdBy+'&lastModifiedBy'+rowData.lastModifiedBy; //window.location.href跳转新页面
+        console.log(rowData);
+    };*/
+
+
+    /*function EditPOSelect() {
+           var PO_List_table = document.getElementById("PO_List_table").rows[1].cells[2].innerHTML;
+           var ponumber = document.getElementsByTagName("table")[0]; //获取第一个表格
+           //var ponumber = document.getElementById("ponumber").value;
+           console.log(ponumber);
+           window.location.href = encodeURI("views/podetail.html?value=" + ponumber);
+   }*/
+   /* EditPOSelect(){
+        console.log(this.$ref.td)
+    }*/
+
+    /*$(document).ready(function(){
+        trace("初始化方法进入");
+    });
+
+    function trace(obj){
+        console.log("ggggggg"+obj);
+        /!*编辑单头信息*!/
+        var Top_Edit = document.getElementsByClassName("Top_Edit");
+
+        for (var i = 0; i < Top_Edit.length; i++) {
+
+            Top_Edit[i].index = i;
+
+            Top_Edit[i].onclick = function () {
+
+                var table = document.getElementById("PO_List_table");
+
+                /!*获取选中的行 *!/
+                var child = table.getElementsByTagName("tr")[this.index+1];
+                console.log("ssssssffsfsfdsf"+this.index)
+                /!*获取选择行的所有列*!/
+                var SZ_col = child.getElementsByTagName("td");
+                var span_col = child.getElementsByTagName("span");
+
+                var jk = span_col[0].innerHTML;
+                console.log("dfsfsdfsfsf"+jk)
+
+            }
+        }
+
+    }*/
+
+    //编辑PO信息
+    /*function EditPOSelect() {
+
+
+        /!*编辑单头信息*!/
+        var Top_Edit = document.getElementsByClassName("Top_Edit");
+
+        for (var i = 0; i < Top_Edit.length; i++) {
+
+            Top_Edit[i].index = i;
+
+            Top_Edit[i].onclick = function () {
+
+                var table = document.getElementById("PO_List_table");
+
+                /!*获取选中的行 *!/
+                var child = table.getElementsByTagName("tr")[this.index+1];
+                console.log("ssssssffsfsfdsf"+this.index)
+                /!*获取选择行的所有列*!/
+                var SZ_col = child.getElementsByTagName("td");
+                var span_col = child.getElementsByTagName("span");
+
+               var ponumber = span_col[0].innerHTML;
+
+
+               console.log("dfsfsdfsfsf"+ponumber);
+               window.location.href = encodeURI("podetail.html?value=" + ponumber);;
+
+            }
+        }
+
+
+
+
+
+        /!*var mytable = document.getElementById("myBody");
+        var data = [];
+        for(var i=0,rows=mytable.rows.length; i<rows; i++){
+            var data2= [];
+            for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
+                data2.push(mytable.rows[i].cells[j].innerHTML)
+            }
+            console.log(i)
+            data.push(data2);
+        }
+
+         var data = document.getElementsByTagName('span')[0].innerHTML;
+        console.log("ddddd  "+data)
+        var ponumber = document.getElementById("td ponumber");
+        console.log("ddddd")
+        console.log(ponumber);*!/
+
+        // var ajax = $.ajax({
+        //     url:"../lenovoscs_Web_exploded/views/selectPOByponumber/"+ponumber,
+        //     //data:"ponumber"+list.ponumber,
+        //     type:"GET",
+        //     success:function (result,state) {
+        //         console.log(result);
+        //     }
+        // });
+
+    }*/
+
+    function EditPOSelect(obj) {
+        var $td = $(obj).parents('tr').children('td');
+        var ponumber = $td.eq(0).text();
+        window.location.href = encodeURI("podetail.html?value=" + ponumber);;
+    }
+
+    //上传Excel
+    function upload() {
+        var params = $("#excelUpload").serializeArray();
+        $("#excelUpload").ajaxSubmit({
+            method: 'post',
+            data:params,
+            url: '/views/import',
+            async: false,
+            success: function (result) {
+                if (result) {
+                    console.log(result);
+                    var txt = "批量导入成功！";
+                    var option = {
+                        onOk: function () {
+                            alert("导入成功！");
+
+                            window.location.href = "/views/procument.html";
+                        }
+                    };
+                    //window.wxc.xcConfirm(txt, "success", option);
+                } /*else {
+                    if (data.code == 1) {
+                        var txt = data.msg;
+                        var option = {
+                            onOk: function () {
+                                window.location.href = "/admin/ImportStu.jsp";
+                            }
+                        };
+                        window.wxc.xcConfirm(txt, "error", option);
+                    }
+                }*/
+            }
+        });
+    }
+
+
+</script>
+
+</body>
+</html>

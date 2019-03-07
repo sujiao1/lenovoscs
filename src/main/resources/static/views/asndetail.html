@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<!--<%@ page contentType="text/html;charset=UTF-8" language="java" %>-->
+<!--<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>-->
+
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="" xmlns:c="http://www.w3.org/1999/XSL/Transform"
+      xmlns:v="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Po Detail</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../views/css/container.css" type="text/css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+
+        body{
+            font:15px/1.3 'Open Sans', sans-serif;
+            color: #5e5b64;
+            text-align:center;
+        }
+
+        a, a:visited {
+            outline:none;
+            color:#389dc1;
+        }
+
+        a:hover{
+            text-decoration:none;
+        }
+
+        section, footer, header, aside, nav{
+            display: block;
+        }
+
+
+        .img{
+            width: 20px;
+            height: 20px;
+        }
+
+        .upload{
+            width: 300px;
+            height: 30px;
+        }
+        .bg{
+            background-color: #cccccc;
+        }
+        /*-------------------------
+                    导航栏属性
+                --------------------------*/
+
+        nav{
+            display:inline-block;
+            margin:60px auto 45px;
+            background-color:#5597b4;
+            box-shadow:0 1px 1px #ccc;
+            border-radius:2px;
+        }
+
+        nav a{
+            display:inline-block;
+            padding: 18px 100px;
+            color:#fff !important;
+            font-weight:bold;
+            font-size:16px;
+            text-decoration:none !important;
+            line-height:1;
+            text-transform: uppercase;
+            background-color:transparent;
+
+            -webkit-transition:background-color 0.25s;
+            -moz-transition:background-color 0.25s;
+            transition:background-color 0.25s;
+        }
+
+        nav a:first-child{
+            border-radius:2px 0 0 2px;
+        }
+
+        nav a:last-child{
+            border-radius:0 2px 2px 0;
+        }
+
+        nav.home .home,
+        nav.Procument .Procument,
+        nav.ASN .ASN,
+        nav.IV .IV{
+            background-color:#e35885;
+        }
+
+        p{
+            font-size:22px;
+            font-weight:bold;
+            color:#7d9098;
+        }
+
+        p b{
+            color:#ffffff;
+            display:inline-block;
+            padding:5px 10px;
+            background-color:#c4d7e0;
+            border-radius:2px;
+            text-transform:uppercase;
+            font-size:18px;
+        }
+
+        /*-------------------------
+                搜索输入框
+            --------------------------*/
+
+        .bar{
+            background-color:#5c9bb7;
+
+            background-image:-webkit-linear-gradient(top, #5c9bb7, #5392ad);
+            background-image:-moz-linear-gradient(top, #5c9bb7, #5392ad);
+            background-image:linear-gradient(top, #5c9bb7, #5392ad);
+
+            box-shadow: 0 1px 1px #ccc;
+            border-radius: 2px;
+            width: 400px;
+            padding: 14px;
+            margin: 45px auto 20px;
+            position:relative;
+        }
+
+        .bar input{
+            background:#fff no-repeat 13px 13px;
+            background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkU5NEY0RTlFMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkU5NEY0RTlGMTA4NzExRTM5RTEzQkFBQzMyRjkyQzVBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RTk0RjRFOUMxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RTk0RjRFOUQxMDg3MTFFMzlFMTNCQUFDMzJGOTJDNUEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4DjA/RAAABK0lEQVR42pTSQUdEURjG8dOY0TqmPkGmRcqYD9CmzZAWJRHVRIa0iFYtM6uofYaiEW2SRJtEi9YxIklp07ZkWswu0v/wnByve7vm5ee8M+85zz1jbt9Os+WiGkYdYxjCOx5wgFeXUHmtBSzpcCGa+5BJTCjEP+0nKWAT8xqe4ArPGEEVC1hHEbs2oBwdXkM7mj/JLZrad437sCGHOfUtcziutuYu2v8XUFF/4f6vMK/YgAH1HxkBYV60AR31gxkBYd6xAeF3VzMCwvzOBpypX8V4yuFRzX2d2gD/l5yjH4fYQEnzkj4fae5rJulF2sMXVrAsaTWttRFu4Osb+1jEDT71/ZveyhouTch2fINQL9hKefKjuYFfuznXWzXMTabyrvfyIV3M4vhXgAEAUMs7K0J9UJAAAAAASUVORK5CYII=);
+
+            border: none;
+            width: 100%;
+            line-height: 19px;
+            padding: 11px 0;
+
+            border-radius: 2px;
+            box-shadow: 0 2px 8px #c4c4c4 inset;
+            text-align: left;
+            font-size: 14px;
+            font-family: inherit;
+            color: #738289;
+            font-weight: bold;
+            outline: none;
+            text-indent: 40px;
+        }
+
+        ul{
+            list-style: none;
+            width: 428px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        ul li{
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        ul li img{
+            width:60px;
+            height:60px;
+            float:left;
+            border:none;
+        }
+
+        ul li p{
+            margin-left: 75px;
+            font-weight: bold;
+            padding-top: 12px;
+            color:#6e7a7f;
+        }
+
+        .page{
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!--搜索框-->
+    <!--<div class="row">
+        <br><br>
+        <div class="col-xs-2" id="logo">
+            <img v-bind:src="imageU">
+        </div>
+        <div class="col-xs-10">
+            <form id="search" v-cloak>
+                <div class="bar">
+                    &lt;!&ndash; searchString 模型与文本域创建绑定 &ndash;&gt;
+
+                    <input type="text" v-model="searchString" placeholder="输入搜索内容" />
+                </div>
+
+                &lt;!&ndash;<ul>
+                    &lt;!&ndash; 循环输出数据 &ndash;&gt;
+
+                    <li v-for="article in filteredArticles">
+                        <a v-bind:href="article.url"><img v-bind:src="article.image" /></a>
+                        <p>{{article.title}}</p>
+                    </li>
+                </ul>&ndash;&gt;
+
+            </form>
+        </div>
+    </div>-->
+    <!--导航条-->
+    <div id="bar" class="row">
+        <!-- 激活的菜单样式为  active 类 -->
+        <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
+        <nav v-bind:class="active">
+
+            <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
+
+            <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
+            <a href="procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
+            <a href="asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
+            <a href="iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+        </nav>
+
+        <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
+
+        <!--<p>您选择了 <b>{{active}} 菜单</b></p>-->
+    </div>
+    <!--PO#--><!--Button-->
+    <form method="POST" id="POdataForm" name="POdataForm">
+        <!--button-->
+        <div class="row">
+            <div class="col-xs-1">
+                <img v-bind:src="../../../static/images/upload.png">
+            </div>
+            <div class="col-xs-2">
+                <h5>order</h5><p>ASN#</p>
+            </div>
+            <div class="col-xs-2"><p>ASN Detail</p></div>
+            <div class="col-xs-1"></div>
+            <!--<div class="col-xs-1">
+                <button type="button" id="download" onclick="downloadForm()">Download</button>
+            </div>-->
+            <div class="col-xs-1"></div>
+            <div class="col-xs-1">
+                <button type="submit" id="confirm" onclick="ConfirmPOForm()">confirm</button>
+            </div>
+            <div class="col-xs-2"></div>
+        </div>
+        <!--横线-->
+        <div class="row">
+            <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+        </div>
+        <!--Po input-->
+        <!--action="insertPO"-->
+        <div class="row">
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-2"><p>ASN Detail</p></div>
+                    <div class="col-xs-10"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">ASN# <input type="text" name="asnnumber" id="asnnumber"></div>
+                    <div class="col-xs-4">Remark <input type="text" id="remark" name="remark"></div>
+                    <div class="col-xs-4">Ship To <input type="text" id="shipTo" name="shipTo"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-4">Carrier <input type="text" id="carrier" name="carrier"></div>
+                    <div class="col-xs-4">Sold To <input type="text" id="soldTo" name="soldTo"></div>
+                    <div class="col-xs-4">Customer <input type="text" id="customer" name="customer"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-4">Order Type <input type="text" id="orderType" name="orderType"></div>
+                    <div class="col-xs-4">Exchange Provision Item <input type="text" id="exchangeProvisionItem" name="exchangeProvisionItem"></div>
+                    <div class="col-xs-4">Net Due Data <input type="date" id="netDueData" name="netDueData"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-4">PO#<input type="text" id="ponumber" name="ponumber"></div>
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4"></div>
+                </div>
+            </div>
+            <!--横线-->
+            <div class="row">
+                <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+            </div>
+            <!--data-->
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-2"><p>Data</p></div>
+                    <div class="col-xs-10"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-5">Po Date <input type="date" id="poDate" name="poDate"></div>
+
+                    <div class="col-xs-5">Delivery Date <input type="date" id="deliveryDate" name="deliveryDate"></div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-5">Drop OrderTime <input type="date" id="dropOrderTime" name="dropOrderTime"></div>
+                    <div class="col-xs-5">Target Date <input type="date" id="targetDate" name="targetDate"></div>
+                </div>
+            </div>
+            <!--横线-->
+            <div class="row">
+                <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+            </div>
+            <!--System information-->
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-2"><p>System Information</p></div>
+                    <div class="col-xs-10"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">createdBy <input type="text" id="createdBy" name="createdBy"></div>
+                    <div class="col-xs-6">lastModifiedBy <input type="text" id="lastModifiedBy" name="lastModifiedBy"></div>
+                </div>
+            </div>
+            <!--横线-->
+            <div class="row">
+                <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+            </div>
+            <!--<div>
+                <button type="button" id="savePO" onclick="saveForm()">save</button>
+            </div>-->
+        </div>
+    </form>
+
+    <!--PN Item-->
+    <div class="row">
+        <div class="col-xs-2"><p>PN Item </p></div>
+        <div class="col-xs-8">
+            <div class="row">
+                <div class="col-xs-6"></div>
+                <div class="col-xs-2"><!--<a href="../views/exportPN">-->
+                    <button class="button-bar" id="download" onclick="download()">download</button></div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+        <div class="col-xs-1" id="PN_add_Button">
+            <button>new</button>
+        </div>
+        <div class="col-xs-1"></div>
+    </div>
+
+    <!--new弹出框-->
+    <div class="modal fade" id="PNAddModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Add PN</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <!--<div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">#</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="empID" class="form-control" id="inputEmail3" placeholder="#">
+                            </div>
+                        </div>-->
+                        <div class="form-group">
+                            <label for="PN_add_input" class="col-sm-2 control-label">PN#</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="pnnumber" class="form-control" id="PN_add_input"
+                                       placeholder="pnnumber">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="PN_PO_input" class="col-sm-2 control-label">PO#</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="number" class="form-control" id="PN_PO_input"
+                                       placeholder="number" readonly="readonly">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="PN_Des_input" class="col-sm-2 control-label">PN Des</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="pnDes" class="form-control" id="PN_Des_input"
+                                       placeholder="pnDes">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category_add_input" class="col-sm-2 control-label">category</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="category" class="form-control" id="category_add_input"
+                                       placeholder="category">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="unit_add_input" class="col-sm-2 control-label">unit</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="unit" class="form-control" id="unit_add_input"
+                                       placeholder="unit">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price_add_input" class="col-sm-2 control-label">price</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="price" class="form-control" id="price_add_input"
+                                       placeholder="price">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pnQuantity_add_input" class="col-sm-2 control-label">pnQuantity</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="pnQuantity" class="form-control" id="pnQuantity_add_input"
+                                       placeholder="pnQuantity">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="partsAmount_add_input" class="col-sm-2 control-label">partsAmount</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="partsAmount" class="form-control" id="partsAmount_add_input"
+                                       placeholder="partsAmount">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <!--<div class="form-group">
+                            <label for="flag_add_input" class="col-sm-2 control-label">flag</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="flag" class="form-control" id="flag_add_input"
+                                       placeholder="flag">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>-->
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">flag</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="flag">
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                    <button type="button" class="btn btn-primary" id="PN_save_btn">save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <!--table display-->
+    <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-11">
+            <table class="table-bordered table table-hover" id="PN_List_table">
+                <thead>
+                    <tr>
+                        <th>PN#</th>
+                        <th>PN Des</th>
+                        <th>Categroy</th>
+                        <th>Unit</th>
+                        <th>Price</th>
+                        <th>PN Quantity</th>
+                        <th>Parts Amount</th>
+                        <th>PN Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr v-for="list in lists">
+                    <td v-text="list.pnnumber"></td>
+                    <td v-text="list.pnDes"></td>
+                    <td v-text="list.category"></td>
+                    <td v-text="list.unit"></td>
+                    <td v-text="list.price"></td>
+                    <td v-text="list.pnQuantity"></td>
+                    <td v-text="list.partsAmount"></td>
+                    <td v-text="list.flag"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    // 创建一个新的 Vue导航条 实例
+    var bar = new Vue({
+        // DOM 元素，挂载视图模型
+        el: '#bar',
+
+        // 定义属性，并设置初始值
+        data: {
+            active: 'home'
+        },
+
+        // 点击菜单使用的函数
+        methods: {
+            makeActive: function(item){
+                // 模型改变，视图会自动更新
+                this.active = item;
+            }
+        }
+    });
+
+    //创建一个新的Vue搜索框实例
+    var search = new Vue({
+        el: '#search',
+        data: {
+            searchString: "",
+
+            // 数据模型，实际环境你可以根据 Ajax 来获取
+
+            articles: [
+                {
+                    "title": "What You Need To Know About CSS Variables",
+                    "url": "https://www.runoob.com/css/css-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css.png"
+                },
+                {
+                    "title": "Freebie: 4 Great Looking Pricing Tables",
+                    "url": "https://www.runoob.com/html/html-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                },
+                {
+                    "title": "20 Interesting JavaScript and CSS Libraries for February 2016",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Quick Tip: The Easiest Way To Make Responsive Headers",
+                    "url": "https://www.runoob.com/css3/css3-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/css3.png"
+                },
+                {
+                    "title": "Learn SQL In 20 Minutes",
+                    "url": "https://www.runoob.com/sql/sql-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/sql.png"
+                },
+                {
+                    "title": "Creating Your First Desktop App With HTML, JS and Electron",
+                    "url": "https://www.runoob.com/js/js-tutorial.html",
+                    "image": "https://static.runoob.com/images/icon/html.png"
+                }
+            ]
+        },
+        computed: {
+            // 计算数学，匹配搜索
+            filteredArticles: function () {
+                var articles_array = this.articles,
+                    searchString = this.searchString;
+
+                if(!searchString){
+                    return articles_array;
+                }
+
+                searchString = searchString.trim().toLowerCase();
+
+                articles_array = articles_array.filter(function(item){
+                    if(item.title.toLowerCase().indexOf(searchString) !== -1){
+                        return item;
+                    }
+                })
+
+                // 返回过来后的数组
+                return articles_array;;
+            }
+        }
+    });
+
+    new Vue({
+        el: '#app',
+        data: {
+            selected: ''
+        }
+    })
+
+    new Vue({
+        el: '#selected',
+        data: {
+            selected: ''
+        }
+    })
+
+    // url传递的信息
+    /*var urlMsg = parseUrl(window.location.search);
+    $.ajax({
+        url:'/attend/getByDept?deptCode='+urlMsg.deptCode+'&month='+urlMsg.month,
+        method: 'get'
+    }).done{
+
+    }*/
+    $(function(){
+        var Editponumber = oneValues();
+        console.log("hrefponumber="+Editponumber);
+        $.ajax({
+            url: "../views/selectPOByponumber/" + Editponumber,
+            type: "GET",
+            success: function (result) {
+                console.log(result.extend.po);
+                var poData = result.extend.po;
+                //  $("#ponumber").text(poData.ponumber);
+                $("#ponumber").text=poData.ponumber;
+                document.getElementById("asnnumber").value = poData.ponumber;
+                document.getElementById("ponumber").value = poData.ponumber;
+                document.getElementById("remark").value = poData.remark;
+                document.getElementById("shipTo").value = poData.shipTo;
+                document.getElementById("carrier").value = poData.carrier;
+                document.getElementById("soldTo").value = poData.soldTo;
+                document.getElementById("customer").value = poData.customer;
+                document.getElementById("orderType").value = poData.orderType;
+                document.getElementById("exchangeProvisionItem").value = poData.exchangeProvisionItem;
+                document.getElementById("netDueData").value = poData.netDueData;
+                document.getElementById("poDate").value = poData.poDate;
+                document.getElementById("deliveryDate").value = poData.deliveryDate;
+                document.getElementById("dropOrderTime").value = poData.dropOrderTime;
+                document.getElementById("targetDate").value = poData.targetDate;
+                document.getElementById("createdBy").value = poData.createdBy;
+                document.getElementById("lastModifiedBy").value = poData.lastModifiedBy;
+            }
+        });
+
+        $.ajax({
+            url:"../views/getPNequal/"+Editponumber,
+            type:"POST",
+            success:function (result) {
+                console.log(result);
+                //console.log(result.extend.pnList.flag.value);
+                //build_emps_table(result);
+                new Vue({
+                    el:'#PN_List_table',
+                    data:{
+                        lists:result.extend.pnList,
+                    }
+                })
+            }
+        });
+    });
+
+    function oneValues() {
+        var result;
+        var url=window.location.search; //获取url中"?"符后的字串
+        if(url.indexOf("?")!=-1){
+            result = url.substr(url.indexOf("=")+1);
+            console.log("1111=   "+result);
+        }
+        return result;
+    }
+
+    /**
+     * 保存PO信息
+     */
+    function saveForm() {
+        var ponumber = document.getElementById("ponumber").value;
+        if (ponumber == "") {
+            alert("产品编号不能为空！");
+            document.getElementById("ponumber").focus();
+            return;
+        }
+        with (document.getElementById("POdataForm")) {
+            method = "post";
+            action = "insertPO";
+            submit();
+        }
+    }
+
+    function parseUrl(url){
+        if(url.indexOf("?") == -1) {
+            return {};
+        }
+        var query = url.split("?")[1];
+        var queryArr = query.split("&");
+        var obj = {};
+        queryArr.forEach(function(item){
+            var key = item.split("=")[0];
+            var value = item.split("=")[1];
+            obj[key] = decodeURIComponent(value);
+        });
+        return obj;
+    }
+
+    /*function editForm() {
+        var ponumber = document.getElementById("ponumber").value;
+        console.log(ponumber);
+        var Editponumber = oneValues();
+        console.log(Editponumber);
+        with (document.getElementById("POdataForm")) {
+            // method = "post";
+            type = 'post';
+            console.log("123")
+            contentType="application/json;charset=utf-8";
+            console.log("321")
+            action = "../views/updatePOByponumber/";
+            submit();
+            // success=Function(result)
+            console.log(Function(result));
+            if(Function(result)){
+                alert("Edit Success");
+            }
+        }
+    }*/
+
+    /*function deleteForm() {
+        var Editponumber = oneValues();
+        console.log(Editponumber);
+        with (document.getElementById("POdataForm")) {
+            // method = "post";
+            type = 'post';
+            console.log("123")
+            contentType="application/json;charset=utf-8";
+            console.log("321")
+            action = "../views/deletePOByponumber/"+Editponumber;
+            submit();
+        }
+    }*/
+
+    //点击新增按钮，弹出模态框
+    $("#PN_add_Button").click(function () {
+        //清除表单数据
+        reset_form("#PNAddModel form");
+        $("#PNAddModel form")[0].reset();
+        // $("")[0].reset();
+        var Editponumber = oneValues();
+        $("#PN_PO_input").val(Editponumber);
+        getFlags("#PNAddModel select");
+
+        //弹出模态框
+        $("#PNAddModel").modal({
+            backdrop: "static"
+        });
+    });
+
+    //查出所有的flag信息并显示出来
+    function getFlags(flag) {
+        $(flag).empty();
+        $.ajax({
+            url: "../views/getFlag",
+            type: "GET",
+            success: function (result) {
+                // console.log(result);
+                // $("#dept_add_select");
+                $.each(result.extend.flagList, function () {
+                    var optionEle = $("<option></option>").append(this.status).attr("value", this.flag);
+                    optionEle.appendTo(flag);
+                });
+            }
+        });
+    }
+
+    //添加PN
+    $("#PN_save_btn").click(function () {
+        console.log("111");
+        /*var PNFormData = $("#PNAddModel").val();
+        console.log(PNFormData);*/
+        document.getElementById("PNAddModel");
+        //document.get
+        if(!PNnumber_validate()){
+            show_validate_msg("#PN_add_input","error","Form's data are incorrect!")
+        }
+        $.ajax({
+            url:"../views/savePN",
+            type:"POST",
+            data:$("#PNAddModel form").serialize(),
+            success:function (result) {
+                if(result){
+                    $("#PNAddModel").modal('hide');
+                    //alert("Insert Success!")
+                    //$("#PNAddModel").style.display = "none";
+                }else {
+                    $("#PNAddModel").modal('hide');
+                    alert("Insert fail");
+                }
+            }
+        })
+
+    });
+
+    //校验PN表单数据
+    function PNnumber_validate() {
+        var PN_add_input = $("#PN_add_input").val();
+        if(PN_add_input == null){
+            show_validate_msg("#PN_add_input","error","Form's data are incorrect!")
+        }
+        return true;
+    }
+
+    //展示校验信息
+    function show_validate_msg(ele, status, msg) {
+        //清除校验状态
+        $(ele).parent().removeClass("has-success has-error");
+        $(ele).next().text("");
+        if("success"==status){
+            $(ele).parent().addClass("has-success");
+            $(ele).next().text(msg);
+        }else {
+            if ("error" == status) {
+                $(ele).parent().addClass("has-error");
+                $(ele).next().text(msg);
+            }
+        }
+    }
+
+    //检验PN数据框的格式
+    $("#PN_add_input").change(function () {
+        //发生ajax请求
+        var pnnumber = this.value;
+        $.ajax({
+            url:"../views/checkPNnumber",
+            data:"pnnumber="+pnnumber,
+            type:"POST",
+            success:function (result) {
+                if(result.code == 100){
+                    show_validate_msg("#PN_add_input","success","This PNNumber can be use.");
+                    $("#PN_add_input").attr("ajax-va", "success");
+                }else {
+                    show_validate_msg("#PN_add_input","error","This PNNumber can not be use!");
+                    $("#PN_add_input").attr("ajax-va","error");
+                }
+            }
+        });
+    });
+
+    //清空表单样式及内容
+    function reset_form(ele) {
+        $(ele)[0].reset();
+        //清空表单样式
+        $(ele).find("*").removeClass("has-success has-error");
+        $(ele).find(".help-block").text("");
+    }
+
+    //改变flag状态
+    function ConfirmPOForm() {
+        var ponumber = document.getElementById("ponumber").value;
+        console.log(ponumber);
+        var Editponumber = oneValues();
+        console.log(Editponumber);
+        with (document.getElementById("POdataForm")) {
+            // method = "post";
+            type = 'post';
+            console.log("123")
+            contentType="application/json;charset=utf-8";
+            console.log("321")
+            action = "../views/updateASNFlag/";
+            submit();
+            window.location.href="asndetail.html"
+            reset_form("#po_information");
+            // success=Function(result)
+            console.log(Function(result));
+        }
+    }
+
+    function download() {
+        var ASNnumber = oneValues();
+        $.ajax({
+            url:"../views/exportASN/"+ASNnumber,
+            type:"GET",
+            success:function (result) {
+                if(result){
+                    window.location = "../views/exportASN/"+ASNnumber
+                    //alert("download success")
+                }
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>
