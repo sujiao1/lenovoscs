@@ -11,7 +11,7 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <!--数据库链接地址账号密码-->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/lenovoscs?characterEncoding=utf8" userId="root" password="root">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/poc?characterEncoding=utf8" userId="root" password="root">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
@@ -33,6 +33,8 @@
         <table tableName="flag" domainObjectName="Flag" ></table>
         <table tableName="pn" domainObjectName="PN"></table>
         <table tableName="po" domainObjectName="PO"></table>
-
+        <table tableName="asn" domainObjectName="ASN"></table>
+        <table tableName="iv" domainObjectName="IV"></table>
+        <table tableName="mapper" domainObjectName="Mapper"></table>
     </context>
 </generatorConfiguration>

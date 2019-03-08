@@ -1,6 +1,8 @@
 package com.lenovo.lenovoscs.service.Impl;
 
+import com.lenovo.lenovoscs.bean.Mapper;
 import com.lenovo.lenovoscs.bean.MyException;
+import com.lenovo.lenovoscs.bean.PN;
 import com.lenovo.lenovoscs.bean.PO;
 import com.lenovo.lenovoscs.dao.POMapper;
 import com.lenovo.lenovoscs.service.ExcelService;
@@ -40,6 +42,8 @@ public class ExcelServiceImpl implements ExcelService {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date2 = format.parse(dbtime2);
         ArrayList<PO> poList = new ArrayList<>();
+        ArrayList<PN> pnArrayList = new ArrayList<>();
+        ArrayList<Mapper> mappers = new ArrayList<>();
         if (!fileName.matches("^.+\\.(?i)(xls)$") && !fileName.matches("^.+\\.(?i)(xlsx)$")) {
             throw new MyException("上传文件格式不正确");
         }
@@ -59,6 +63,8 @@ public class ExcelServiceImpl implements ExcelService {
             notNull = true;
         }
         PO po;
+        PN pn;
+        Mapper mapper;
         for (int r = 2; r <= sheet.getLastRowNum(); r++) {//r = 2 表示从第三行开始循环 如果你的第三行开始是数据
             Row row = sheet.getRow(r);//通过sheet表单对象得到 行对象
             System.out.println("row="+sheet.getLastRowNum());
@@ -90,6 +96,8 @@ public class ExcelServiceImpl implements ExcelService {
                 }
 
             po = new PO();
+            pn = new PN();
+            mapper = new Mapper();
 
                 /*if( row.getCell(0).getCellType() !=1){//循环时，得到每一行的单元格进行判断
                     throw new MyException("导入失败(第"+(r+1)+"行,用户名请设为文本格式)");
@@ -315,35 +323,34 @@ public class ExcelServiceImpl implements ExcelService {
                 Cell lastModifiedByCell = row.getCell(14);
                 //设置单元格类型
                 lastModifiedByCell.setCellType(CellType.STRING);
-                //row.getCell(j).setCellValue(new HSSFRichTextString(String.valueOf(listRow.get(j))));
-                //row.getCell(1).setCellValue(row.getCell(1).getStringCellValue());
                 lastModifiedBy = row.getCell(14).getStringCellValue();
             }
             System.out.print("lastModifiedBy="+lastModifiedBy);
 
-                /*HSSFCellStyle cellStyle= (HSSFCellStyle) wb.createCellStyle();
-                cellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("m/d/yy h:mm"));
-                Cell poDate = row.getCell(9);
-                poDate.setCellStyle(cellStyle);
-                Cell deliveryDate = row.getCell(10);
-                deliveryDate.setCellStyle(cellStyle);
-                Cell dropOrderTime = row.getCell(11);
-                dropOrderTime.setCellStyle(cellStyle);
-                Cell targetDate = row.getCell(12);
-                targetDate.setCellStyle(cellStyle);*/
-               /* Calendar c = new GregorianCalendar(1900,0,-1);
-                //Date date= DateUtils.addDays(c.getTime(), "");
-                Date date= DateUtils.addDays(c.getTime(),"");*/
-                /*row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);//得到每一行的 第二个单元格的值
-                String password = row.getCell(1).getStringCellValue();
+            String pnnumber = "";
+            if(row.getCell(15) == null){//单元格没有值(等于null)时，getCell方法获取不到单元格,要用createCell方法。
+                row.createCell(15).setCellValue("");
+            }else {//单元格有值时，getCell方法获获取到单元格。
+                Cell pnnumberCell = row.getCell(15);
+                //设置单元格类型
+                pnnumberCell.setCellType(CellType.STRING);
+                pnnumber = row.getCell(15).getStringCellValue();
+            }
+            System.out.print("pnnumber="+pnnumber);
 
-
-                if(password==null || password.isEmpty()){
-                    throw new MyException("导入失败(第"+(r+1)+"行,密码未填写)");
-                }*/
+            String pnQuantity = "";
+            if(row.getCell(16) == null){//单元格没有值(等于null)时，getCell方法获取不到单元格,要用createCell方法。
+                row.createCell(16).setCellValue("");
+            }else {//单元格有值时，getCell方法获获取到单元格。
+                Cell pnQuantityCell = row.getCell(16);
+                //设置单元格类型
+                pnQuantityCell.setCellType(CellType.STRING);
+                pnQuantity = row.getCell(16).getStringCellValue();
+            }
+            System.out.print("pnQuantity="+pnQuantity);
 
             //完整的循环一次 就组成了一个对象
-            po.setPonumber(Integer.parseInt(row.getCell(1).getStringCellValue()));
+            po.setPonumber(Integer.parseInt(row.getCell(0).getStringCellValue()));
             po.setRemark(remark);
             po.setShipTo(shipTo);
             po.setCarrier(carrier);
@@ -358,8 +365,16 @@ public class ExcelServiceImpl implements ExcelService {
             po.setTargetDate(targetDate);
             po.setCreatedBy(carrier);
             po.setLastModifiedBy(lastModifiedBy);
-            po.setFlag(1);
+            po.setPnnumber(Integer.parseInt(pnnumber));
+            po.setPnQuantity(Integer.parseInt(pnQuantity));
+            pn.setPnnumber(Integer.parseInt(pnnumber));
+            pn.setPnQuantity(Integer.parseInt(pnQuantity));
+            mapper.setPnnumber(Integer.parseInt(pnnumber));
+            mapper.setPonumber(Integer.parseInt(row.getCell(0).getStringCellValue()));
+            //po.setFlag(1);
             poList.add(po);
+            pnArrayList.add(pn);
+            mappers.add(mapper);
         }
         for (PO poResord : poList) {
             Integer ponumber = poResord.getPonumber();

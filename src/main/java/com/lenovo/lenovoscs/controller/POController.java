@@ -61,7 +61,6 @@ public class POController {
             }
             /*return "redirect:/views/podetail.html";*/
         } else {
-            po.setFlag(1);
             poService.InsertPO(po);
             try {
                 response.sendRedirect("../views/podetail.html");

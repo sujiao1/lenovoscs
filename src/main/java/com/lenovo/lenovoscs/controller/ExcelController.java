@@ -69,9 +69,9 @@ public class ExcelController {
          * lastRow从第0行结束
          *
          *从第1个单元格开始
-         * 从第15个单元格结束
+         * 从第17个单元格结束
          */
-        CellRangeAddress rowRegion = new CellRangeAddress(0, 0, 0, 14);
+        CellRangeAddress rowRegion = new CellRangeAddress(0, 0, 0, 16);
         sheet.addMergedRegion(rowRegion);
 
 		/*CellRangeAddress columnRegion = new CellRangeAddress(1,4,0,0);
@@ -100,7 +100,8 @@ public class ExcelController {
         row.createCell(12).setCellValue("Target Date");//为第13个单元格设值
         row.createCell(13).setCellValue("createdBy");//为第14个单元格设值
         row.createCell(14).setCellValue("lastModifiedBy");//为第15个单元格设值
-        //row.createCell(15).setCellValue("lastModifiedBy");//为第15个单元格设值
+        row.createCell(15).setCellValue("PNnumber");//为第16个单元格设值
+        row.createCell(16).setCellValue("PN_Quantity");//为第17个单元格设值
 
         for (int i = 0; i < poList.size(); i++) {
             row = sheet.createRow(i + 2);
@@ -140,10 +141,12 @@ public class ExcelController {
 
             row.createCell(13).setCellValue(po.getCreatedBy());
             row.createCell(14).setCellValue(po.getLastModifiedBy());
+            row.createCell(15).setCellValue(po.getPnnumber());
+            row.createCell(16).setCellValue(po.getPnQuantity());
         }
         sheet.setDefaultRowHeight((short) (16.5 * 20));
         //列宽自适应
-        for (int i = 0; i <= 13; i++) {
+        for (int i = 0; i <= 16; i++) {
             sheet.autoSizeColumn(i);
         }
 
@@ -405,7 +408,7 @@ public class ExcelController {
          *从第1个单元格开始
          * 从第15个单元格结束
          */
-        CellRangeAddress cellAddresses = new CellRangeAddress(0, 0, 0, 14);
+        CellRangeAddress cellAddresses = new CellRangeAddress(0, 0, 0, 16);
         sheet.addMergedRegion(cellAddresses);
 
         row = sheet.createRow(1);
@@ -425,10 +428,12 @@ public class ExcelController {
         row.createCell(12).setCellValue("Target Date");//为第13个单元格设值
         row.createCell(13).setCellValue("createdBy");//为第14个单元格设值
         row.createCell(14).setCellValue("lastModifiedBy");//为第15个单元格设值
+        row.createCell(15).setCellValue("PNnumber");//为第16个单元格设值
+        row.createCell(16).setCellValue("PN_Quantity");//为第17个单元格设值
 
         sheet.setDefaultRowHeight((short) (16.5 * 20));
         //列宽自适应
-        for (int i = 0; i <= 13; i++) {
+        for (int i = 0; i <= 16; i++) {
             sheet.autoSizeColumn(i);
         }
 
