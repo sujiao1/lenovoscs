@@ -12,6 +12,5 @@ public class LenovoscsApplication {
     public static void main(String[] args) {
         SpringApplication.run(LenovoscsApplication.class, args);
     }
-
 }
 

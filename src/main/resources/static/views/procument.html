@@ -177,11 +177,13 @@
     <!--table display-->
     <div class="row">
         <div class="col-xs-1"></div>
-        <div class="col-xs-11">
+        <div class="col-xs-11" id="table1">
             <table class="table-bordered table table-hover" id="PO_List_table">
                 <thead>
                     <tr>
+                        <th hidden="hidden">id</th>
                         <th>PO#</th>
+                        <th>PN#</th>
                         <th>Ship to</th>
                         <th>Sold to</th>
                         <th>Order Type</th>
@@ -195,7 +197,9 @@
                 </thead>
                 <tbody id="myBody">
                     <tr v-for="list in lists">
+                        <td v-text="list.id" hidden="hidden"></td>
                         <td v-text="list.ponumber" id="ponumber"></td>
+                        <td v-text="list.pnnumber"></td>
                         <td v-text="list.shipTo"></td>
                         <td v-text="list.soldTo"></td>
                         <td v-text="list.orderType"></td>
@@ -239,7 +243,7 @@
         </div>
     </div>
     <!--显示分页信息-->
-    <!--<div class="row">
+    <div class="row">
         <div class="col-xs-6" id="page_info_area">
 
         </div>
@@ -250,7 +254,7 @@
                 </ul>
             </nav>
         </div>
-    </div>-->
+    </div>
 </div>
 
 <script>
@@ -510,12 +514,27 @@
                     el:'#PO_List_table',
                     data:{
                         lists:result.extend.pageInfo.list,
+
                     }
                 });
                 console.log(result);
+                /*var obj=eval(result);
+                var s='';
+                for(var p in obj)
+                {
+                    s+=p+'\n';
+                }
+                alert(s);
+                console.log('aaaaa:'+result.extend.pageInfo.list);*/
+                alert(result.extend.pageInfo.list[0].remark);
                 //build_PO_table(result);
                 build_page_info(result);
                 build_pages_nav(result);
+
+                setInterval(function () {
+                    $("#PO_List_table").load(location.href + " #PO_List_table");//注意后面DIV的ID前面的空格，很重要！没有空格的话，会出双眼皮！（也可以使用类名）
+                }, 8000);//8秒自动刷新
+
             }
         });
     }
@@ -541,15 +560,6 @@
 //     });
 //
 // }
-    /*PO_List_table.ChangeA = function (rowData) {
-        window.location.href="views/podetail.html?ponumber=" + rowData.ponumber
-            + '&remark=' + rowData.remark+'&shipTo'+rowData.shipTo+'&carrier'+rowData.carrier
-            +'&soldTo'+rowData.soldTo+'&customer'+rowData.customer+'&orderType'+rowData.orderType
-            +'&exchangeProvisionItem'+rowData.exchangeProvisionItem+'&conditionItem'+rowData.conditionItem
-            +'&poDate'+rowData.poDate+'&deliveryDate'+rowData.deliveryDate+'&dropOrderTime'+rowData.dropOrderTime
-            +'&targetDate'+rowData.targetDate+'&createdBy'+rowData.createdBy+'&lastModifiedBy'+rowData.lastModifiedBy; //window.location.href跳转新页面
-        console.log(rowData);
-    };*/
 
 
     /*function EditPOSelect() {
@@ -660,8 +670,9 @@
 
     function EditPOSelect(obj) {
         var $td = $(obj).parents('tr').children('td');
-        var ponumber = $td.eq(0).text();
-        window.location.href = encodeURI("podetail.html?value=" + ponumber);;
+        var ponumber = $td.eq(1).text();
+        window.location.href = encodeURI("podetail.html?value=" + ponumber);
+        console.log(ponumber);
     }
 
     //上传Excel

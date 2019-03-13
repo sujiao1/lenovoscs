@@ -68,11 +68,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
-        <!--<dependency>
+        <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.6</version>
-        </dependency>-->
+        </dependency>
 
 
         <!-- 返回json字符串的支持 -->

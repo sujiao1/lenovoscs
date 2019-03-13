@@ -280,11 +280,11 @@
                     <div class="col-xs-4">Net Due Data <input type="date" id="netDueData" name="netDueData"></div>
                 </div>
                 <br>
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-xs-4">PO#<input type="text" id="ponumber" name="ponumber"></div>
                     <div class="col-xs-4"></div>
                     <div class="col-xs-4"></div>
-                </div>
+                </div>-->
             </div>
             <!--横线-->
             <div class="row">
@@ -614,37 +614,37 @@
 
     }*/
     $(function(){
-        var Editponumber = oneValues();
-        console.log("hrefponumber="+Editponumber);
+        var Editasnnumber = oneValues();
+        console.log("hrefponumber="+Editasnnumber);
         $.ajax({
-            url: "../views/selectPOByponumber/" + Editponumber,
+            url: "../views/selectASNByasnnumber/" + Editasnnumber,
             type: "GET",
             success: function (result) {
-                console.log(result.extend.po);
-                var poData = result.extend.po;
+                console.log(result);
+                var asnData = result.extend.asn[0];
                 //  $("#ponumber").text(poData.ponumber);
-                $("#ponumber").text=poData.ponumber;
-                document.getElementById("asnnumber").value = poData.ponumber;
-                document.getElementById("ponumber").value = poData.ponumber;
-                document.getElementById("remark").value = poData.remark;
-                document.getElementById("shipTo").value = poData.shipTo;
-                document.getElementById("carrier").value = poData.carrier;
-                document.getElementById("soldTo").value = poData.soldTo;
-                document.getElementById("customer").value = poData.customer;
-                document.getElementById("orderType").value = poData.orderType;
-                document.getElementById("exchangeProvisionItem").value = poData.exchangeProvisionItem;
-                document.getElementById("netDueData").value = poData.netDueData;
-                document.getElementById("poDate").value = poData.poDate;
-                document.getElementById("deliveryDate").value = poData.deliveryDate;
-                document.getElementById("dropOrderTime").value = poData.dropOrderTime;
-                document.getElementById("targetDate").value = poData.targetDate;
-                document.getElementById("createdBy").value = poData.createdBy;
-                document.getElementById("lastModifiedBy").value = poData.lastModifiedBy;
+                //$("#ponumber").text=poData.ponumber;
+                document.getElementById("asnnumber").value = asnData.asnnumber;
+                //document.getElementById("ponumber").value = asnData.ponumber;
+                document.getElementById("remark").value = asnData.remark;
+                document.getElementById("shipTo").value = asnData.shipTo;
+                document.getElementById("carrier").value = asnData.carrier;
+                document.getElementById("soldTo").value = asnData.soldTo;
+                document.getElementById("customer").value = asnData.customer;
+                document.getElementById("orderType").value = asnData.orderType;
+                document.getElementById("exchangeProvisionItem").value = asnData.exchangeProvisionItem;
+                document.getElementById("netDueData").value = asnData.netDueData;
+                document.getElementById("poDate").value = asnData.poDate;
+                document.getElementById("deliveryDate").value = asnData.deliveryDate;
+                document.getElementById("dropOrderTime").value = asnData.dropOrderTime;
+                document.getElementById("targetDate").value = asnData.targetDate;
+                document.getElementById("createdBy").value = asnData.createdBy;
+                document.getElementById("lastModifiedBy").value = asnData.lastModifiedBy;
             }
         });
 
         $.ajax({
-            url:"../views/getPNequal/"+Editponumber,
+            url:"../views/getPNequal/"+Editasnnumber,
             type:"POST",
             success:function (result) {
                 console.log(result);

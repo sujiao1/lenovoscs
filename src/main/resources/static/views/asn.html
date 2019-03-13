@@ -14,6 +14,7 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <style>
         *{
             margin:0;
@@ -257,8 +258,14 @@
     <!--Po display-->
     <div class="row">
         <div class="col-xs-2"><p>PO Display</p></div>
-        <div class="col-xs-3"></div>
-        <div class="col-xs-2"><!--Recent Order--></div>
+        <div class="col-xs-3">
+            <input type="text" id="searchASN" name="searchASN">
+            <button type="button" id="searchASNButton" onclick="getASNonSearch()">search</button>
+        </div>
+        <div class="col-xs-2"><!--Recent Order-->
+             <!--<a href="#" class="btn mini purple" v-on:click="getASNonSearch()">
+             -- <i class="icon-edit"></i>search</a>-->
+        </div>
         <div class="col-xs-2">
             <!--<div id="selected">
                 <select v-model="selected" name="fruit">
@@ -288,9 +295,9 @@
                     <th>action</th>
                 </tr>
                 </thead>
-                <tbody id="myBody">
+                <tbody>
                 <tr v-for="item in lists">
-                    <td v-text="item.ponumber"></td>
+                    <td v-text="item.asnnumber"></td>
                     <td v-text="item.soldTo"></td>
                     <td v-text="item.poDate"></td>
                     <td v-text="item.netDueDate"></td>
@@ -403,23 +410,23 @@
         }
     });
 
-    $(function () {
-        $.ajax({
-            url:"../views/getAllASN",
+    /*$(function () {
+        var ajax = $.ajax({
+            url:"../views/getASNS",
             type:"POST",
-            success:function (result) {
+            success:function (result,state) {
                 console.log(result);
-                //console.log(result.extend.pnList.flag.value);
+                console.log(result.extend.asnList);
                 //build_emps_table(result);
                 new Vue({
                     el:'#ASN_List_table',
                     data:{
-                        lists:result.extend.poList,
+                        lists:result.extend.asnList,
                     }
-                })
+                });
             }
         });
-    });
+    });*/
 
     new Vue({
         el: '#app',
@@ -651,6 +658,60 @@
         });
     }
 
+    $('#searchASNButton').off("click").on("click", function () {
+        var ponumber = document.getElementById("searchASN").value;
+        $.ajax({
+            url:"../views/getASNSearch/"+ponumber,
+            //data:"ponumber="+ponumber,
+            type:"GET",
+            success:function (result) {
+                //$('#ASN_List_table').DataTable().ajax.reload();
+                console.log(result);
+               // window.location.reload();
+                new Vue({
+                    el:'#ASN_List_table',
+                    data:{
+                        lists:result.extend.asnList
+                    }
+                });
+                //window.location.href=window.location.href;
+                /*var table = $('#ASN_List_table').DataTable({
+                    ajax: "data.json"
+                });
+
+                setInterval( function () {
+                    table.ajax.reload( null, false ); // 刷新表格数据，分页信息不会重置
+                }, 30000 );*/
+                //$.fn.dataTable.ext.errMode = 'throw';
+            }
+        });
+        // $('#ASN_List_table').DataTable().ajax.reload();
+    });
+
+    /*function getASNonSearch() {
+        //$("ASN_List_table tbody tr").stop().hide();
+        //表格隐藏
+        //ASN_List_table.style.display = "none";
+        $("ASN_List_table tbody tr").hidden;
+        var ponumber = document.getElementById("searchASN").value;
+        $.ajax({
+           url:"../views/getASNSearch/"+ponumber,
+           //data:"ponumber="+ponumber,
+            type:"GET",
+            success:function (result) {
+               //$('#ASN_List_table').DataTable().ajax.reload();
+                window.location.reload();
+               console.log(result);
+                new Vue({
+                    el:'#ASN_List_table',
+                    data:{
+                        lists:result.extend.asnList
+                    }
+                });
+
+            }
+        });
+    }*/
 
 </script>
 </body>

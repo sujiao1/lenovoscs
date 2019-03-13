@@ -335,7 +335,7 @@
     <div class="row">
         <div class="col-xs-2"><p>PN Item </p></div>
         <div class="col-xs-8">
-            <form id="excelUpload" action="../views/ImportPN" enctype="multipart/form-data" method="post">
+            <!--<form id="excelUpload" action="../views/ImportPN" enctype="multipart/form-data" method="post">
                 <div class="row">
                     <div class="col-xs-5"><h5>Select a CSV or Excel file to import</h5></div>
                     <div class="col-xs-2">
@@ -346,14 +346,14 @@
                     </div>
                     <div class="col-xs-2"></div>
                 </div>
-            </form>
-            <br>
+            </form>-->
+            <!--<br>
             <div class="row">
                 <div class="col-xs-1"></div>
                 <div class="col-xs-5"><h5><a href="../views/exportPNTemplate"><u>Template Download</u></a></h5></div>
                 <div class="col-xs-2"><a href="../views/exportPN"><button class="button-bar">download</button></a></div>
                 <div class="col-xs-4"></div>
-            </div>
+            </div>-->
         </div>
         <div class="col-xs-1" id="PN_add_Button">
             <button>new</button>
@@ -502,7 +502,7 @@
                             <label for="PN_Edit_input" class="col-sm-2 control-label">PN#</label>
                             <div class="col-sm-10">
                                 <input type="text" name="pnnumber" class="form-control" id="PN_Edit_input"
-                                       placeholder="pnnumber">
+                                       placeholder="pnnumber" readonly="readonly">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -755,9 +755,14 @@
             type: "GET",
             success: function (result) {
                // console.log(result.extend.po);
-                var poData = result.extend.po;
+                console.log(result);
+                var poData = result.extend.po[0];
+                console.log(poData);
+               /* for(var key in poData){
+                    console.log(key+':'+poData[key]+":i="+i);
+                }*/
               //  $("#ponumber").text(poData.ponumber);
-                $("#ponumber").text=poData.ponumber;
+                //$("#ponumber").text=poData.ponumber;
                 document.getElementById("ponumber").value = poData.ponumber;
                 document.getElementById("remark").value = poData.remark;
                 document.getElementById("shipTo").value = poData.shipTo;
