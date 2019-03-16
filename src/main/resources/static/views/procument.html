@@ -14,7 +14,11 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
-<style>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <!--<script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+    <style>
     *{
         margin:0;
         padding:0;
@@ -51,33 +55,6 @@
 </head>
 <body>
 <div class="container">
-    <!--<header class="am-topbar am-topbar-fixed-top"></header>-->
-    <!--搜索框-->
-    <!--<div class="row">
-        <br><br>
-        <div class="col-xs-2" id="logo">
-            <img v-bind:src="imageU">
-        </div>
-        <div class="col-xs-10">
-            <form id="search" v-cloak>
-                <div class="bar">
-                    &lt;!&ndash; searchString 模型与文本域创建绑定 &ndash;&gt;
-
-                    <input type="text" v-model="searchString" placeholder="输入搜索内容" />
-                </div>
-
-                &lt;!&ndash;<ul>
-                    &lt;!&ndash; 循环输出数据 &ndash;&gt;
-
-                    <li v-for="article in filteredArticles">
-                        <a v-bind:href="article.url"><img v-bind:src="article.image" /></a>
-                        <p>{{article.title}}</p>
-                    </li>
-                </ul>&ndash;&gt;
-
-            </form>
-        </div>
-    </div>-->
     <!--导航条-->
     <div id="bar" class="row">
         <!-- 激活的菜单样式为  active 类 -->
@@ -177,7 +154,7 @@
     <!--table display-->
     <div class="row">
         <div class="col-xs-1"></div>
-        <div class="col-xs-11" id="table1">
+        <div class="col-xs-11" id="PO_List">
             <table class="table-bordered table table-hover" id="PO_List_table">
                 <thead>
                     <tr>
@@ -196,7 +173,7 @@
                     </tr>
                 </thead>
                 <tbody id="myBody">
-                    <tr v-for="list in lists">
+                    <!--<tr v-for="(list,index) in lists">
                         <td v-text="list.id" hidden="hidden"></td>
                         <td v-text="list.ponumber" id="ponumber"></td>
                         <td v-text="list.pnnumber"></td>
@@ -209,25 +186,10 @@
                         <td v-text="list.carrier"></td>
                         <td v-text="list.customer"></td>
                         <td><button onclick="EditPOSelect(this)" type="button">information</button></td>
-                        <!--<td id="ponumber"><a v-bind="{title:list.ponumber}">
-                            <span class=grid-check-box>{{list.ponumber}}</span>
-                        </a>
-                        </td>
-                        <td><a v-bind="{title:list.shipTo}">{{list.shipTo}}</a></td>
-                        <td><a v-bind="{title:list.soldTo}">{{list.soldTo}}</a></td>
-                        <td><a v-bind="{title:list.orderType}">{{list.orderType}}</a></td>
-                        <td><a v-bind="{title:list.dropOrderTime}">{{list.dropOrderTime}}</a></td>
-                        <td><a v-bind="{title:list.conditionItem}">{{list.conditionItem}}</a></td>
-                        <td><a v-bind="{title:list.remark}">{{list.remark}}</a></td>
-                        <td><a v-bind="{title:list.carrier}">{{list.carrier}}</a></td>
-                        <td><a v-bind="{title:list.customer}">{{list.customer}}</a></td>
-                        &lt;!&ndash;<td><a @onclick="EditPOSelect">Edit</a></td>&ndash;&gt;
-                        <td><button onclick="EditPOSelect()" id="editButton" type="button" class="Top_Edit" onload='init()'>Edit</button></td>
-
-                    --> </tr>
-                    <!--<tr v-for="item in list">
-                        <td>{{item.ponumber}}</td>
-                        &lt;!&ndash;<a style="float:right;color:DarkGray;font-size:13px" v-show="showEdit" @click=EditPOSelect()></a></td>&ndash;&gt;
+                    </tr>-->
+                    <tr v-if="listData.length>0"  v-for="item in listData">
+                        <td scope="row">{{item.ponumber}}</td>
+                        <td>{{item.pnnumber}}</td>
                         <td>{{item.shipTo}}</td>
                         <td>{{item.soldTo}}</td>
                         <td>{{item.orderType}}</td>
@@ -236,14 +198,101 @@
                         <td>{{item.remark}}</td>
                         <td>{{item.carrier}}</td>
                         <td>{{item.customer}}</td>
-                        <td><button onclick="EditPOSelect()" type="button">Edit</button></td>
-                    </tr>-->
+                        <td><button onclick="EditPOSelect(this)" type="button">information</button></td>
+                    </tr>
+                    <tr>
+                        <td colspan=11>
+                            <div id="pagelist">
+                                <div class="row">
+                                    <div class="col-sm-6" style="line-height: 80px">
+                                        <div class="dataTables_info" id="sample-table-2_info">
+                                            共{{pageData.total}}条，当前显示第
+                                            <span v-if="pageData.pageSize==1 || pageData.total == 0 || pageData.total == 1">
+                                                {{pageData.itemStart}}</span>
+                                            <span v-else>{{pageData.itemStart}}-{{pageData.itemEnd}}</span>
+                                            条
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="dataTables_paginate paging_bootstrap">
+                                            <ul class="pagination">
+                                                <li v-if="pageData.curPage == 1 || pageData.total == 0 || pageData.total == 1" class="prev disabled">
+                                                    <a>首页</a>
+                                                </li>
+                                                <li v-else class="prev">
+                                                    <a href="javascript:void(0)" v-on:click="changeCurPage(1,pageData.pageSize);">
+                                                        首页
+                                                    </a>
+                                                </li>
+                                                <li v-if="pageData.curPage == 1 || pageData.total == 0 || pageData.total == 1" class="prev disabled">
+                                                    <a>上一页</a>
+                                                </li>
+                                                <li v-else class="prev">
+                                                    <a href="javascript:void(0)" v-on:click="changeCurPage(pageData.curPage-1,pageData.pageSize);">
+                                                        上一页</i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="pageData.totalPage > 5 && pageData.curPage > 3" class="next disabled">
+                                                    <a>...</a>
+                                                </li>
+                                                <template v-for="pageItem in pageData.pageIndex">
+                                                    <li v-if="pageData.curPage == pageItem" class="active">
+                                                        <a>{{pageItem}}</a>
+                                                    </li>
+                                                    <li v-else>
+                                                        <a href="javascript:void(0)" v-on:click="changeCurPage(pageItem,pageData.pageSize);">
+                                                            {{pageItem}}
+                                                        </a>
+                                                    </li>
+                                                </template>
+                                                <li v-if="pageData.totalPage > 5 && pageData.curPage < pageData.totalPage-2" class="next disabled">
+                                                    <a>...</a>
+                                                </li>
+                                                <li v-if="pageData.curPage == pageData.totalPage || pageData.total == 0 || pageData.total == 1" class="next disabled">
+                                                    <a>下一页</i></a>
+                                                </li>
+                                                <li v-else class="next">
+                                                    <a href="javascript:void(0)" v-on:click="changeCurPage(pageData.curPage+1,pageData.pageSize);">
+                                                        下一页</i>
+                                                    </a>
+                                                </li>
+                                                <li v-if="pageData.curPage == pageData.totalPage || pageData.total == 0 || pageData.total == 1" class="next disabled">
+                                                    <a>末页</a>
+                                                </li>
+                                                <li v-else class="next">
+                                                    <a href="javascript:void(0)" v-on:click="changeCurPage(pageData.totalPage,pageData.pageSize);">
+                                                        末页
+                                                    </a>
+                                                </li>
+                                                <template v-if="pageData.totalPage > 5" class="next disabled">
+                                                    <li>
+                                                        <input value="" ref="goPage" class="input-mini" type="text" style="height: 32px;width:40px;margin:auto 5px auto 20px;line-height: 24px;">
+                                                        <label><a href="javascript:void(0)" v-on:click="goPage(pageData.pageSize,pageData.totalPage)">Go</a></label>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    <tr>
                 </tbody>
             </table>
         </div>
     </div>
     <!--显示分页信息-->
-    <div class="row">
+    <!--<div class="row">
+        <div class="col-xs-offset-4 col-xs-4">
+            <ul class="pagination">
+                <li><a href="javascript:;" @click="jump(1)">首页</a></li>
+                <li><a href="javascript:;" @click="jump(pageInfo.prePage)">上页</a></li>
+                <li><a href="javascript:;" @click="jump(pageInfo.nextPage)">下页</a></li>
+                <li><a href="javascript:;" @click="jump(pageInfo.pages)">尾页</a></li>
+            </ul>
+        </div>
+    </div>-->
+    <!--<div class="row">
         <div class="col-xs-6" id="page_info_area">
 
         </div>
@@ -254,9 +303,18 @@
                 </ul>
             </nav>
         </div>
-    </div>
+    </div>-->
+    <!--<div class="row">
+        <div class="col-xs-offset-4 col-xs-4">
+            <ul class="pagination">
+                <li><a href="javascript:;" @click="jump(1)">首页</a></li>
+                <li><a href="javascript:;" @click="jump(pageInfo.prePage)">上页</a></li>
+                <li><a href="javascript:;" @click="jump(pageInfo.nextPage)">下页</a></li>
+                <li><a href="javascript:;" @click="jump(pageInfo.pages)">尾页</a></li>
+            </ul>
+        </div>
+    </div>-->
 </div>
-
 <script>
     // 创建一个新的 Vue导航条 实例
     var bar = new Vue({
@@ -360,6 +418,7 @@
     //var inputField = document.getElementById("input_select");
     $(function () {
         to_page(1);
+        getData(1,10);
     });
 
     //解析显示分页信息
@@ -505,7 +564,7 @@
     //将信息在表格中显示
     function to_page(pn) {
         console.log(pn);
-        var ajax = $.ajax({
+        /*var ajax = $.ajax({
             url: "../views/getAllPO",
             data:"pn="+pn,
             type:"GET",
@@ -514,30 +573,118 @@
                     el:'#PO_List_table',
                     data:{
                         lists:result.extend.pageInfo.list,
-
-                    }
+                         }
                 });
                 console.log(result);
-                /*var obj=eval(result);
-                var s='';
-                for(var p in obj)
-                {
-                    s+=p+'\n';
-                }
-                alert(s);
-                console.log('aaaaa:'+result.extend.pageInfo.list);*/
+                console.log('aaaaa:'+result.extend.pageInfo.list);
                 alert(result.extend.pageInfo.list[0].remark);
                 //build_PO_table(result);
                 build_page_info(result);
                 build_pages_nav(result);
-
-                setInterval(function () {
-                    $("#PO_List_table").load(location.href + " #PO_List_table");//注意后面DIV的ID前面的空格，很重要！没有空格的话，会出双眼皮！（也可以使用类名）
-                }, 8000);//8秒自动刷新
-
+                window.history.go(1);
             }
-        });
+        });*/
     }
+
+    function getData($page,$pageSize){//获取数据，可使用各种语言替换^_^
+        var $data = [];
+        for (var $i=($page-1)*$pageSize+1; $i <=$page*$pageSize ; $i++) {
+            $data.push( {
+                id:$i,
+                name:'name'+$i
+            });
+        }
+        var $returnData = {'data':$data,'total':103};
+        return $returnData;
+    }
+
+    var vm = new Vue({
+        el: '#PO_List_table',
+        data: {
+            listData:[],
+            page: 1,//当前页码
+            pageSize: 10,//每页条数
+            total:0,//总数
+            pageData: {
+                curPage: 1,
+                pageSize: 10,
+                total: 0,
+                totalPage: 0,
+                pageIndex: [],
+                itemStart: 0,
+                itemEnd: 0
+            }
+        },
+        methods:{
+            listItems: function () {//列出需要的数据
+                var returnData =getData(this.page,this.pageSize);
+                this.listData = returnData.data;
+                this.total=returnData['total'];
+                this.setPageList(this.total, this.page, this.pageSize);
+            },
+            setPageList: function (total, page, pageSize) {
+                total = parseInt(total);
+                var curPage = parseInt(page);
+                pageSize = parseInt(pageSize);
+                var totalPage = Math.ceil(total / pageSize);
+                var itemStart = (curPage - 1) * pageSize + 1;
+                if (curPage == totalPage) {
+                    itemEnd = total;
+                } else {
+                    itemEnd = curPage * pageSize;
+                }
+                var pageIndex = [];
+                if (curPage >= 1 && curPage <= totalPage) {
+                    if (totalPage < 5) {//5页以内
+                        for (var $i = 1; $i <= totalPage; $i++) {
+                            pageIndex.push($i);
+                        }
+                    } else {//大于5页
+                        if (curPage == 1) {
+                            pageIndex = [curPage, curPage + 1, curPage + 2, curPage + 3, curPage + 4];
+                        } else if (curPage == 2) {
+                            pageIndex = [curPage - 1, curPage, curPage + 1, curPage + 2, curPage + 3];
+                        } else if (curPage == totalPage - 1) {
+                            pageIndex = [curPage - 3, curPage - 2, curPage - 1, curPage, totalPage];
+                        } else if (curPage == totalPage) {
+                            pageIndex = [curPage - 4, curPage - 3, curPage - 2, curPage - 1, curPage];
+                        } else {
+                            pageIndex = [curPage - 2, curPage - 1, curPage, curPage + 1, curPage + 2];
+                        }
+                    }
+                }
+
+                this.pageData.curPage = curPage;
+                this.pageData.pageSize = pageSize;
+                this.pageData.total = total;
+                this.pageData.totalPage = totalPage;
+                this.pageData.pageIndex = pageIndex;
+                this.pageData.itemStart = itemStart;
+                this.pageData.itemEnd = itemEnd;
+            },
+            changeCurPage: function (page, pageSize) {//换页
+                this.page = page;
+                this.pageSize = pageSize;
+                this.listItems();
+            },
+            goPage: function (pageSize, totalPage) {//跳转页
+                var pageIndex = this.$refs.goPage.value;
+                if (pageIndex <= 0) {
+                    pageIndex = 1;
+                    this.$refs.goPage.value = 1;
+                } else if (pageIndex >= totalPage) {
+                    pageIndex = totalPage;
+                    this.$refs.goPage.value = totalPage;
+                }
+                this.changeCurPage(pageIndex, pageSize);
+            }
+        }
+    });
+
+    window.onload = function(){
+        console.log('Hello World!');
+        vm.listItems();
+    };
 
     function build_PO_table(result) {
         //清空table表格
@@ -561,112 +708,6 @@
 //
 // }
 
-
-    /*function EditPOSelect() {
-           var PO_List_table = document.getElementById("PO_List_table").rows[1].cells[2].innerHTML;
-           var ponumber = document.getElementsByTagName("table")[0]; //获取第一个表格
-           //var ponumber = document.getElementById("ponumber").value;
-           console.log(ponumber);
-           window.location.href = encodeURI("views/podetail.html?value=" + ponumber);
-   }*/
-   /* EditPOSelect(){
-        console.log(this.$ref.td)
-    }*/
-
-    /*$(document).ready(function(){
-        trace("初始化方法进入");
-    });
-
-    function trace(obj){
-        console.log("ggggggg"+obj);
-        /!*编辑单头信息*!/
-        var Top_Edit = document.getElementsByClassName("Top_Edit");
-
-        for (var i = 0; i < Top_Edit.length; i++) {
-
-            Top_Edit[i].index = i;
-
-            Top_Edit[i].onclick = function () {
-
-                var table = document.getElementById("PO_List_table");
-
-                /!*获取选中的行 *!/
-                var child = table.getElementsByTagName("tr")[this.index+1];
-                console.log("ssssssffsfsfdsf"+this.index)
-                /!*获取选择行的所有列*!/
-                var SZ_col = child.getElementsByTagName("td");
-                var span_col = child.getElementsByTagName("span");
-
-                var jk = span_col[0].innerHTML;
-                console.log("dfsfsdfsfsf"+jk)
-
-            }
-        }
-
-    }*/
-
-    //编辑PO信息
-    /*function EditPOSelect() {
-
-
-        /!*编辑单头信息*!/
-        var Top_Edit = document.getElementsByClassName("Top_Edit");
-
-        for (var i = 0; i < Top_Edit.length; i++) {
-
-            Top_Edit[i].index = i;
-
-            Top_Edit[i].onclick = function () {
-
-                var table = document.getElementById("PO_List_table");
-
-                /!*获取选中的行 *!/
-                var child = table.getElementsByTagName("tr")[this.index+1];
-                console.log("ssssssffsfsfdsf"+this.index)
-                /!*获取选择行的所有列*!/
-                var SZ_col = child.getElementsByTagName("td");
-                var span_col = child.getElementsByTagName("span");
-
-               var ponumber = span_col[0].innerHTML;
-
-
-               console.log("dfsfsdfsfsf"+ponumber);
-               window.location.href = encodeURI("podetail.html?value=" + ponumber);;
-
-            }
-        }
-
-
-
-
-
-        /!*var mytable = document.getElementById("myBody");
-        var data = [];
-        for(var i=0,rows=mytable.rows.length; i<rows; i++){
-            var data2= [];
-            for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
-                data2.push(mytable.rows[i].cells[j].innerHTML)
-            }
-            console.log(i)
-            data.push(data2);
-        }
-
-         var data = document.getElementsByTagName('span')[0].innerHTML;
-        console.log("ddddd  "+data)
-        var ponumber = document.getElementById("td ponumber");
-        console.log("ddddd")
-        console.log(ponumber);*!/
-
-        // var ajax = $.ajax({
-        //     url:"../lenovoscs_Web_exploded/views/selectPOByponumber/"+ponumber,
-        //     //data:"ponumber"+list.ponumber,
-        //     type:"GET",
-        //     success:function (result,state) {
-        //         console.log(result);
-        //     }
-        // });
-
-    }*/
 
     function EditPOSelect(obj) {
         var $td = $(obj).parents('tr').children('td');
@@ -694,24 +735,12 @@
                             window.location.href = "/views/procument.html";
                         }
                     };
-                    //window.wxc.xcConfirm(txt, "success", option);
-                } /*else {
-                    if (data.code == 1) {
-                        var txt = data.msg;
-                        var option = {
-                            onOk: function () {
-                                window.location.href = "/admin/ImportStu.jsp";
-                            }
-                        };
-                        window.wxc.xcConfirm(txt, "error", option);
-                    }
-                }*/
+                }
             }
         });
     }
 
 
 </script>
-
 </body>
 </html>

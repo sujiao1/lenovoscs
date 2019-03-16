@@ -3,6 +3,7 @@ package com.lenovo.lenovoscs.controller;
 import com.lenovo.lenovoscs.bean.ASN;
 import com.lenovo.lenovoscs.bean.Msg;
 import com.lenovo.lenovoscs.service.ASNService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class ASNController {
      */
     @RequestMapping("/getASNS")
     @ResponseBody
+    @ApiOperation("返回ASN表中所有的ASN数据")
     public Msg getASNS(){
        List<ASN> asnList = asnService.getASNS();
        return Msg.success().add("asnList",asnList);
