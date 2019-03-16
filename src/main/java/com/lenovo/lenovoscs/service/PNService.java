@@ -11,7 +11,6 @@ import com.sun.org.apache.bcel.internal.generic.RETURN;
 import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.net.idn.Punycode;
 
 import java.util.List;
 
@@ -112,7 +111,7 @@ public class PNService {
     }
 
     /**
-     * 
+     *
      * @param popnumber
      */
     public void deletePNByPonumber(Integer popnumber){

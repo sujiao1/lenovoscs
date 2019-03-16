@@ -21,7 +21,7 @@ public class ASNController {
      * 返回ASN表中所有的ASN数据
      * @return
      */
-    @RequestMapping("/getASNS")
+    @RequestMapping(value = "/getASNS",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation("返回ASN表中所有的ASN数据")
     public Msg getASNS(){
