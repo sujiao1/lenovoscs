@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Po Detail</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../views/css/container.css" type="text/css">
+    <!--<link rel="stylesheet" href="../views/css/container.css" type="text/css">-->
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
@@ -57,8 +57,8 @@
                 --------------------------*/
 
         nav{
-            display:inline-block;
-            margin:60px auto 45px;
+            /*display:inline-block;*/
+            margin:30px auto 15px;
             background-color:#5597b4;
             box-shadow:0 1px 1px #ccc;
             border-radius:2px;
@@ -152,14 +152,14 @@
 
         ul{
             list-style: none;
-            width: 428px;
+            width: 500px;
             margin: 0 auto;
             text-align: left;
         }
 
         ul li{
             border-bottom: 1px solid #ddd;
-            padding: 10px;
+            padding: 0px;
             overflow: hidden;
         }
 
@@ -176,7 +176,6 @@
             padding-top: 12px;
             color:#6e7a7f;
         }
-
         .page{
             float: left;
         }
@@ -215,14 +214,14 @@
     <div id="bar" class="row">
         <!-- 激活的菜单样式为  active 类 -->
         <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
-        <nav v-bind:class="active">
+        <nav>
 
             <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
 
-            <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
-            <a href="procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
-            <a href="asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
-            <a href="iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+            <a href="../hello" class="home">Home</a> <!--v-on:click="makeActive('home')"-->
+            <a href="procument.html" class="Procument">Order</a>
+            <a href="asn.html" class="ASN">ASN</a>
+            <a href="iv.html" class="IV">GR</a>
         </nav>
 
         <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
@@ -233,22 +232,21 @@
     <form method="POST" id="POdataForm" name="POdataForm">
         <!--button-->
         <div class="row">
-            <div class="col-xs-1">
+            <!--<div class="col-xs-1">
                 <img v-bind:src="../../../static/images/upload.png">
             </div>
             <div class="col-xs-2">
                 <h5>order</h5><p>ASN#</p>
             </div>
-            <div class="col-xs-2"><p>ASN Detail</p></div>
-            <div class="col-xs-1"></div>
+            <div class="col-xs-2"><p>ASN Detail</p></div>-->
+            <div class="col-xs-4"></div>
             <!--<div class="col-xs-1">
                 <button type="button" id="download" onclick="downloadForm()">Download</button>
             </div>-->
-            <div class="col-xs-1"></div>
-            <div class="col-xs-1">
-                <button type="submit" id="confirm" onclick="ConfirmPOForm()">confirm</button>
+            <div class="col-xs-4">
+                <button type="button" id="confirm" onclick="ConfirmPOForm()">confirm</button>
             </div>
-            <div class="col-xs-2"></div>
+            <div class="col-xs-4"></div>
         </div>
         <!--横线-->
         <div class="row">
@@ -277,14 +275,14 @@
                 <div class="row">
                     <div class="col-xs-4">Order Type <input type="text" id="orderType" name="orderType"></div>
                     <div class="col-xs-4">Exchange Provision Item <input type="text" id="exchangeProvisionItem" name="exchangeProvisionItem"></div>
-                    <div class="col-xs-4">Net Due Data <input type="date" id="netDueData" name="netDueData"></div>
+                    <div class="col-xs-4">Net Due Date <input type="date" id="netDueDate" name="netDueDate"></div>
                 </div>
                 <br>
-                <!--<div class="row">
+                <div class="row">
                     <div class="col-xs-4">PO#<input type="text" id="ponumber" name="ponumber"></div>
                     <div class="col-xs-4"></div>
                     <div class="col-xs-4"></div>
-                </div>-->
+                </div>
             </div>
             <!--横线-->
             <div class="row">
@@ -298,7 +296,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-2"></div>
-                    <div class="col-xs-5">Po Date <input type="date" id="poDate" name="poDate"></div>
+                    <div class="col-xs-5">ASN Date <input type="date" id="poDate" name="poDate"></div>
 
                     <div class="col-xs-5">Delivery Date <input type="date" id="deliveryDate" name="deliveryDate"></div>
                 </div>
@@ -316,8 +314,8 @@
             <!--System information-->
             <div class="row">
                 <div class="row">
-                    <div class="col-xs-2"><p>System Information</p></div>
-                    <div class="col-xs-10"></div>
+                    <div class="col-xs-3"><p>System Information</p></div>
+                    <div class="col-xs-8"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6">createdBy <input type="text" id="createdBy" name="createdBy"></div>
@@ -379,7 +377,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="PN_PO_input" class="col-sm-2 control-label">PO#</label>
+                            <label for="PN_PO_input" class="col-sm-2 control-label">ASN#</label>
                             <div class="col-sm-10">
                                 <input type="text" name="number" class="form-control" id="PN_PO_input"
                                        placeholder="number" readonly="readonly">
@@ -477,12 +475,12 @@
             <table class="table-bordered table table-hover" id="PN_List_table">
                 <thead>
                     <tr>
-                        <th>PN#</th>
+                        <th>ASN PN#</th>
                         <th>PN Des</th>
-                        <th>Categroy</th>
+                        <th>Category</th>
                         <th>Unit</th>
                         <th>Price</th>
-                        <th>PN Quantity</th>
+                        <th>ASN PN Quantity</th>
                         <th>Parts Amount</th>
                         <th>PN Status</th>
                     </tr>
@@ -496,7 +494,7 @@
                     <td v-text="list.price"></td>
                     <td v-text="list.pnQuantity"></td>
                     <td v-text="list.partsAmount"></td>
-                    <td v-text="list.flag"></td>
+                    <td v-text="list.status"></td>
                 </tr>
                 </tbody>
             </table>
@@ -513,9 +511,9 @@
         el: '#bar',
 
         // 定义属性，并设置初始值
-        data: {
+       /* data: {
             active: 'home'
-        },
+        },*/
 
         // 点击菜单使用的函数
         methods: {
@@ -625,7 +623,7 @@
                 //  $("#ponumber").text(poData.ponumber);
                 //$("#ponumber").text=poData.ponumber;
                 document.getElementById("asnnumber").value = asnData.asnnumber;
-                //document.getElementById("ponumber").value = asnData.ponumber;
+                document.getElementById("ponumber").value = asnData.ponumber;
                 document.getElementById("remark").value = asnData.remark;
                 document.getElementById("shipTo").value = asnData.shipTo;
                 document.getElementById("carrier").value = asnData.carrier;
@@ -633,7 +631,7 @@
                 document.getElementById("customer").value = asnData.customer;
                 document.getElementById("orderType").value = asnData.orderType;
                 document.getElementById("exchangeProvisionItem").value = asnData.exchangeProvisionItem;
-                document.getElementById("netDueData").value = asnData.netDueData;
+                document.getElementById("netDueDate").value = asnData.netDueDate;
                 document.getElementById("poDate").value = asnData.poDate;
                 document.getElementById("deliveryDate").value = asnData.deliveryDate;
                 document.getElementById("dropOrderTime").value = asnData.dropOrderTime;
@@ -853,13 +851,21 @@
 
     //改变flag状态
     function ConfirmPOForm() {
-        var ponumber = document.getElementById("ponumber").value;
-        console.log(ponumber);
-        var Editponumber = oneValues();
-        console.log(Editponumber);
-        with (document.getElementById("POdataForm")) {
+        //var ponumber = document.getElementById("ponumber").value;
+        //console.log(ponumber);
+        var ASNnumber = oneValues();
+        console.log(ASNnumber);
+        $.ajax({
+           url:"../views/updateASNFlag/",
+           type:"GET",
+           success:function (result) {
+               console.log(result);
+               window.location.href="iv.html"
+           }
+        });
+        /*with (document.getElementById("POdataForm")) {
             // method = "post";
-            type = 'post';
+            type = "GET";
             console.log("123")
             contentType="application/json;charset=utf-8";
             console.log("321")
@@ -869,7 +875,7 @@
             reset_form("#po_information");
             // success=Function(result)
             console.log(Function(result));
-        }
+        }*/
     }
 
     function download() {

@@ -3,6 +3,8 @@ package com.lenovo.lenovoscs.dao;
 import com.lenovo.lenovoscs.bean.PN;
 import com.lenovo.lenovoscs.bean.PNExample;
 import java.util.List;
+
+import com.lenovo.lenovoscs.bean.PNStatus;
 import org.apache.ibatis.annotations.Param;
 
 public interface PNMapper {
@@ -20,13 +22,17 @@ public interface PNMapper {
 
     int insertSelective(PN record);
 
-    List<PN> selectByExample(PNExample example);
+    List<PNStatus> selectByExample();
+
+    List<PN> selectPNByExample(PNExample example);
 
     List<PN> selectAllASNPN(PNExample example);
 
-    List<PN> getPNequalByExample(Integer number);
+    List<PNStatus> getPNequalByExample(Integer number);
 
-    List<PN> getASNPNEqual(Integer number);
+    List<PNStatus> getPNequalPOnumber(Integer number);
+
+    List<PNStatus> getPNequalivnumber(Integer number);
 
     PN selectByPrimaryKey(Integer id);
 
@@ -41,4 +47,8 @@ public interface PNMapper {
     int updateByPrimaryKey(PN record);
 
     int updataPNBypnnumber(PN record);
+
+    int updataPNFlagByasn(PN pn);
+
+    int updataPNFlagByIV(PN pn);
 }

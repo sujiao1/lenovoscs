@@ -1,5 +1,6 @@
 package com.lenovo.lenovoscs.dao;
 
+import com.lenovo.lenovoscs.bean.IVStatus;
 import com.lenovo.lenovoscs.bean.PO;
 import com.lenovo.lenovoscs.bean.POExample;
 import java.util.List;
@@ -25,7 +26,9 @@ public interface POMapper {
 
     List<Object> getAllASN(POExample example);
 
-    List<PO> getAllIV(POExample example);
+    List<PO> getPO(Integer ponumber);
+
+    List<IVStatus> getAllIV(POExample example);
 
     //List<PO> getPOByponumber(Integer ponumber);
 
@@ -44,6 +47,8 @@ public interface POMapper {
     int updateByPrimaryKey(PO record);
 
     int updatePOByponumber(PO record);
+
+    int updatePOBypnnumber(PO record);
 
     int updatePOFlag(PO record);
 

@@ -87,8 +87,8 @@
     condition_item, remark, carrier, customer, net_due_date, po_date, delivery_date,
     drop_order_time, target_date, created_by, last_modified_by, flag
   </sql>
-  <select id="selectByExample" parameterType="com.lenovo.lenovoscs.bean.ASNExample" resultMap="BaseResultMap">
-    select
+  <select id="selectByExample" resultType="com.lenovo.lenovoscs.bean.ASNStatus">
+    <!--select
     <if test="distinct">
       distinct
     </if>
@@ -99,7 +99,15 @@
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
-    </if>
+    </if>-->
+    select mapper.ponumber as ponumber,asn.id as id,asn.asnnumber as asnnumber,asn.pnnumber as pnnumber,
+    asn.pn_quantity as pnQuantity,asn.payment as payment,asn.ship_to as shipTo,asn.sold_to as soldTo,
+    asn.order_type as orderType,asn.exchange_provision_item as exchangeProvisionItem,
+    asn.condition_item as conditionItem,asn.remark as remark,asn.carrier as carrier,
+    asn.customer as customer,asn.net_due_date as netDueDate,asn.po_date as poDate,
+    asn.delivery_date as deliveryDate,asn.drop_order_time as dropOrderTime,asn.target_date as targetDate,
+    asn.created_by as createdBy,asn.last_modified_by as lastModifiedBy,asn.flag as flag,flag.status as status
+    from asn,flag,mapper where asn.flag = flag.flag and asn.pnnumber = mapper.pnnumber
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -107,13 +115,31 @@
     from asn
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectASNByasnnumber" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select asn.*,mapper.ponumber from asn left join mapper on  asn.pnnumber = mapper.pnnumber
-    where asn.asnnumber = #{asnnumber,jdbcType=INTEGER}
+  <select id="selectASNByasnnumber" parameterType="java.lang.Integer" resultType="com.lenovo.lenovoscs.bean.ASNStatus">
+    select mapper.ponumber,asn.id as id,asn.asnnumber as asnnumber,asn.pnnumber as pnnumber,
+    asn.pn_quantity as pnQuantity,asn.payment as payment,asn.ship_to as shipTo,asn.sold_to as soldTo,
+    asn.order_type as orderType,asn.exchange_provision_item as exchangeProvisionItem,
+    asn.condition_item as conditionItem,asn.remark as remark,asn.carrier as carrier,
+    asn.customer as customer,asn.net_due_date as netDueDate,asn.po_date as poDate,
+    asn.delivery_date as deliveryDate,asn.drop_order_time as dropOrderTime,asn.target_date as targetDate,
+    asn.created_by as createdBy,asn.last_modified_by as lastModifiedBy,asn.flag as flag,flag.status as status
+    from asn,mapper,flag
+    /*left join mapper on  asn.pnnumber = mapper.pnnumber,
+    left join flag on asn.flag = flag.flag*/
+    where asn.pnnumber = mapper.pnnumber
+    and asn.flag = flag.flag
+    and asn.asnnumber = #{asnnumber,jdbcType=INTEGER}
   </select>
-  <select id="getASNSearch" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select asn.* from asn,mapper
-    where asn.asnnumber = mapper.asnnumber and mapper.ponumber = #{ponumber}
+  <select id="getASNSearch" parameterType="java.lang.Integer" resultType="com.lenovo.lenovoscs.bean.ASNStatus">
+    select mapper.ponumber,asn.id as id,asn.asnnumber as asnnumber,asn.pnnumber as pnnumber,
+    asn.pn_quantity as pnQuantity,asn.payment as payment,asn.ship_to as shipTo,asn.sold_to as soldTo,
+    asn.order_type as orderType,asn.exchange_provision_item as exchangeProvisionItem,
+    asn.condition_item as conditionItem,asn.remark as remark,asn.carrier as carrier,
+    asn.customer as customer,asn.net_due_date as netDueDate,asn.po_date as poDate,
+    asn.delivery_date as deliveryDate,asn.drop_order_time as dropOrderTime,asn.target_date as targetDate,
+    asn.created_by as createdBy,asn.last_modified_by as lastModifiedBy,asn.flag as flag,flag.status as status
+    from asn,mapper,flag
+    where asn.asnnumber = mapper.asnnumber and mapper.ponumber = #{ponumber} and asn.flag = flag.flag
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from asn

@@ -35,4 +35,8 @@ public interface MapperMapper {
     int updateByPrimaryKey(Mapper record);
 
     int updateByPoAndPn(Mapper record);
+
+    int updateMapper(Mapper record);
+
+    int updateMapperIV(Mapper record);
 }

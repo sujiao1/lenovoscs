@@ -56,8 +56,8 @@
                 --------------------------*/
 
         nav{
-            display:inline-block;
-            margin:60px auto 45px;
+           /* display:inline-block;*/
+            margin:30px auto 15px;
             background-color:#5597b4;
             box-shadow:0 1px 1px #ccc;
             border-radius:2px;
@@ -151,14 +151,14 @@
 
         ul{
             list-style: none;
-            width: 428px;
+            width: 500px;
             margin: 0 auto;
             text-align: left;
         }
 
         ul li{
             border-bottom: 1px solid #ddd;
-            padding: 10px;
+            padding: 0px;
             overflow: hidden;
         }
 
@@ -174,6 +174,14 @@
             font-weight: bold;
             padding-top: 12px;
             color:#6e7a7f;
+        }
+
+        .pagination {
+            /*display: inline-block;*/
+            display: block;
+            padding-left: 0;
+            margin: 10px 0;
+            border-radius: 4px;
         }
 
         .page{
@@ -213,14 +221,14 @@
     <div id="bar" class="row">
         <!-- 激活的菜单样式为  active 类 -->
         <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
-        <nav v-bind:class="active">
+        <nav>
 
             <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
 
-            <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
-            <a href="procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
-            <a href="asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
-            <a href="iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+            <a href="../hello" class="home">Home</a>
+            <a href="procument.html" class="Procument">Order</a>
+            <a href="asn.html" class="ASN">ASN</a>
+            <a href="iv.html" class="IV">GR</a>
         </nav>
 
         <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
@@ -228,50 +236,47 @@
         <!--<p>您选择了 <b>{{active}} 菜单</b></p>-->
     </div>
     <!--home标题--><!--selected下拉框-->
-    <div class="row">
+    <!--<div class="row">
         <div class="col-xs-1">
             <img v-bind:src="../../../static/images/upload.png">
         </div>
         <div class="col-xs-2">
             <h5>order</h5><h3>IV#</h3>
         </div>
-        <div class="col-xs-1"><p>View:</p></div>
-        <div class="col-xs-1">
-            <div id="app">
-                <select v-model="selected" name="POSelect" id="input_select">
-                    <option value="">All</option>
-                    <option value="Product Line-SMP">Product Line-SMP</option>
-                    <option value="Product Line-TAB">Product Line-TAB</option>
-                    <option value="Status">Status</option>
-                </select>
+
+        <div class="col-xs-4"></div>
+    </div>-->
+    <!--横线-->
+    <!--<div class="row">
+        <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
+    </div>-->
+    <!--Po display-->
+    <div class="row">
+        <div class="col-xs-1"><p>GR Display</p></div>
+        <div class="col-xs-3">
+            <input type="text" id="searchGR" name="searchGR" placeholder="PO#">
+            <button type="button" id="searchGRButton" onclick="getGRonSearch()">search</button>
+        </div>
+        <div class="col-xs-5">
+            <div class="col-xs-1">View:</div>
+            <div class="col-xs-5">
+                <div id="app">
+                    <select v-model="selected" name="POSelect" id="input_select">
+                        <option value="">All</option>
+                        <option value="Product Line-SMP">Product Line-SMP</option>
+                        <option value="Product Line-TAB">Product Line-TAB</option>
+                        <option value="Status">Status</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-1">
+                <button onclick="selectAll()">go!</button>
             </div>
         </div>
         <div class="col-xs-3">
-            <button onclick="selectAll()">go!</button>
+            <input type="text" id="searchGRByASN" name="searchGRByASN" placeholder="ASN#">
+            <button type="button" id="searchGRASN" onclick="getGRonSearch()">search</button>
         </div>
-        <div class="col-xs-4"></div>
-    </div>
-    <!--横线-->
-    <div class="row">
-        <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
-    </div>
-    <!--Po display-->
-    <div class="row">
-        <div class="col-xs-2"><p>PO Display</p></div>
-        <div class="col-xs-3"></div>
-        <div class="col-xs-2"><!--Recent Order--></div>
-        <div class="col-xs-2">
-            <!--<div id="selected">
-                <select v-model="selected" name="fruit">
-                    <option value="">Recently Upload</option>
-                    <option value="Recently Viewed">Recently Viewed</option>
-                    <option value="Recently Modified">Recently Modified</option>
-                </select>
-            </div>-->
-        </div>
-        <!--<div class="col-xs-1">
-            <button onclick="window.location.href='ivdetail.html'">new</button>
-        </div>-->
     </div>
     <br>
     <!--table display-->
@@ -281,28 +286,32 @@
             <table class="table-bordered table table-hover" id="IV_List_table">
                 <thead>
                 <tr>
-                    <th>IV#</th>
+                    <th>PO#</th>
+                    <th>ASN#</th>
+                    <th>GR#</th>
                     <th>Sold to</th>
-                    <th>IV Data</th>
-                    <th>Net Due Data</th>
+                    <th>GR Data</th>
+                    <th>Target Data</th>
                     <th>Status</th>
                     <th>action</th>
                 </tr>
                 </thead>
                 <tbody id="myBody">
                 <tr v-for="list in lists">
-                    <td v-text="list.ponumber" id="ponumber"></td>
+                    <td v-text="list.ponumber"></td>
+                    <td v-text="list.asnnumber"></td>
+                    <td v-text="list.ivnumber"></td>
                     <td v-text="list.soldTo"></td>
                     <td v-text="list.poDate"></td>
-                    <td v-text="list.netDueDate"></td>
-                    <td v-text="list.flag"></td>
+                    <td v-text="list.targetDate"></td>
+                    <td v-text="list.status"></td>
                     <td><button onclick="EditPOSelect(this)" type="button">Information</button></td>
                 </tbody>
             </table>
         </div>
     </div>
     <!--显示分页信息-->
-    <!--<div class="row">
+    <div class="row">
         <div class="col-xs-6" id="page_info_area">
 
         </div>
@@ -313,7 +322,7 @@
                 </ul>
             </nav>
         </div>
-    </div>-->
+    </div>
 </div>
 
 <script>
@@ -416,27 +425,27 @@
     })
 
     //初始化
-    $(function () {
+    /*$(function () {
         $.ajax({
-            url:"../views/getAllIV",
+            url:"../views/getAllIVs",
             type: "POST",
             success:function (result) {
+                console.log(result);
                 new Vue({
                     el:"#IV_List_table",
                     data:{
-                        lists:result.extend.poList
+                        lists:result.extend.IVList
                     }
 
                 })
             }
         });
+    });*/
+
+    $(function () {
+        to_page(1);
     });
 
-    var totalRecord,currentPage;
-    //var inputField = document.getElementById("input_select");
-    /*function selectAll() {
-        to_page(1);
-    };*/
 
     //解析显示分页信息
     function build_page_info(result) {
@@ -522,16 +531,30 @@
     function to_page(pn) {
         console.log(pn);
         var ajax = $.ajax({
-            url: "../lenovoscs_Web_exploded/views/getAllPO",
+            url: "../views/getAllIVs",
             data:"pn="+pn,
             type:"GET",
             success:function (result,state) {
-                new Vue({
+                /*new Vue({
                     el:'#PO_List_table',
                     data:{
                         lists:result.extend.pageInfo.list
                     }
-                })
+                });*/
+                $("#myBody").html("");
+                for(var i = 0;i<result.extend.pageInfo.list.length;i++){
+                    str1 = "<tr>" +
+                        "<td>"+result.extend.pageInfo.list[i].ponumber + "</td>" +
+                        "<td>"+result.extend.pageInfo.list[i].asnnumber + "</td>" +
+                        "<td>"+result.extend.pageInfo.list[i].ivnumber + "</td>" +
+                        "<td>"+result.extend.pageInfo.list[i].soldTo+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].poDate+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].targetDate+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].status+"</td>"+
+                        "<td>"+"<button onclick='EditPOSelect(this)' type='button' v-text:='information'>information</button>"+"</td>"
+                        +"</tr>";
+                    $("#myBody").append(str1);
+                }
                 console.log(result);
                 //build_PO_table(result);
                 build_page_info(result);
@@ -540,40 +563,64 @@
         });
     }
 
-    //编辑PO信息
-    /*function EditPOSelect() {
-        /!*编辑单头信息*!/
-        var Top_Edit = document.getElementsByClassName("Top_Edit");
-
-        for (var i = 0; i < Top_Edit.length; i++) {
-
-            Top_Edit[i].index = i;
-
-            Top_Edit[i].onclick = function () {
-
-                var table = document.getElementById("PO_List_table");
-
-                /!*获取选中的行 *!/
-                var child = table.getElementsByTagName("tr")[this.index+1];
-                console.log("ssssssffsfsfdsf"+this.index)
-                /!*获取选择行的所有列*!/
-                var SZ_col = child.getElementsByTagName("td");
-                var span_col = child.getElementsByTagName("span");
-
-                var ponumber = span_col[0].innerHTML;
-                console.log("dfsfsdfsfsf"+ponumber);
-                window.location.href = encodeURI("views/podetail.html?value=" + ponumber);;
-
-            }
-        }
-
-    }*/
 
     function EditPOSelect(obj) {
         var $td = $(obj).parents('tr').children('td');
-        var ivnumber = $td.eq(0).text();
+        var ivnumber = $td.eq(1).text();
         window.location.href = encodeURI("ivdetail.html?value=" + ivnumber);
     }
+
+    $('#searchGRButton').off("click").on("click", function () {
+        var ponumber = document.getElementById("searchGR").value;
+        $.ajax({
+            url:"../views/getIVSearch/"+ponumber,
+            //data:"ponumber="+ponumber,
+            type:"GET",
+            success:function (result) {
+                console.log(result);
+                $("#myBody").html("");
+                for(var i = 0;i<result.extend.ivStatusList.length;i++){
+                    str1 = "<tr>" +
+                        "<td>"+result.extend.ivStatusList[i].ponumber+"</td>"+
+                        "<td>"+result.extend.ivStatusList[i].asnnumber+"</td>"+
+                        "<td>"+result.extend.ivStatusList[i].ivnumber + "</td>" +
+                        "<td>"+result.extend.ivStatusList[i].shipTo + "</td>" +
+                        "<td>"+result.extend.ivStatusList[i].poDate+"</td>"+
+                        "<td>"+result.extend.ivStatusList[i].targetDate+"</td>"+
+                        "<td>"+result.extend.ivStatusList[i].status+"</td>"+
+                        "<td>"+"<button onclick='EditPOSelect(this)' type='button' v-text:='information'>information</button>"+"</td>"+
+                        "</tr>";
+                    $("#myBody").append(str1);
+                }
+            }
+        });
+    });
+
+    $('#searchGRASN').off("click").on("click", function () {
+        var asnnumber = document.getElementById("searchGRByASN").value;
+        $.ajax({
+            url:"../views/getIVSearchASN/"+asnnumber,
+            //data:"ponumber="+ponumber,
+            type:"GET",
+            success:function (result) {
+                console.log(result);
+                $("#myBody").html("");
+                for(var i = 0;i<result.extend.ivStatusList1.length;i++){
+                    str1 = "<tr>" +
+                        "<td>"+result.extend.ivStatusList1[i].ponumber+"</td>"+
+                        "<td>"+result.extend.ivStatusList1[i].asnnumber+"</td>"+
+                        "<td>"+result.extend.ivStatusList1[i].ivnumber + "</td>" +
+                        "<td>"+result.extend.ivStatusList1[i].shipTo + "</td>" +
+                        "<td>"+result.extend.ivStatusList1[i].poDate+"</td>"+
+                        "<td>"+result.extend.ivStatusList1[i].targetDate+"</td>"+
+                        "<td>"+result.extend.ivStatusList1[i].status+"</td>"+
+                        "<td>"+"<button onclick='EditPOSelect(this)' type='button' v-text:='information'>information</button>"+"</td>"+
+                        "</tr>";
+                    $("#myBody").append(str1);
+                }
+            }
+        });
+    });
 
 </script>
 </body>

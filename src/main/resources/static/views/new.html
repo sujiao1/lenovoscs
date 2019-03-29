@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    //别忘了导入该用的js文件
+    function subForm(pn) {
+        pn=1;
+        $.ajax({
+            url: "../views/getAllPO",
+            type: 'get', //请求的方式
+            data: "pn="+pn,
+            error:function (data) {
+                alert('请求失败'+data.message);
+            },
+
+            success:function (data) {
+                alert(data.extend.pageInfo.list[0].remark);
+                var str1 = "";
+                //清空table中的html
+                for(var i = 0;i<data.extend.pageInfo.list.length;i++) {
+                    "<tr>" +
+                    "<td>" + data.extend.pageInfo.list[i].ponumber + "</td>" +
+                    "<td>" + data.extend.pageInfo.list[i].pnnumber + "</td>" +
+                    "<td>" + data.extend.pageInfo.list[i].shipTo + "</td>" +
+                    "</tr>";
+                }
+                document.getElementById("test").innerHTML = str1;
+                /*$("#test").html("");
+                for(var i = 0;i<data.extend.pageInfo.list;i++){
+                    str1 = "<tr>" +
+                        "<td>"+data.extend.pageInfo.list[i].ponumber + "</td>" +
+                        "<td>"+data.extend.pageInfo.list[i].pnnumber + "</td>" +
+                        "<td>"+data.extend.pageInfo.list[i].shipTo + "</td>" +
+                        "</tr>";
+                    $("#test").append(str1);
+                }*/
+            }
+        });
+    }
+</script>
+
+
+
+<form onsubmit="return false" id="formAddtr" method="get">
+    <input type="text" name="id">
+    <button id="select1" onclick="subForm(this)">查询</button>
+</form>
+
+
+
+<table class="table-bordered table table-hover" id="PO_List_table">
+    <thead>
+    <tr>
+        <!--<th hidden="hidden">id</th>-->
+        <th>PO#</th>
+        <th>PN#</th>
+        <th>Ship to</th>
+    </tr>
+    </thead>
+
+    <tbody id="test">
+    </tbody>
+
+</table>
+
+
+
+
+
+
+
+</body>
+</html>

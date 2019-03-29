@@ -74,7 +74,22 @@
   <sql id="Base_Column_List">
     id, pnnumber, number, pn_des, category, unit, price, pn_quantity, parts_amount, flag
   </sql>
-  <select id="selectByExample" parameterType="com.lenovo.lenovoscs.bean.PNExample" resultMap="BaseResultMap">
+  <select id="selectByExample" resultType="com.lenovo.lenovoscs.bean.PNStatus">
+    <!--select pn.*
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pn,flag
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>-->
+    select * from pn,flag where pn.flag = flag.flag
+  </select>
+  <select id="selectPNByExample" parameterType="com.lenovo.lenovoscs.bean.PNExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -112,7 +127,19 @@
     </if>
   </select>
 
-  <select id="getPNequalByExample" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="getPNequalByExample" parameterType="java.lang.Integer"
+          resultType="com.lenovo.lenovoscs.bean.PNStatus">
+    select pn.id as id,pn.pnnumber as pnnumber,pn.pn_des as pnDes,pn.category as category,
+    pn.unit as unit,pn.price as price,pn.pn_quantity as pnQuantity,pn.flag as flag,
+    pn.parts_amount as partsAmount,flag.status as status
+    from pn,mapper,asn,flag
+    where pn.number = mapper.ponumber
+    and asn.asnnumber = mapper.asnnumber
+    and pn.flag = flag.flag
+    and asn.asnnumber = #{number}
+  </select>
+  <select id="getPNequalPOnumber" parameterType="java.lang.Integer"
+          resultType="com.lenovo.lenovoscs.bean.PNStatus">
     <!--select pn.*
     <if test="distinct">
       distinct
@@ -127,20 +154,30 @@
     </where>
     <if test="orderByClause != null">
       order by ${orderByClause}
-    </if>-->
-    SELECT pn.* from pn,mapper,asn
-    where pn.number = mapper.ponumber and asn.asnnumber = mapper.asnnumber
-    and asn.asnnumber = #{number}
-    <!--<where>
+    </if>
+    <where>
       <if test="_paramter!=null">
         pn.number = #{_paramter}
       </if>
     </where>-->
+    select pn.id as id,pn.pnnumber as pnnumber,pn.pn_des as pnDes,pn.category as category,
+    pn.unit as unit,pn.price as price,pn.pn_quantity as pnQuantity,pn.flag as flag,
+    pn.parts_amount as partsAmount,flag.status
+    from pn,mapper,flag
+    where pn.number = mapper.ponumber
+    and pn.flag = flag.flag
+    and pn.number = #{number}
+  </select>
+  <select id="getPNequalivnumber" parameterType="java.lang.Integer" resultType="com.lenovo.lenovoscs.bean.PNStatus">
+    select pn.id as id,pn.pnnumber as pnnumber,pn.pn_des as pnDes,pn.category as category,
+    pn.unit as unit,pn.price as price,pn.pn_quantity as pnQuantity,pn.flag as flag,
+    pn.parts_amount as partsAmount,flag.status
+    from pn,mapper,iv,flag
+    where pn.number = mapper.ponumber and iv.ivnumber = mapper.ivnumber
+    and pn.flag = flag.flag
+    and iv.ivnumber = #{number}
   </select>
 
-  <select id="getASNPNEqual" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
-    select pn.* from pn where pn.number = #{_paramter}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from pn
     where id = #{id,jdbcType=INTEGER}
@@ -361,6 +398,18 @@
       pn_quantity = #{pnQuantity,jdbcType=INTEGER},
       parts_amount = #{partsAmount,jdbcType=VARCHAR},
       flag = #{flag,jdbcType=INTEGER}
+    where pnnumber = #{pnnumber,jdbcType=INTEGER}
+  </update>
+  <update id="updataPNFlagByasn">
+    update pn
+    set
+    flag = #{flag,jdbcType=INTEGER}
+    where pnnumber = #{pnnumber,jdbcType=INTEGER}
+  </update>
+  <update id="updataPNFlagByIV">
+    update pn
+    set
+    flag = #{flag,jdbcType=INTEGER}
     where pnnumber = #{pnnumber,jdbcType=INTEGER}
   </update>
 </mapper>

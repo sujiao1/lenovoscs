@@ -1,6 +1,7 @@
 package com.lenovo.lenovoscs.service;
 
 import com.lenovo.lenovoscs.bean.ASN;
+import com.lenovo.lenovoscs.bean.ASNStatus;
 import com.lenovo.lenovoscs.dao.ASNMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,11 @@ public class ASNService {
      * 得到所有的ASN数据
      * @return
      */
-    public List<ASN> getASNS(){
-        return asnMapper.selectByExample(null);
+    public List<ASNStatus> getASNS(){
+        return asnMapper.selectByExample();
     }
 
-    public List<ASN> selectASNByasnnumber(Integer asnnumber){
+    public List<ASNStatus> selectASNByasnnumber(Integer asnnumber){
         return asnMapper.selectASNByasnnumber(asnnumber);
     }
 
@@ -30,7 +31,7 @@ public class ASNService {
      * @param ponumber
      * @return
      */
-    public List<ASN> getASNSearch(Integer ponumber){
+    public List<ASNStatus> getASNSearch(Integer ponumber){
         return asnMapper.getASNSearch(ponumber);
     }
 }

@@ -3,6 +3,8 @@ package com.lenovo.lenovoscs.dao;
 import com.lenovo.lenovoscs.bean.ASN;
 import com.lenovo.lenovoscs.bean.ASNExample;
 import java.util.List;
+
+import com.lenovo.lenovoscs.bean.ASNStatus;
 import org.apache.ibatis.annotations.Param;
 
 public interface ASNMapper {
@@ -16,13 +18,13 @@ public interface ASNMapper {
 
     int insertSelective(ASN record);
 
-    List<ASN> selectByExample(ASNExample example);
+    List<ASNStatus> selectByExample();
 
     ASN selectByPrimaryKey(Integer id);
 
-    List<ASN> selectASNByasnnumber(Integer asnnumber);
+    List<ASNStatus> selectASNByasnnumber(Integer asnnumber);
 
-    List<ASN> getASNSearch(Integer ponumber);
+    List<ASNStatus> getASNSearch(Integer ponumber);
 
     int updateByExampleSelective(@Param("record") ASN record, @Param("example") ASNExample example);
 

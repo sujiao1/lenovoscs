@@ -1,5 +1,6 @@
 package com.lenovo.lenovoscs.service;
 
+import com.lenovo.lenovoscs.bean.IVStatus;
 import com.lenovo.lenovoscs.bean.PO;
 import com.lenovo.lenovoscs.dao.POMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,20 @@ public class POService {
         return poMapper.selectByExample(null);
     }
 
+    /**
+     * 根据ponumber得到po信息
+     * @param ponumber
+     * @return
+     */
+    public List<PO> getPO(Integer ponumber){
+        return poMapper.getPO(ponumber);
+    }
+
     public List<Object> getAllASN(){
         return poMapper.getAllASN(null);
     }
 
-    public List<PO> getAllIV(){
+    public List<IVStatus> getAllIV(){
         return poMapper.getAllIV(null);
     }
 
@@ -72,6 +82,10 @@ public class POService {
      */
     public void updatePOByponumber(PO po){
         poMapper.updatePOByponumber(po);
+    }
+
+    public void updatePOBypnnumber(PO po){
+        poMapper.updatePOBypnnumber(po);
     }
 
     /**

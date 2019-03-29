@@ -83,8 +83,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, ivnumber, pnnumber, pn_quantity, payment, ship_to, sold_to, order_type, exchange_provision_item, 
-    condition_item, remark, carrier, customer, net_due_date, po_date, delivery_date, 
+    id, ivnumber, pnnumber, pn_quantity, payment, ship_to, sold_to, order_type, exchange_provision_item,
+    condition_item, remark, carrier, customer, net_due_date, po_date, delivery_date,
     drop_order_time, target_date, created_by, last_modified_by, flag
   </sql>
   <select id="selectByExample" parameterType="com.lenovo.lenovoscs.bean.IVExample" resultMap="BaseResultMap">
@@ -101,8 +101,57 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="getAllIVs" resultType="com.lenovo.lenovoscs.bean.IVStatus">
+    select iv.id as id,mapper.ponumber as ponumber,iv.ivnumber as ivnumber,mapper.asnnumber as asnnumber,
+    iv.pnnumber as pnnumber,iv.pn_quantity as pnQuantity,iv.payment as payment,iv.ship_to as shipTo,
+    iv.sold_to as soldTo,iv.order_type as orderType,iv.exchange_provision_item as exchangeProvisionItem,
+    iv.condition_item as conditionItem,iv.remark as remark,iv.carrier as carrier,
+    iv.customer as customer,iv.net_due_date as netDueDate,iv.po_date as poDate,
+    iv.delivery_date as deliveryDate,iv.drop_order_time as dropOrderTime,iv.target_date as targetDate,
+    iv.created_by as createdBy,iv.last_modified_by as lastModifiedBy,iv.flag as flag,flag.status as status
+    from iv,flag,mapper
+    where iv.flag = flag.flag and iv.pnnumber = mapper.pnnumber
+  </select>
+  <select id="selectIVByIVnumber" parameterType="java.lang.Integer" resultType="com.lenovo.lenovoscs.bean.IVStatus">
+    select iv.id as id,mapper.ponumber as ponumber,iv.ivnumber as ivnumber,mapper.asnnumber as asnnumber,
+    iv.pnnumber as pnnumber,iv.pn_quantity as pnQuantity,iv.payment as payment,iv.ship_to as shipTo,
+    iv.sold_to as soldTo,iv.order_type as orderType,iv.exchange_provision_item as exchangeProvisionItem,
+    iv.condition_item as conditionItem,iv.remark as remark,iv.carrier as carrier,
+    iv.customer as customer,iv.net_due_date as netDueDate,iv.po_date as poDate,
+    iv.delivery_date as deliveryDate,iv.drop_order_time as dropOrderTime,iv.target_date as targetDate,
+    iv.created_by as createdBy,iv.last_modified_by as lastModifiedBy,iv.flag as flag,flag.status as status
+    from iv,flag,mapper
+    where
+    iv.flag = flag.flag and iv.pnnumber = mapper.pnnumber
+    and iv.ivnumber = #{IVnumber,jdbcType=INTEGER}
+  </select>
+  <select id="getIVSearch" parameterType="java.lang.Integer" resultType="com.lenovo.lenovoscs.bean.IVStatus">
+    select iv.id as id,mapper.ponumber as ponumber,mapper.asnnumber as asnnumber,iv.ivnumber as ivnumber,iv.pnnumber as pnnumber,
+    iv.pn_quantity as pnQuantity,iv.payment as payment,iv.ship_to as shipTo,iv.sold_to as soldTo,
+    iv.order_type as orderType,iv.exchange_provision_item as exchangeProvisionItem,
+    iv.condition_item as conditionItem,iv.remark as remark,iv.carrier as carrier,
+    iv.customer as customer,iv.net_due_date as netDueDate,iv.po_date as poDate,
+    iv.delivery_date as deliveryDate,iv.drop_order_time as dropOrderTime,iv.target_date as targetDate,
+    iv.created_by as createdBy,iv.last_modified_by as lastModifiedBy,iv.flag as flag,flag.status as status
+    from iv,flag,mapper
+    where iv.flag = flag.flag and iv.pnnumber = mapper.pnnumber
+    and mapper.ponumber = #{ponumber}
+  </select>
+
+  <select id="getIVSearchASN" parameterType="java.lang.Integer" resultType="com.lenovo.lenovoscs.bean.IVStatus">
+    select iv.id as id,mapper.ponumber as ponumber,mapper.asnnumber as asnnumber,iv.ivnumber as ivnumber,iv.pnnumber as pnnumber,
+    iv.pn_quantity as pnQuantity,iv.payment as payment,iv.ship_to as shipTo,iv.sold_to as soldTo,
+    iv.order_type as orderType,iv.exchange_provision_item as exchangeProvisionItem,
+    iv.condition_item as conditionItem,iv.remark as remark,iv.carrier as carrier,
+    iv.customer as customer,iv.net_due_date as netDueDate,iv.po_date as poDate,
+    iv.delivery_date as deliveryDate,iv.drop_order_time as dropOrderTime,iv.target_date as targetDate,
+    iv.created_by as createdBy,iv.last_modified_by as lastModifiedBy,iv.flag as flag,flag.status as status
+    from iv,flag,mapper
+    where iv.flag = flag.flag and iv.pnnumber = mapper.pnnumber
+    and mapper.asnnumber = #{asnnumber}
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from iv
     where id = #{id,jdbcType=INTEGER}
@@ -118,20 +167,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lenovo.lenovoscs.bean.IV">
-    insert into iv (id, ivnumber, pnnumber, 
-      pn_quantity, payment, ship_to, 
-      sold_to, order_type, exchange_provision_item, 
-      condition_item, remark, carrier, 
-      customer, net_due_date, po_date, 
-      delivery_date, drop_order_time, target_date, 
+    insert into iv (id, ivnumber, pnnumber,
+      pn_quantity, payment, ship_to,
+      sold_to, order_type, exchange_provision_item,
+      condition_item, remark, carrier,
+      customer, net_due_date, po_date,
+      delivery_date, drop_order_time, target_date,
       created_by, last_modified_by, flag
       )
-    values (#{id,jdbcType=INTEGER}, #{ivnumber,jdbcType=INTEGER}, #{pnnumber,jdbcType=INTEGER}, 
-      #{pnQuantity,jdbcType=INTEGER}, #{payment,jdbcType=VARCHAR}, #{shipTo,jdbcType=VARCHAR}, 
-      #{soldTo,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{exchangeProvisionItem,jdbcType=VARCHAR}, 
-      #{conditionItem,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{carrier,jdbcType=VARCHAR}, 
-      #{customer,jdbcType=VARCHAR}, #{netDueDate,jdbcType=TIMESTAMP}, #{poDate,jdbcType=TIMESTAMP}, 
-      #{deliveryDate,jdbcType=TIMESTAMP}, #{dropOrderTime,jdbcType=TIMESTAMP}, #{targetDate,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{ivnumber,jdbcType=INTEGER}, #{pnnumber,jdbcType=INTEGER},
+      #{pnQuantity,jdbcType=INTEGER}, #{payment,jdbcType=VARCHAR}, #{shipTo,jdbcType=VARCHAR},
+      #{soldTo,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{exchangeProvisionItem,jdbcType=VARCHAR},
+      #{conditionItem,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{carrier,jdbcType=VARCHAR},
+      #{customer,jdbcType=VARCHAR}, #{netDueDate,jdbcType=TIMESTAMP}, #{poDate,jdbcType=TIMESTAMP},
+      #{deliveryDate,jdbcType=TIMESTAMP}, #{dropOrderTime,jdbcType=TIMESTAMP}, #{targetDate,jdbcType=TIMESTAMP},
       #{createdBy,jdbcType=VARCHAR}, #{lastModifiedBy,jdbcType=VARCHAR}, #{flag,jdbcType=INTEGER}
       )
   </insert>
@@ -268,6 +317,9 @@
       </if>
     </trim>
   </insert>
+  <select id="getIVByIvnumber" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select iv.* from iv where ivnumber = #{IVnumber} and pnnumber = #{pnnumber}
+  </select>
   <select id="countByExample" parameterType="com.lenovo.lenovoscs.bean.IVExample" resultType="java.lang.Long">
     select count(*) from iv
     <if test="_parameter != null">
@@ -461,5 +513,31 @@
       last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
       flag = #{flag,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateIV">
+    update iv
+    set
+      pn_quantity = #{pnQuantity,jdbcType=INTEGER},
+      payment = #{payment,jdbcType=VARCHAR},
+      ship_to = #{shipTo,jdbcType=VARCHAR},
+      sold_to = #{soldTo,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=VARCHAR},
+      exchange_provision_item = #{exchangeProvisionItem,jdbcType=VARCHAR},
+      condition_item = #{conditionItem,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      carrier = #{carrier,jdbcType=VARCHAR},
+      customer = #{customer,jdbcType=VARCHAR},
+      net_due_date = #{netDueDate,jdbcType=TIMESTAMP},
+      po_date = #{poDate,jdbcType=TIMESTAMP},
+      delivery_date = #{deliveryDate,jdbcType=TIMESTAMP},
+      drop_order_time = #{dropOrderTime,jdbcType=TIMESTAMP},
+      target_date = #{targetDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER}
+    where
+      ivnumber = #{ivnumber,jdbcType=INTEGER}
+      and
+      pnnumber = #{pnnumber,jdbcType=INTEGER}
   </update>
 </mapper>

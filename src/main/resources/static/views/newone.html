@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+
+<table id="tab" border="1">
+    <tbody id="tbody">
+    <tr>
+        <td align="right" colspan="2">
+            <input type="button" value="添加" onclick="add()" />
+            <input type="button" value="删除" onclick="del()" />
+        </td>
+    </tr>
+    <tr>
+        <td>资源名称</td>
+        <td>资源状态</td>
+    </tr>
+    <tr>
+        <td>gfdfdsafsd</td>
+        <td>0</td>
+    </tr>
+    </tbody>
+</table>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+<script>
+    function add(){
+        pn=1;
+        $.ajax({
+            url: "../views/getAllPO",
+            type: 'get', //请求的方式
+            data: "pn=" + pn,
+            error: function (data) {
+                alert('请求失败' + data.message);
+            },
+            success:function (data) {
+                console.log(data);
+                for(var i = 0;i<data.extend.pageInfo.list.length;i++){
+                    console.log("1111")
+                    var table = document.getElementById("tbody");
+                    var tr = document.createElement("tr");
+                    table.appendChild(tr);
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    var text =  document.createElement("input");
+                    text.type = "text";
+                    text.name = "ponumber";
+
+                    text.add(data.extend.pageInfo.list[i].ponumber);
+                    td1.appendChild(text);
+                    var text2 = document.createElement("input");
+                    text2.add(data.extend.pageInfo.list[i].pnnumber);
+                    td2.appendChild(text2);
+                }
+            }
+        });
+       /* sel.options.add(new Option("预占","0"));
+        sel.options.add(new Option("空闲","1"));*/
+    }
+    function del(){
+        var trs = document.getElementsByTagName("tr");
+
+        var tbody = document.getElementById("tbody");
+        tbody.removeChild(trs[trs.length - 1]);
+    }
+</script>
+</body>
+</html>

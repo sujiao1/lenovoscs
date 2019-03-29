@@ -178,44 +178,43 @@
 </head>
 <body>
 <div class="container">
-
-    <div class="row">
+    <!--<div class="row">
         <br><br>
-        <!--<div class="col-xs-2" id="logo">
+        &lt;!&ndash;<div class="col-xs-2" id="logo">
             <img v-bind:src="imageU">
-        </div>-->
+        </div>&ndash;&gt;
         <div class="col-xs-10">
             <form id="search">
                 <div class="bar">
-                    <!-- searchString 模型与文本域创建绑定 -->
+                    &lt;!&ndash; searchString 模型与文本域创建绑定 &ndash;&gt;
 
                     <input type="text" v-model="searchString" placeholder="输入搜索内容" />
                 </div>
 
-                <!--<ul>
+                &lt;!&ndash;<ul>
                     &lt;!&ndash; 循环输出数据 &ndash;&gt;
 
                     <li v-for="article in filteredArticles">
                         <a v-bind:href="article.url"><img v-bind:src="article.image" /></a>
                         <p>{{article.title}}</p>
                     </li>
-                </ul>-->
+                </ul>&ndash;&gt;
 
             </form>
         </div>
-    </div>
+    </div>-->
 
     <div id="bar" class="row">
         <!-- 激活的菜单样式为  active 类 -->
         <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。v-on:click.prevent -->
          <div class="col-xs-12">
-            <nav v-bind:class="active">
+            <nav><!--v-bind:class="active"-->
 
                 <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
-                <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
-                <a href="views/procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
-                <a href="views/asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
-                <a href="views/iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+                <a href="../hello" class="home">Home</a>
+                <a href="views/procument.html" class="Procument">Order</a>
+                <a href="views/asn.html" class="ASN">ASN</a>
+                <a href="views/iv.html" class="IV">GR</a>
             </nav>
          </div>
 
@@ -239,9 +238,9 @@
         el: '#bar',
 
         // 定义属性，并设置初始值
-        data: {
+        /*data: {
             active: 'home'
-        },
+        },*/
 
         // 点击菜单使用的函数
         methods: {

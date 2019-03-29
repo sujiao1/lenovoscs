@@ -229,4 +229,14 @@
       ivnumber = #{ivnumber,jdbcType=INTEGER}
     where ponumber = #{ponumber,jdbcType=INTEGER} and pnnumber = #{pnnumber,jdbcType=INTEGER}
   </update>
+  <update id="updateMapper" parameterType="com.lenovo.lenovoscs.bean.Mapper">
+    update mapper
+    set  asnnumber = #{asnnumber,jdbcType=INTEGER}
+    where pnnumber = #{pnnumber,jdbcType=INTEGER}
+  </update>
+  <update id="updateMapperIV" parameterType="com.lenovo.lenovoscs.bean.Mapper">
+    update mapper
+    set ivnumber = #{ivnumber,jdbcType=INTEGER}
+    where pnnumber = #{pnnumber,jdbcType=INTEGER}
+  </update>
 </mapper>

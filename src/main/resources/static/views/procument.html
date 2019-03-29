@@ -14,7 +14,7 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
-    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <!--<script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>-->
     <!--<script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.js"></script>
     <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>-->
@@ -51,6 +51,36 @@
         width: 300px;
         height: 30px;
     }
+    nav{
+        /*display:inline-block;*/
+        margin:30px auto 15px;
+        background-color:#5597b4;
+        box-shadow:0 1px 1px #ccc;
+        border-radius:2px;
+    }
+    ul{
+        list-style: none;
+        width: 500px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    ul li{
+        border-bottom: 1px solid #ddd;
+        padding: 0px;
+        overflow: hidden;
+    }
+    .pagination {
+        /*display: inline-block;*/
+        display: block;
+        padding-left: 0;
+        margin: 10px 0;
+        border-radius: 4px;
+    }
+    .new{
+        width: 50px;
+        height: 30px;
+    }
 </style>
 </head>
 <body>
@@ -59,14 +89,14 @@
     <div id="bar" class="row">
         <!-- 激活的菜单样式为  active 类 -->
         <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
-            <nav v-bind:class="active">
+            <nav>
 
                 <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
 
-                <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
-                <a href="procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
-                <a href="asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
-                <a href="iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+                <a href="../hello" class="home">Home</a>
+                <a href="procument.html" class="Procument">Order</a>
+                <a href="asn.html" class="ASN">ASN</a>
+                <a href="iv.html" class="IV">GR</a>
             </nav>
 
         <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
@@ -75,34 +105,20 @@
     </div>
     <!--home标题--><!--selected下拉框-->
     <div class="row">
-        <div class="col-xs-1">
-            <img v-bind:src="../../../static/images/upload.png">
-        </div>
-        <div class="col-xs-2">
-           <h5>order</h5><h3>Home</h3>
-        </div>
-        <div class="col-xs-1"><p>View:</p></div>
-        <div class="col-xs-1">
-            <div id="app">
-                <select v-model="selected" name="POSelect" id="input_select">
-                    <option value="">All</option>
-                    <option value="Product Line-SMP">Product Line-SMP</option>
-                    <option value="Product Line-TAB">Product Line-TAB</option>
-                    <option value="Status">Status</option>
-                </select>
-            </div>
+        <div class="col-xs-3">
+            <p>Purchase Order</p>
         </div>
         <div class="col-xs-3">
-            <button onclick="selectAll()">go!</button>
+
         </div>
-        <div class="col-xs-4"></div>
+        <div class="col-xs-6"></div>
     </div>
     <!--横线-->
-    <div class="row">
+    <!--<div class="row">
         <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
-    </div>
+    </div>-->
     <!--upload download-->
-    <div class="row">
+    <!--<div class="row">
         <div class="col-xs-2"><p>upload</p></div>
         <div class="col-xs-5">
             <form id="excelUpload" action="../views/import" enctype="multipart/form-data" method="post">
@@ -127,7 +143,7 @@
             </div>
         </div>
         <div class="col-xs-5"></div>
-    </div>
+    </div>-->
     <!--横线-->
     <div class="row">
         <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
@@ -135,20 +151,27 @@
     <!--Po display-->
     <div class="row">
         <div class="col-xs-2"><p>PO Display</p></div>
-        <div class="col-xs-3"></div>
-        <div class="col-xs-2"><!--Recent Order--></div>
-        <div class="col-xs-2">
-            <!--<div id="selected">
-                <select v-model="selected" name="fruit">
-                    <option value="">Recently Upload</option>
-                    <option value="Recently Viewed">Recently Viewed</option>
-                    <option value="Recently Modified">Recently Modified</option>
-                </select>
-            </div>-->
+        <div class="col-xs-9">
+            <div class="col-xs-1">View:</div>
+            <div class="col-xs-1">
+                <div id="app">
+                    <select v-model="selected" name="POSelect" id="input_select">
+                        <option value="">All</option>
+                        <option value="Product Line-SMP">Product Line-SMP</option>
+                        <option value="Product Line-TAB">Product Line-TAB</option>
+                        <option value="Status">Status</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-2">
+                <button onclick="selectAll()">go!</button>
+            </div>
+            <div class="col-xs-1">
+                <button class="new" onclick="window.location.href='podetail.html'">new</button>
+            </div>
         </div>
-        <div class="col-xs-1">
-            <button onclick="window.location.href='podetail.html'">new</button>
-        </div>
+        <div class="col-xs-1"></div>
     </div>
         <br>
     <!--table display-->
@@ -158,7 +181,7 @@
             <table class="table-bordered table table-hover" id="PO_List_table">
                 <thead>
                     <tr>
-                        <th hidden="hidden">id</th>
+                        <!--<th hidden="hidden">id</th>-->
                         <th>PO#</th>
                         <th>PN#</th>
                         <th>Ship to</th>
@@ -173,8 +196,8 @@
                     </tr>
                 </thead>
                 <tbody id="myBody">
-                    <!--<tr v-for="(list,index) in lists">
-                        <td v-text="list.id" hidden="hidden"></td>
+                    <tr v-for="(list,index) in lists">
+                       <!-- <td v-text="list.id" hidden="hidden"></td>-->
                         <td v-text="list.ponumber" id="ponumber"></td>
                         <td v-text="list.pnnumber"></td>
                         <td v-text="list.shipTo"></td>
@@ -186,8 +209,8 @@
                         <td v-text="list.carrier"></td>
                         <td v-text="list.customer"></td>
                         <td><button onclick="EditPOSelect(this)" type="button">information</button></td>
-                    </tr>-->
-                    <tr v-if="listData.length>0"  v-for="item in listData">
+                    </tr>
+                    <!--<tr v-if="listData.length>0"  v-for="item in listData">
                         <td scope="row">{{item.ponumber}}</td>
                         <td>{{item.pnnumber}}</td>
                         <td>{{item.shipTo}}</td>
@@ -199,121 +222,24 @@
                         <td>{{item.carrier}}</td>
                         <td>{{item.customer}}</td>
                         <td><button onclick="EditPOSelect(this)" type="button">information</button></td>
-                    </tr>
-                    <tr>
-                        <td colspan=11>
-                            <div id="pagelist">
-                                <div class="row">
-                                    <div class="col-sm-6" style="line-height: 80px">
-                                        <div class="dataTables_info" id="sample-table-2_info">
-                                            共{{pageData.total}}条，当前显示第
-                                            <span v-if="pageData.pageSize==1 || pageData.total == 0 || pageData.total == 1">
-                                                {{pageData.itemStart}}</span>
-                                            <span v-else>{{pageData.itemStart}}-{{pageData.itemEnd}}</span>
-                                            条
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="dataTables_paginate paging_bootstrap">
-                                            <ul class="pagination">
-                                                <li v-if="pageData.curPage == 1 || pageData.total == 0 || pageData.total == 1" class="prev disabled">
-                                                    <a>首页</a>
-                                                </li>
-                                                <li v-else class="prev">
-                                                    <a href="javascript:void(0)" v-on:click="changeCurPage(1,pageData.pageSize);">
-                                                        首页
-                                                    </a>
-                                                </li>
-                                                <li v-if="pageData.curPage == 1 || pageData.total == 0 || pageData.total == 1" class="prev disabled">
-                                                    <a>上一页</a>
-                                                </li>
-                                                <li v-else class="prev">
-                                                    <a href="javascript:void(0)" v-on:click="changeCurPage(pageData.curPage-1,pageData.pageSize);">
-                                                        上一页</i>
-                                                    </a>
-                                                </li>
-                                                <li v-if="pageData.totalPage > 5 && pageData.curPage > 3" class="next disabled">
-                                                    <a>...</a>
-                                                </li>
-                                                <template v-for="pageItem in pageData.pageIndex">
-                                                    <li v-if="pageData.curPage == pageItem" class="active">
-                                                        <a>{{pageItem}}</a>
-                                                    </li>
-                                                    <li v-else>
-                                                        <a href="javascript:void(0)" v-on:click="changeCurPage(pageItem,pageData.pageSize);">
-                                                            {{pageItem}}
-                                                        </a>
-                                                    </li>
-                                                </template>
-                                                <li v-if="pageData.totalPage > 5 && pageData.curPage < pageData.totalPage-2" class="next disabled">
-                                                    <a>...</a>
-                                                </li>
-                                                <li v-if="pageData.curPage == pageData.totalPage || pageData.total == 0 || pageData.total == 1" class="next disabled">
-                                                    <a>下一页</i></a>
-                                                </li>
-                                                <li v-else class="next">
-                                                    <a href="javascript:void(0)" v-on:click="changeCurPage(pageData.curPage+1,pageData.pageSize);">
-                                                        下一页</i>
-                                                    </a>
-                                                </li>
-                                                <li v-if="pageData.curPage == pageData.totalPage || pageData.total == 0 || pageData.total == 1" class="next disabled">
-                                                    <a>末页</a>
-                                                </li>
-                                                <li v-else class="next">
-                                                    <a href="javascript:void(0)" v-on:click="changeCurPage(pageData.totalPage,pageData.pageSize);">
-                                                        末页
-                                                    </a>
-                                                </li>
-                                                <template v-if="pageData.totalPage > 5" class="next disabled">
-                                                    <li>
-                                                        <input value="" ref="goPage" class="input-mini" type="text" style="height: 32px;width:40px;margin:auto 5px auto 20px;line-height: 24px;">
-                                                        <label><a href="javascript:void(0)" v-on:click="goPage(pageData.pageSize,pageData.totalPage)">Go</a></label>
-                                                    </li>
-                                                </template>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    <tr>
+                    </tr>-->
                 </tbody>
             </table>
         </div>
     </div>
-    <!--显示分页信息-->
-    <!--<div class="row">
-        <div class="col-xs-offset-4 col-xs-4">
-            <ul class="pagination">
-                <li><a href="javascript:;" @click="jump(1)">首页</a></li>
-                <li><a href="javascript:;" @click="jump(pageInfo.prePage)">上页</a></li>
-                <li><a href="javascript:;" @click="jump(pageInfo.nextPage)">下页</a></li>
-                <li><a href="javascript:;" @click="jump(pageInfo.pages)">尾页</a></li>
-            </ul>
-        </div>
-    </div>-->
-    <!--<div class="row">
+    <div class="row">
         <div class="col-xs-6" id="page_info_area">
 
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-4">
             <nav aria-label="Page navigation" id="page_nav_area">
                 <ul class="pagination">
 
                 </ul>
             </nav>
         </div>
-    </div>-->
-    <!--<div class="row">
-        <div class="col-xs-offset-4 col-xs-4">
-            <ul class="pagination">
-                <li><a href="javascript:;" @click="jump(1)">首页</a></li>
-                <li><a href="javascript:;" @click="jump(pageInfo.prePage)">上页</a></li>
-                <li><a href="javascript:;" @click="jump(pageInfo.nextPage)">下页</a></li>
-                <li><a href="javascript:;" @click="jump(pageInfo.pages)">尾页</a></li>
-            </ul>
-        </div>
-    </div>-->
+    </div>
 </div>
 <script>
     // 创建一个新的 Vue导航条 实例
@@ -418,7 +344,7 @@
     //var inputField = document.getElementById("input_select");
     $(function () {
         to_page(1);
-        getData(1,10);
+        //getData(1,10);
     });
 
     //解析显示分页信息
@@ -493,43 +419,7 @@
        // var ListPO = result.extend.pageInfo.list;
        console.log(111111);
         console.log(ListPO);
-        /*var poListData = result.data;
-        for (var p=0;p<poListData.length;p++){
-            var pon = getDataPO(poListData[p]);
-            tbody.appendChild(pon);
-        }
-
-        function getDataPO(poo){
-            var poData = document.createElement("tr");
-            var ponumber = document.createElement("td");
-            ponumber.innerHTML = poo.ponumber;
-            poData.appendChild(ponumber);
-            var shipTo = document.createElement("td");
-            shipTo.innerHTML = poo.shipTo;
-            poData.appendChild(shipTo);
-            var soldTo = document.createElement("td");
-            soldTo.innerHTML = poo.soldTo;
-            poData.appendChild(soldTo);
-            var orderType = document.createElement("td");
-            orderType.innerHTML = poo.orderType;
-            poData.appendChild(orderType);
-            var dropOrderTime = document.createElement("td");
-            dropOrderTime.innerHTML = poo.dropOrderTime;
-            poData.appendChild(dropOrderTime);
-            var conditionItem = document.createElement("td");
-            conditionItem.innerHTML = poo.conditionItem;
-            poData.appendChild(conditionItem);
-            var remark = document.createElement("td");
-            remark.innerHTML = poo.remark;
-            poData.appendChild(remark);
-            var carrier = document.createElement("td");
-            carrier.innerHTML = poo.carrier;
-            poData.appendChild(carrier);
-            var customer = document.createElement("td");
-            customer.innerHTML = poo.customer;
-            poData.appendChild(customer);
-
-        }*/
+        var ListPO = result.extend.pageInfo.list;
         $.each(ListPO, function (index, item) {
             console.log("item"+JSON.stringify(item));
             var ponumber = $("<td></td>").append(item.ponumber);
@@ -553,40 +443,51 @@
             $("<tr></tr>").append(ponumber).append(shipTo).append(soldTo).append(orderType).append(dropOrderTime)
                 .append(conditionItem).append(remark).append(carrier).append(customer).append(btnBtn).appendTo("#emps_tables tbody");
         });
-        /*new Vue({
-            el:'#PO_List_table',
-            data:{
-                lists:result
-            }
-        })*/
     }
 
     //将信息在表格中显示
     function to_page(pn) {
         console.log(pn);
-        /*var ajax = $.ajax({
+        var ajax = $.ajax({
             url: "../views/getAllPO",
             data:"pn="+pn,
             type:"GET",
             success:function (result,state) {
-                new Vue({
+                /*new Vue({
                     el:'#PO_List_table',
                     data:{
                         lists:result.extend.pageInfo.list,
                          }
-                });
+                });*/
                 console.log(result);
                 console.log('aaaaa:'+result.extend.pageInfo.list);
-                alert(result.extend.pageInfo.list[0].remark);
+                //alert(result.extend.pageInfo.list[0].remark);
                 //build_PO_table(result);
+                $("#myBody").html("");
+                for(var i = 0;i<result.extend.pageInfo.list.length;i++){
+                    str1 = "<tr>" +
+                        "<td>"+result.extend.pageInfo.list[i].ponumber + "</td>" +
+                        "<td>"+result.extend.pageInfo.list[i].pnnumber + "</td>" +
+                        "<td>"+result.extend.pageInfo.list[i].shipTo + "</td>" +
+                        "<td>"+result.extend.pageInfo.list[i].soldTo+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].orderType+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].dropOrderTime+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].conditionItem+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].remark+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].carrier+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].customer+"</td>"+
+                            "<td>"+"<button onclick='EditPOSelect(this)' type='button' v-text:='information'>information</button>"+"</td>"
+                        +"</tr>";
+                    $("#myBody").append(str1);
+                }
                 build_page_info(result);
                 build_pages_nav(result);
-                window.history.go(1);
+                //window.history.go(1);
             }
-        });*/
+        });
     }
 
-    function getData($page,$pageSize){//获取数据，可使用各种语言替换^_^
+    /*function getData($page,$pageSize){//获取数据，可使用各种语言替换^_^
         var $data = [];
         for (var $i=($page-1)*$pageSize+1; $i <=$page*$pageSize ; $i++) {
             $data.push( {
@@ -596,9 +497,9 @@
         }
         var $returnData = {'data':$data,'total':103};
         return $returnData;
-    }
+    }*/
 
-    var vm = new Vue({
+    /*var vm = new Vue({
         el: '#PO_List_table',
         data: {
             listData:[],
@@ -679,12 +580,12 @@
                 this.changeCurPage(pageIndex, pageSize);
             }
         }
-    });
+    });*/
 
-    window.onload = function(){
+    /*window.onload = function(){
         console.log('Hello World!');
         vm.listItems();
-    };
+    };*/
 
     function build_PO_table(result) {
         //清空table表格
@@ -711,7 +612,7 @@
 
     function EditPOSelect(obj) {
         var $td = $(obj).parents('tr').children('td');
-        var ponumber = $td.eq(1).text();
+        var ponumber = $td.eq(0).text();
         window.location.href = encodeURI("podetail.html?value=" + ponumber);
         console.log(ponumber);
     }

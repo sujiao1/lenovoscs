@@ -116,8 +116,19 @@
     </if>-->
     SELECT po.*,flag.status FROM po,flag WHERE po.flag = flag.flag and flag.flag = 2
   </select>
-  <select id="getAllIV" parameterType="com.lenovo.lenovoscs.bean.POExample" resultMap="BaseResultMap">
-    SELECT po.*,flag.status FROM po,flag WHERE po.flag = flag.flag and flag.flag = 3
+  <select id="getPO" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from po where ponumber = #{ponumber}
+  </select>
+
+  <select id="getAllIV" parameterType="com.lenovo.lenovoscs.bean.POExample" resultType="com.lenovo.lenovoscs.bean.IVStatus">
+    select iv.id as id,iv.ivnumber as ivnumber,iv.pnnumber as pnnumber,
+    iv.pn_quantity as pnQuantity,iv.payment as payment,iv.ship_to as shipTo,iv.sold_to as soldTo,
+    iv.order_type as orderType,iv.exchange_provision_item as exchangeProvisionItem,
+    iv.condition_item as conditionItem,iv.remark as remark,iv.carrier as carrier,
+    iv.customer as customer,iv.net_due_date as netDueDate,iv.po_date as poDate,
+    iv.delivery_date as deliveryDate,iv.drop_order_time as dropOrderTime,iv.target_date as targetDate,
+    iv.created_by as createdBy,iv.last_modified_by as lastModifiedBy,iv.flag as flag,flag.status as status
+    from iv,flag where iv.flag = flag.flag
   </select>
   <!--<select id="getPOByponumber" resultType="com.lenovo.lenovoscs.bean.PO">
     select * from po where ponumber = #{ponumber}
@@ -496,7 +507,6 @@
   <update id="updatePOByponumber" parameterType="com.lenovo.lenovoscs.bean.PO">
     update po
     set
-    pn_quantity = #{pnQuantity,jdbcType=INTEGER},
     payment = #{payment,jdbcType=VARCHAR},
     ship_to = #{shipTo,jdbcType=VARCHAR},
     sold_to = #{soldTo,jdbcType=VARCHAR},
@@ -519,6 +529,13 @@
         ponumber = #{ponumber,jdbcType=INTEGER}
       </if>
     </where>-->
+  </update>
+  <update id="updatePOBypnnumber">
+    update po
+    set
+    pnnumber = #{pnnumber,jdbcType=INTEGER},
+    pn_quantity = #{pnQuantity,jdbcType=INTEGER}
+    where ponumber = #{ponumber}
   </update>
   <update id="updatePOFlag">
     update po left join pn on (pn.number = po.ponumber)
@@ -569,8 +586,8 @@
     target_date = #{targetDate,jdbcType=TIMESTAMP},
     created_by = #{createdBy,jdbcType=VARCHAR},
     last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
-    pn.flag = 3,
-    po.flag = 3
+    pn.flag = 4,
+    po.flag = 4
     <where>
       <if test="ponumber!=null">
         ponumber = #{ponumber,jdbcType=INTEGER}

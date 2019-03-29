@@ -2,12 +2,14 @@ package com.lenovo.lenovoscs.controller;
 
 import com.lenovo.lenovoscs.bean.Msg;
 import com.lenovo.lenovoscs.bean.PN;
+import com.lenovo.lenovoscs.bean.PNStatus;
 import com.lenovo.lenovoscs.bean.PO;
 import com.lenovo.lenovoscs.service.ExcelService;
 import com.lenovo.lenovoscs.service.Impl.ExcelPNServiceImpl;
 import com.lenovo.lenovoscs.service.Impl.ExcelServiceImpl;
 import com.lenovo.lenovoscs.service.PNService;
 import com.lenovo.lenovoscs.service.POService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -15,10 +17,7 @@ import org.apache.poi.sl.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -26,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -49,8 +47,9 @@ public class ExcelController {
     @Resource
     private ExcelPNServiceImpl excelPNService;
 
-    @RequestMapping("/export")
+    @RequestMapping(method = RequestMethod.GET,value = "/export")
     @ResponseBody
+    @ApiOperation("导出所有的PO信息")
     public void export(HttpServletResponse response) throws IOException {
         List<PO> poList = poService.getAllPO();
 
@@ -170,10 +169,11 @@ public class ExcelController {
 
     }
 
-    @RequestMapping("/exportPN")
+    @RequestMapping(method = RequestMethod.GET,value = "/exportPN")
     @ResponseBody
+    @ApiOperation("导出所有的PN信息")
     public void exportPN(HttpServletResponse response) throws IOException {
-        List<PN> pnList = pnService.getAllPN();
+        List<PNStatus> pnList = pnService.getAllPN();
 
         HSSFWorkbook wb = new HSSFWorkbook();
 
@@ -219,7 +219,7 @@ public class ExcelController {
 
         for (int i = 0; i < pnList.size(); i++) {
             row = sheet.createRow(i + 2);
-            PN pn = pnList.get(i);
+            PNStatus pn = pnList.get(i);
             row.createCell(0).setCellValue(pn.getPnnumber());
             if(pn.getPrice() == null){
                 row.createCell(1).setCellValue("");
@@ -241,10 +241,10 @@ public class ExcelController {
                 row.createCell(6).setCellValue(pn.getPnQuantity());
             }
             row.createCell(7).setCellValue(pn.getPartsAmount());
-            if(pn.getFlag()== null){
+            if(pn.getStatus()== null){
                 row.createCell(8).setCellValue("");
             }else {
-                row.createCell(8).setCellValue(pn.getFlag());
+                row.createCell(8).setCellValue(pn.getStatus());
             }
             //row.createCell(8).setCellValue(pn.getConditionItem());
         }
@@ -262,11 +262,12 @@ public class ExcelController {
         os.close();
     }
 
-    @RequestMapping("/exportASN/{ASNnumber}")
+    @RequestMapping(method = RequestMethod.GET,value = "/exportASN/{ASNnumber}")
     @ResponseBody
+    @ApiOperation("导出所有的ASN信息")
     public void exportASN(HttpServletResponse response,@PathVariable("ASNnumber") Integer ASNnumber) throws IOException {
 
-        List<PN> pnList = pnService.getPNequal(ASNnumber);
+        List<PNStatus> pnList = pnService.getPNequal(ASNnumber);
 
         for  ( int  i  =   0 ; i  <  pnList.size()  -   1 ; i ++ )  {
             for  ( int  j  =  pnList.size()  -   1 ; j  >  i; j -- )  {
@@ -293,7 +294,7 @@ public class ExcelController {
          *从第1个单元格开始
          * 从第15个单元格结束
          */
-        CellRangeAddress rowRegion = new CellRangeAddress(0, 0, 0, 8);
+        CellRangeAddress rowRegion = new CellRangeAddress(0, 0, 0, 7);
         sheet.addMergedRegion(rowRegion);
 
 		/*CellRangeAddress columnRegion = new CellRangeAddress(1,4,0,0);
@@ -306,52 +307,52 @@ public class ExcelController {
          * */
         row = sheet.createRow(1);
         row.setHeight((short) (22.50 * 20));//设置行高
-        row.createCell(0).setCellValue("PN #");//为第一个单元格设值
-        row.createCell(1).setCellValue("PONumber");//为第二个单元格设值
-        row.createCell(2).setCellValue("PN Des");//为第三个单元格设值
-        row.createCell(3).setCellValue("Categroy");//为第4个单元格设值
-        row.createCell(4).setCellValue("Unit");//为第5三个单元格设值
-        row.createCell(5).setCellValue("Price");//为第6个单元格设值
-        row.createCell(6).setCellValue("PN Quantity");//为第7个单元格设值
-        row.createCell(7).setCellValue("Parts Amount");//为第8个单元格设值
-        row.createCell(8).setCellValue("PN Status");//为第9个单元格设值
+        row.createCell(0).setCellValue("ASN PN #");//为第一个单元格设值
+        //row.createCell(1).setCellValue("PONumber");//为第二个单元格设值
+        row.createCell(1).setCellValue("PN Des");//为第三个单元格设值
+        row.createCell(2).setCellValue("Categroy");//为第4个单元格设值
+        row.createCell(3).setCellValue("Unit");//为第5三个单元格设值
+        row.createCell(4).setCellValue("Price");//为第6个单元格设值
+        row.createCell(5).setCellValue("ASN PN Quantity");//为第7个单元格设值
+        row.createCell(6).setCellValue("Parts Amount");//为第8个单元格设值
+        row.createCell(7).setCellValue("PN Status");//为第9个单元格设值
 
         //row.createCell(15).setCellValue("lastModifiedBy");//为第15个单元格设值
 
         for (int i = 0; i < pnList.size(); i++) {
             row = sheet.createRow(i + 2);
-            PN pn = pnList.get(i);
+            PNStatus pn = pnList.get(i);
             row.createCell(0).setCellValue(pn.getPnnumber());
-            if(pn.getPrice() == null){
+            /*if(pn.getPrice() == null){
                 row.createCell(1).setCellValue("");
             }else {
                 row.createCell(1).setCellValue(pn.getNumber());
-            }
-            row.createCell(2).setCellValue(pn.getPnDes());
-            row.createCell(3).setCellValue(pn.getCategory());
-            row.createCell(4).setCellValue(pn.getUnit());
+            }*/
+            row.createCell(1).setCellValue(pn.getPnDes());
+            row.createCell(2).setCellValue(pn.getCategory());
+            row.createCell(3).setCellValue(pn.getUnit());
             if(pn.getPrice() == null){
-                row.createCell(5).setCellValue("");
+                row.createCell(4).setCellValue("");
             }else {
-                row.createCell(5).setCellValue(pn.getPrice().toString());
+                row.createCell(4).setCellValue(pn.getPrice().toString());
             }
 
             if(pn.getPnQuantity()==null){
-                row.createCell(6).setCellValue("");
+                row.createCell(5).setCellValue("");
             }else{
-                row.createCell(6).setCellValue(pn.getPnQuantity());
+                row.createCell(5).setCellValue(pn.getPnQuantity());
             }
-            row.createCell(7).setCellValue(pn.getPartsAmount());
-            if(pn.getFlag()== null){
-                row.createCell(8).setCellValue("");
+            row.createCell(6).setCellValue(pn.getPartsAmount());
+            if(pn.getStatus()== null){
+                row.createCell(7).setCellValue("");
             }else {
-                row.createCell(8).setCellValue(pn.getFlag());
+                row.createCell(7).setCellValue(pn.getStatus());
             }
             //row.createCell(8).setCellValue(pn.getConditionItem());
         }
         sheet.setDefaultRowHeight((short) (16.5 * 20));
         //列宽自适应
-        for (int i = 0; i <= 13; i++) {
+        for (int i = 0; i <= 7; i++) {
             sheet.autoSizeColumn(i);
         }
 
@@ -363,7 +364,8 @@ public class ExcelController {
         os.close();
     }
 
-    @RequestMapping(value = "/import")
+    @RequestMapping(method = RequestMethod.POST,value = "/import")
+    @ApiOperation("导入所有的PO和PN信息")
     public String exImport(@RequestParam(value = "filename") MultipartFile file, HttpSession session) {
         Msg msg = new Msg();
         boolean a = false;
@@ -378,7 +380,8 @@ public class ExcelController {
         return "redirect:/views/procument.html";
     }
 
-    @RequestMapping("/ImportPN")
+    @RequestMapping(method = RequestMethod.POST,value = "/ImportPN")
+    @ApiOperation("导入所有的PN信息，该方法暂时未用到")
     public String ImportPN(@RequestParam(value = "filename") MultipartFile file, HttpSession session) {
         Msg msg = new Msg();
         boolean a = false;
@@ -399,8 +402,9 @@ public class ExcelController {
      * @param response
      * @throws Exception
      */
-    @RequestMapping("/exportTemplate")
+    @RequestMapping(method = RequestMethod.GET,value = "/exportTemplate")
     @ResponseBody
+    @ApiOperation("下载PO模板文件")
     public void exportTemplate(HttpServletResponse response) throws Exception{
 
         HSSFWorkbook hssfWorkbookwb = new HSSFWorkbook();
@@ -460,8 +464,9 @@ public class ExcelController {
      * @param response
      * @throws Exception
      */
-    @RequestMapping("/exportPNTemplate")
+    @RequestMapping(method = RequestMethod.POST,value = "/exportPNTemplate")
     @ResponseBody
+    @ApiOperation("下载PN模板文件,该方法暂时搁置")
     public void exportPNTemplate(HttpServletResponse response) throws Exception{
         HSSFWorkbook wb = new HSSFWorkbook();
 

@@ -57,8 +57,8 @@
                 --------------------------*/
 
         nav{
-            display:inline-block;
-            margin:60px auto 45px;
+            /*display:inline-block;*/
+            margin:30px auto 15px;
             background-color:#5597b4;
             box-shadow:0 1px 1px #ccc;
             border-radius:2px;
@@ -152,14 +152,14 @@
 
         ul{
             list-style: none;
-            width: 428px;
+            width: 500px;
             margin: 0 auto;
             text-align: left;
         }
 
         ul li{
             border-bottom: 1px solid #ddd;
-            padding: 10px;
+            padding: 0px;
             overflow: hidden;
         }
 
@@ -186,43 +186,19 @@
 <div class="container">
 
     <!--搜索框-->
-    <!--<div class="row">
-        <br><br>
-        <div class="col-xs-2" id="logo">
-            <img v-bind:src="imageU">
-        </div>
-        <div class="col-xs-10">
-            <form id="search" v-cloak>
-                <div class="bar">
-                    &lt;!&ndash; searchString 模型与文本域创建绑定 &ndash;&gt;
 
-                    <input type="text" v-model="searchString" placeholder="输入搜索内容" />
-                </div>
-
-                &lt;!&ndash;<ul>
-                    &lt;!&ndash; 循环输出数据 &ndash;&gt;
-
-                    <li v-for="article in filteredArticles">
-                        <a v-bind:href="article.url"><img v-bind:src="article.image" /></a>
-                        <p>{{article.title}}</p>
-                    </li>
-                </ul>&ndash;&gt;
-
-            </form>
-        </div>
-    </div>-->
     <!--导航条-->
     <div id="bar" class="row">
         <!-- 激活的菜单样式为  active 类 -->
         <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
-        <nav v-bind:class="active">
+        <nav>
 
             <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
 
-            <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
-            <a href="procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
-            <a href="asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
-            <a href="iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+            <a href="../hello" class="home">Home</a>
+            <a href="procument.html" class="Procument">Order</a>
+            <a href="asn.html" class="ASN">ASN</a>
+            <a href="iv.html" class="IV">GR</a>
         </nav>
 
         <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
@@ -232,38 +208,16 @@
     <!--PO#--><!--Button-->
     <form method="POST" id="POdataForm" name="POdataForm">
         <!--button-->
-        <div class="row">
-            <div class="col-xs-1">
-                <img v-bind:src="../../../static/images/upload.png">
-            </div>
-            <div class="col-xs-2">
-                <h5>order</h5><p>IV#</p>
-            </div>
-            <div class="col-xs-2"><p>IV Detail</p></div>
-            <div class="col-xs-1"></div>
-            <!--<div class="col-xs-1">
-                <button type="button" id="download" onclick="editForm()">Download</button>
-            </div>-->
-            <div class="col-xs-1"></div>
-            <div class="col-xs-1">
-                <button type="button" id="ConfirmPO" onclick="ConfirmPOForm()">confirm</button>
-            </div>
-            <div class="col-xs-2"></div>
-        </div>
-        <!--横线-->
-        <div class="row">
-            <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
-        </div>
         <!--Po input-->
         <!--action="insertPO"-->
         <div class="row">
             <div class="row">
                 <div class="row">
-                    <div class="col-xs-2"><p>IV Detail</p></div>
+                    <div class="col-xs-2"><p>GR Detail</p></div>
                     <div class="col-xs-10"></div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4">IV# <input type="text" name="asnnumber" id="asnnumber"></div>
+                    <div class="col-xs-4">GR# <input type="text" name="ivnumber" id="ivnumber"></div>
                     <div class="col-xs-4">Remark <input type="text" id="remark" name="remark"></div>
                     <div class="col-xs-4">Ship To <input type="text" id="shipTo" name="shipTo"></div>
                 </div>
@@ -277,11 +231,11 @@
                 <div class="row">
                     <div class="col-xs-4">Order Type <input type="text" id="orderType" name="orderType"></div>
                     <div class="col-xs-4">Exchange Provision Item <input type="text" id="exchangeProvisionItem" name="exchangeProvisionItem"></div>
-                    <div class="col-xs-4">Net Due Data<input type="date" id="netDueData" name="netDueData"></div>
+                    <div class="col-xs-4">Net Due Date<input type="date" id="netDueDate" name="netDueDate"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4">PO#<input type="text" id="ponumber" name="ponumber"></div>
-                    <div class="col-xs-4">payment</div>
+                    <div class="col-xs-4">ASN#<input type="text" id="asnnumber" name="asnnumber"></div>
                     <div class="col-xs-4"></div>
                 </div>
             </div>
@@ -297,7 +251,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-2"></div>
-                    <div class="col-xs-5">Po Date <input type="date" id="poDate" name="poDate"></div>
+                    <div class="col-xs-5">IV Date <input type="date" id="poDate" name="poDate"></div>
 
                     <div class="col-xs-5">Delivery Date <input type="date" id="deliveryDate" name="deliveryDate"></div>
                 </div>
@@ -315,8 +269,8 @@
             <!--System information-->
             <div class="row">
                 <div class="row">
-                    <div class="col-xs-2"><p>System Information</p></div>
-                    <div class="col-xs-10"></div>
+                    <div class="col-xs-3"><p>System Information</p></div>
+                    <div class="col-xs-9"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6">createdBy <input type="text" id="createdBy" name="createdBy"></div>
@@ -356,12 +310,12 @@
             <table class="table-bordered table table-hover" id="PN_List_table">
                 <thead>
                 <tr>
-                    <th>PN#</th>
+                    <th>GR PN#</th>
                     <th>PN Des</th>
-                    <th>Categroy</th>
+                    <th>Category</th>
                     <th>Unit</th>
                     <th>Price</th>
-                    <th>PN Quantity</th>
+                    <th>GR PN Quantity</th>
                     <th>Parts Amount</th>
                     <th>PN Status</th>
                 </tr>
@@ -375,7 +329,7 @@
                     <td v-text="list.price"></td>
                     <td v-text="list.pnQuantity"></td>
                     <td v-text="list.partsAmount"></td>
-                    <td v-text="list.flag"></td>
+                    <td v-text="list.status"></td>
                 </tr>
                 </tbody>
             </table>
@@ -485,37 +439,38 @@
     })
 
     $(function(){
-        var Editponumber = oneValues();
-        console.log("hrefponumber="+Editponumber);
+        var ivnumber = oneValues();
+        console.log("hrefponumber="+ivnumber);
         $.ajax({
-            url: "../views/selectPOByponumber/" + Editponumber,
+            url: "../views/selectIVByIVnumber/" + ivnumber,
             type: "GET",
             success: function (result) {
-                console.log(result.extend.po);
-                var poData = result.extend.po;
+                //console.log(result.extend.po);
+                var ivData = result.extend.ivList[0];
                 //  $("#ponumber").text(poData.ponumber);
-                $("#ponumber").text=poData.ponumber;
-                document.getElementById("asnnumber").value = poData.ponumber;
-                document.getElementById("ponumber").value = poData.ponumber;
-                document.getElementById("remark").value = poData.remark;
-                document.getElementById("shipTo").value = poData.shipTo;
-                document.getElementById("carrier").value = poData.carrier;
-                document.getElementById("soldTo").value = poData.soldTo;
-                document.getElementById("customer").value = poData.customer;
-                document.getElementById("orderType").value = poData.orderType;
-                document.getElementById("exchangeProvisionItem").value = poData.exchangeProvisionItem;
-                document.getElementById("netDueData").value = poData.netDueData;
-                document.getElementById("poDate").value = poData.poDate;
-                document.getElementById("deliveryDate").value = poData.deliveryDate;
-                document.getElementById("dropOrderTime").value = poData.dropOrderTime;
-                document.getElementById("targetDate").value = poData.targetDate;
-                document.getElementById("createdBy").value = poData.createdBy;
-                document.getElementById("lastModifiedBy").value = poData.lastModifiedBy;
+                //$("#ponumber").text=poData.ponumber;
+                document.getElementById("ivnumber").value = ivData.ivnumber;
+                document.getElementById("ponumber").value = ivData.ponumber;
+                document.getElementById("asnnumber").value = ivData.asnnumber;
+                document.getElementById("remark").value = ivData.remark;
+                document.getElementById("shipTo").value = ivData.shipTo;
+                document.getElementById("carrier").value = ivData.carrier;
+                document.getElementById("soldTo").value = ivData.soldTo;
+                document.getElementById("customer").value = ivData.customer;
+                document.getElementById("orderType").value = ivData.orderType;
+                document.getElementById("exchangeProvisionItem").value = ivData.exchangeProvisionItem;
+                document.getElementById("netDueDate").value = ivData.netDueDate;
+                document.getElementById("poDate").value = ivData.poDate;
+                document.getElementById("deliveryDate").value = ivData.deliveryDate;
+                document.getElementById("dropOrderTime").value = ivData.dropOrderTime;
+                document.getElementById("targetDate").value = ivData.targetDate;
+                document.getElementById("createdBy").value = ivData.createdBy;
+                document.getElementById("lastModifiedBy").value = ivData.lastModifiedBy;
             }
         });
 
         $.ajax({
-            url:"../views/getPNequal/"+Editponumber,
+            url:"../views/getPNequalivnumber/"+ivnumber,
             type:"POST",
             success:function (result) {
                 console.log(result);

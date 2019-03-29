@@ -26,15 +26,29 @@
             color: #5e5b64;
             text-align:center;
         }
-
-        a, a:visited {
+        /*a, a:visited {
             outline:none;
             color:#389dc1;
+        }*/
+        a:link {
+            color:#3C3C3C;
+            text-decoration:underline;
         }
-
-        a:hover{
+        a:visited {
+            color:#0000FF;
             text-decoration:none;
         }
+        a:hover {
+            color:#FF00FF;
+            text-decoration:none;
+        }
+        a:active {
+            color:#D200D2;
+            text-decoration:none;
+        }
+       /* a:hover{
+            text-decoration:none;
+        }*/
 
         section, footer, header, aside, nav{
             display: block;
@@ -56,8 +70,8 @@
                 --------------------------*/
 
         nav{
-            display:inline-block;
-            margin:60px auto 45px;
+            /*display:inline-block;*/
+            margin:30px auto 15px;
             background-color:#5597b4;
             box-shadow:0 1px 1px #ccc;
             border-radius:2px;
@@ -151,14 +165,14 @@
 
         ul{
             list-style: none;
-            width: 428px;
+            width: 500px;
             margin: 0 auto;
             text-align: left;
         }
 
         ul li{
             border-bottom: 1px solid #ddd;
-            padding: 10px;
+            padding: 0px;
             overflow: hidden;
         }
 
@@ -174,6 +188,14 @@
             font-weight: bold;
             padding-top: 12px;
             color:#6e7a7f;
+        }
+
+        .pagination {
+            /*display: inline-block;*/
+            display: block;
+            padding-left: 0;
+            margin: 10px 0;
+            border-radius: 4px;
         }
 
         .page{
@@ -213,14 +235,14 @@
     <div id="bar" class="row">
         <!-- 激活的菜单样式为  active 类 -->
         <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
-        <nav v-bind:class="active">
+        <nav><!--v-bind:class="active"-->
 
             <!-- 当菜单上的链接被点击时，我们调用了 makeActive 方法, 该方法在 Vue 实例中创建。 -->
 
-            <a href="../hello" class="home" v-on:click="makeActive('home')">Home</a>
-            <a href="procument.html" class="Procument" v-on:click="makeActive('Procument')">Procument</a>
-            <a href="asn.html" class="ASN" v-on:click="makeActive('ASN')">ASN</a>
-            <a href="iv.html" class="IV" v-on:click="makeActive('IV')">IV</a>
+            <a href="../hello" class="home">Home</a>
+            <a href="procument.html" class="Procument">Order</a>
+            <a href="asn.html" class="ASN">ASN</a>
+            <a href="iv.html" class="IV">GR</a>
         </nav>
 
         <!-- 以下 "active" 变量会根据当前选中的值来自动变换 -->
@@ -228,9 +250,9 @@
         <!--<p>您选择了 <b>{{active}} 菜单</b></p>-->
     </div>
     <!--home标题--><!--selected下拉框-->
-    <div class="row">
+    <!--<div class="row">
         <div class="col-xs-1">
-            <img v-bind:src="../../../static/images/upload.png">
+        <img v-bind:src="../../../static/images/upload.png">
         </div>
         <div class="col-xs-2">
             <h5>order</h5><h3>ASN#</h3>
@@ -250,31 +272,40 @@
             <button onclick="selectAll()">go!</button>
         </div>
         <div class="col-xs-4"></div>
-    </div>
-    <!--横线-->
-    <div class="row">
-        <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
-    </div>
+    </div>-->
     <!--Po display-->
     <div class="row">
-        <div class="col-xs-2"><p>PO Display</p></div>
+        <div class="col-xs-2"><p>ASN Display</p></div>
         <div class="col-xs-3">
             <input type="text" id="searchASN" name="searchASN">
             <button type="button" id="searchASNButton" onclick="getASNonSearch()">search</button>
         </div>
-        <div class="col-xs-2"><!--Recent Order-->
-             <!--<a href="#" class="btn mini purple" v-on:click="getASNonSearch()">
-             -- <i class="icon-edit"></i>search</a>-->
+        <div class="col-xs-5"><!--Recent Order-->
+            <div class="col-xs-1">View:</div>
+            <div class="col-xs-5">
+                <div id="app">
+                    <select v-model="selected" name="POSelect" id="input_select">
+                        <option value="">All</option>
+                        <option value="Product Line-SMP">Product Line-SMP</option>
+                        <option value="Product Line-TAB">Product Line-TAB</option>
+                        <option value="Status">Status</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-1">
+                <button onclick="selectAll()">go!</button>
+            </div>
+            <div class="col-xs-6"></div>
         </div>
-        <div class="col-xs-2">
-            <!--<div id="selected">
+        <!--<div class="col-xs-2">
+            <div id="selected">
                 <select v-model="selected" name="fruit">
                     <option value="">Recently Upload</option>
                     <option value="Recently Viewed">Recently Viewed</option>
                     <option value="Recently Modified">Recently Modified</option>
                 </select>
-            </div>-->
-        </div>
+            </div>
+        </div>-->
        <!-- <div class="col-xs-1">
             <button onclick="window.location.href='podetail.html'">new</button>
         </div>-->
@@ -287,21 +318,23 @@
             <table class="table-bordered table table-hover" id="ASN_List_table">
                 <thead>
                 <tr>
+                    <th>PO#</th>
                     <th>ASN#</th>
                     <th>Sold to</th>
-                    <th>ASN Data</th>
-                    <th>Net Due Data</th>
+                    <th>ASN Date</th>
+                    <th>Target Date</th>
                     <th>Status</th>
                     <th>action</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="myBody">
                 <tr v-for="item in lists">
+                    <td v-text="item.ponumber"></td>
                     <td v-text="item.asnnumber"></td>
                     <td v-text="item.soldTo"></td>
                     <td v-text="item.poDate"></td>
-                    <td v-text="item.netDueDate"></td>
-                    <td v-text="item.flag"></td>
+                    <td v-text="item.targetDate"></td>
+                    <td v-text="item.status"></td>
                     <td>
                         <button onclick="EditPOSelect(this)" type="button">information</button>
                     </td>
@@ -311,7 +344,7 @@
         </div>
     </div>
     <!--显示分页信息-->
-    <!--<div class="row">
+    <div class="row">
         <div class="col-xs-6" id="page_info_area">
 
         </div>
@@ -322,7 +355,7 @@
                 </ul>
             </nav>
         </div>
-    </div>-->
+    </div>
 </div>
 
 <script>
@@ -332,18 +365,27 @@
         el: '#bar',
 
         // 定义属性，并设置初始值
-        data: {
+        /*data: {
             active: 'home'
-        },
+        },*/
 
         // 点击菜单使用的函数
-        methods: {
+       /* methods: {
             makeActive: function(item){
                 // 模型改变，视图会自动更新
-                this.active = item;
+                //this.active = item;
+                this.style.backgroundColor='red'
             }
-        }
+        }*/
     });
+
+    var perDiv=null;
+    function chgColor(_this)
+    {
+        if(perDiv) perDiv.style.backgroundColor='';
+        _this.style.backgroundColor='red';
+        perDiv=_this;
+    }
 
     //创建一个新的Vue搜索框实例
     var search = new Vue({
@@ -411,6 +453,10 @@
     });
 
     $(function () {
+       to_page(1);
+    });
+
+    /*$(function () {
         var ajax = $.ajax({
             url:"../views/getASNS",
             type:"POST",
@@ -426,7 +472,7 @@
                 });
             }
         });
-    });
+    });*/
 
     new Vue({
         el: '#app',
@@ -587,16 +633,29 @@
     function to_page(pn) {
         console.log(pn);
         var ajax = $.ajax({
-            url: "../lenovoscs_Web_exploded/views/getAllPO",
+            url: "../views/getASNS",
             data:"pn="+pn,
             type:"GET",
             success:function (result,state) {
-                new Vue({
+                /*new Vue({
                     el:'#PO_List_table',
                     data:{
                         lists:result.extend.pageInfo.list
                     }
-                })
+                });*/
+                $("#myBody").html("");
+                for(var i = 0;i<result.extend.pageInfo.list.length;i++){
+                    str1 = "<tr>" +
+                        "<td>"+result.extend.pageInfo.list[i].ponumber + "</td>" +
+                        "<td>"+result.extend.pageInfo.list[i].asnnumber + "</td>" +
+                        "<td>"+result.extend.pageInfo.list[i].soldTo+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].poDate+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].targetDate+"</td>"+
+                        "<td>"+result.extend.pageInfo.list[i].status+"</td>"+
+                        "<td>"+"<button onclick='EditPOSelect(this)' type='button' v-text:='information'>information</button>"+"</td>"
+                        +"</tr>";
+                    $("#myBody").append(str1);
+                }
                 console.log(result);
                 //build_PO_table(result);
                 build_page_info(result);
@@ -605,39 +664,9 @@
         });
     }
 
-    //编辑PO信息
-    /*function EditPOSelect() {
-        /!*编辑单头信息*!/
-        var Top_Edit = document.getElementsByClassName("Top_Edit");
-
-        for (var i = 0; i < Top_Edit.length; i++) {
-
-            Top_Edit[i].index = i;
-
-            Top_Edit[i].onclick = function () {
-
-                var table = document.getElementById("PO_List_table");
-
-                /!*获取选中的行 *!/
-                var child = table.getElementsByTagName("tr")[this.index+1];
-                console.log("ssssssffsfsfdsf"+this.index)
-                /!*获取选择行的所有列*!/
-                var SZ_col = child.getElementsByTagName("td");
-                var span_col = child.getElementsByTagName("span");
-
-                var ponumber = span_col[0].innerHTML;
-
-
-                console.log("dfsfsdfsfsf"+ponumber);
-                window.location.href = encodeURI("views/podetail.html?value=" + ponumber);;
-
-            }
-        }
-    }*/
-
     function EditPOSelect(obj){
         var $td = $(obj).parents('tr').children('td');
-        var asnnumber = $td.eq(0).text();
+        var asnnumber = $td.eq(1).text();
         window.location.href = encodeURI("asndetail.html?value=" + asnnumber);
     }
 
@@ -668,12 +697,25 @@
                 //$('#ASN_List_table').DataTable().ajax.reload();
                 console.log(result);
                // window.location.reload();
-                new Vue({
+                /*new Vue({
                     el:'#ASN_List_table',
                     data:{
                         lists:result.extend.asnList
                     }
-                });
+                });*/
+                $("#myBody").html("");
+                for(var i = 0;i<result.extend.asnList.length;i++){
+                    str1 = "<tr>" +
+                        "<td>"+result.extend.asnList[i].ponumber+"</td>"+
+                        "<td>"+result.extend.asnList[i].asnnumber + "</td>" +
+                        "<td>"+result.extend.asnList[i].shipTo + "</td>" +
+                        "<td>"+result.extend.asnList[i].poDate+"</td>"+
+                        "<td>"+result.extend.asnList[i].targetDate+"</td>"+
+                        "<td>"+result.extend.asnList[i].status+"</td>"+
+                        "<td>"+"<button onclick='EditPOSelect(this)' type='button' v-text:='information'>information</button>"+"</td>"+
+                    "</tr>";
+                    $("#myBody").append(str1);
+                }
                 //window.location.href=window.location.href;
                 /*var table = $('#ASN_List_table').DataTable({
                     ajax: "data.json"

@@ -4,6 +4,7 @@ import com.lenovo.lenovoscs.bean.*;
 import com.lenovo.lenovoscs.service.MapperService;
 import com.lenovo.lenovoscs.service.PNService;
 import com.lenovo.lenovoscs.service.POService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,9 @@ public class PNController {
      * 返回PN标记
      * @return
      */
-    @RequestMapping("/getFlag")
+    @RequestMapping(method = RequestMethod.GET,value = "/getFlag")
     @ResponseBody
+    @ApiOperation("返回flag表中所有的状态信息")
     public Msg getFlag(){
         System.out.println("11111");
         List<Flag> flagList = pnService.getFlag();
@@ -44,8 +46,9 @@ public class PNController {
      * @param pnnumber
      * @return
      */
-    @RequestMapping("/checkPNnumber")
+    @RequestMapping(method = RequestMethod.POST,value = "/checkPNnumber")
     @ResponseBody
+    @ApiOperation("校验PNnumber是否正确")
     public Msg checkPNnumber(@RequestParam("pnnumber") Integer pnnumber){
         boolean checkPNnumber = pnService.checkPNnumber(pnnumber);
         if(checkPNnumber){
@@ -60,8 +63,9 @@ public class PNController {
      * @param pn
      * @return
      */
-    @RequestMapping("/savePN")
+    @RequestMapping(method = RequestMethod.POST,value = "/savePN")
     @ResponseBody
+    @ApiOperation("保存pn信息")
     public Msg savePN(@Valid PN pn){
         //List<PN> pnList = pnService.getAllPN();
         /*for(PN pn1:pnList){
@@ -70,19 +74,46 @@ public class PNController {
                 return Msg.fail();
             }
         }*/
-        pn.setFlag(1);
+        //pn.setFlag(1);
         int countPn = pnService.savePN(pn);
         Mapper mapper = new Mapper();
         mapper.setPonumber(pn.getNumber());
         mapper.setPnnumber(pn.getPnnumber());
         int countMapper = mapperService.saveMapper(mapper);
-        PO poRecord = new PO();
-        poRecord.setPonumber(pn.getNumber());
-        poRecord.setPnnumber(pn.getPnnumber());
-        poRecord.setPnQuantity(pn.getPnQuantity());
-        poService.InsertPO(poRecord);
-        System.out.println(poRecord.getPnnumber());
-        System.out.println("save="+countPn);
+        List<PO> poList = poService.getPO(pn.getNumber());
+        for(PO po:poList){
+            System.out.println("po="+po.getPonumber());
+            if(po.getPnnumber() == null){
+                po.setPnnumber(pn.getPnnumber());
+                po.setPnQuantity(pn.getPnQuantity());
+                poService.updatePOBypnnumber(po);
+            }else {
+                PO poRecord = new PO();
+                poRecord.setPonumber(pn.getNumber());
+                poRecord.setPnnumber(pn.getPnnumber());
+                poRecord.setPnQuantity(pn.getPnQuantity());
+                poRecord.setSoldTo(po.getSoldTo());
+                poRecord.setPayment(po.getPayment());
+                poRecord.setShipTo(po.getShipTo());
+                poRecord.setOrderType(po.getOrderType());
+                poRecord.setExchangeProvisionItem(po.getExchangeProvisionItem());
+                poRecord.setConditionItem(po.getConditionItem());
+                poRecord.setRemark(po.getRemark());
+                poRecord.setCarrier(po.getCarrier());
+                poRecord.setCustomer(po.getCustomer());
+                poRecord.setNetDueDate(po.getNetDueDate());
+                poRecord.setPoDate(po.getPoDate());
+                poRecord.setDeliveryDate(po.getDeliveryDate());
+                poRecord.setDropOrderTime(po.getDropOrderTime());
+                poRecord.setTargetDate(po.getTargetDate());
+                poRecord.setCreatedBy(po.getCreatedBy());
+                poRecord.setLastModifiedBy(po.getLastModifiedBy());
+                poService.InsertPO(poRecord);
+            }
+        }
+        /**/
+        //System.out.println(poRecord.getPnnumber());
+        //System.out.println("save="+countPn);
         if(countPn>0&&countMapper>0){
             return Msg.success();
         }else {
@@ -94,10 +125,11 @@ public class PNController {
      * 查询所有PN
      * @return
      */
-    @RequestMapping("/getAllPN")
+    @RequestMapping(method = RequestMethod.GET,value = "/getAllPN")
     @ResponseBody
+    @ApiOperation("查询所有PN，返回PN表中所有PN信息")
     public Msg getAllPN(Model model){
-        List<PN> pnList = pnService.getAllPN();
+        List<PNStatus> pnList = pnService.getAllPN();
         return Msg.success().add("pnList",pnList);
     }
 
@@ -108,12 +140,12 @@ public class PNController {
      * @param number
      * @return
      */
-    @RequestMapping("/getPNequal/{number}")
+    @RequestMapping(method = RequestMethod.POST,value = "/getPNequal/{number}")
     @ResponseBody
-    public Msg getPNequalPONumber(@PathVariable("number") Integer number){
-        //List<PN> pnList;
-        //HashMap<Integer,Object> tempMap = new HashMap<>();
-        List<PN> pnList = pnService.getPNequal(number);
+    @ApiOperation("得到ASN下的所有PN信息")
+    public Msg getPNequalASNNumber(@PathVariable("number") Integer number){
+        System.out.println(number);
+        List<PNStatus> pnList = pnService.getPNequal(number);
         for  ( int  i  =   0 ; i  <  pnList.size()  -   1 ; i ++ )  {
             for  ( int  j  =  pnList.size()  -   1 ; j  >  i; j -- )  {
                 if  (pnList.get(j).getId() == pnList.get(i).getId())  {
@@ -129,10 +161,12 @@ public class PNController {
      * @param ponumber
      * @return
      */
-    @RequestMapping("/getASNPNEqual/{ponumber}")
+    @RequestMapping(method = RequestMethod.POST,value = "/getPNequalPOnumber/{ponumber}")
     @ResponseBody
-    public Msg getASNPNEqual(Integer ponumber){
-        List<PN> pnList = pnService.getASNPNEqual(ponumber);
+    @ApiOperation("得到PO下的所有PN信息")
+    public Msg getPNequalPOnumber(@PathVariable("ponumber") Integer ponumber){
+        List<PNStatus> pnList = pnService.getPNequalPOnumber(ponumber);
+        System.out.println(ponumber);
         for(int a = 0;a<pnList.size()-1;a++){
             for(int b=pnList.size()-1;b>a;b--){
                 if(pnList.get(b).getId() == pnList.get(a).getId()){
@@ -143,6 +177,27 @@ public class PNController {
         return Msg.success().add("pnList",pnList);
     }
 
+
+    /**
+     * 得到IV下的相应PN
+     * @param ivnumber
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST,value = "/getPNequalivnumber/{ivnumber}")
+    @ResponseBody
+    @ApiOperation("得到IV下的所有PN信息")
+    public Msg getPNequalivnumber(@PathVariable("ivnumber") Integer ivnumber){
+        List<PNStatus> pnList = pnService.getPNequalivnumber(ivnumber);
+        System.out.println(ivnumber);
+        for(int a = 0;a<pnList.size()-1;a++){
+            for(int b=pnList.size()-1;b>a;b--){
+                if(pnList.get(b).getId() == pnList.get(a).getId()){
+                    pnList.remove(b);
+                }
+            }
+        }
+        return Msg.success().add("pnList",pnList);
+    }
 //    public static List<Object> mySort(List<Object> list){
 ////        HashMap<Integer,Object> tempMap = new HashMap<>();
 ////        for (Object obj : list) {
@@ -181,8 +236,9 @@ public class PNController {
      * @param model
      * @return
      */
-    @RequestMapping("/getAllASNPN")
+    @RequestMapping(method = RequestMethod.GET,value = "/getAllASNPN")
     @ResponseBody
+    @ApiOperation("得到ASN下的所有PN信息,该方法已被替代")
     public Msg getAllASNPN(Model model){
         List<PN> pnList = pnService.getAllASNPN();
         return Msg.success().add("pnList",pnList);
@@ -193,8 +249,9 @@ public class PNController {
      * @param pnnumber
      * @return
      */
-    @RequestMapping("/selectPnBypnnumber/{pnnumber}")
+    @RequestMapping(method = RequestMethod.GET,value = "/selectPnBypnnumber/{pnnumber}")
     @ResponseBody
+    @ApiOperation("根据pnumber的到对应的pnnumber")
     public Msg selectPnBypnnumber(@PathVariable("pnnumber") Integer pnnumber){
         PN pn = pnService.getPNBypnnumber(pnnumber);
         return Msg.success().add("pn",pn);
@@ -207,6 +264,9 @@ public class PNController {
      */
     @RequestMapping(method = RequestMethod.GET,value = "/updataPNBypnnumber/{pnnumber}")
     @ResponseBody
+    @ApiOperation("点击模态框更新按钮更新PN信息")
+    //此处应判断该pn是否位于asn中，若是，更新pn的flag为asn对应pn的flag,若不是，设置flag为1；
+    //更新poquantity是否同时更新PO，ASNquantity信息
    /* public Msg updataPNBypnnumber(@Valid PN pn){ */
     public Msg updataPNBypnnumber(@Valid PN pn,@PathVariable("pnnumber") Integer pnnumber){
         System.out.println("update111");
@@ -231,6 +291,7 @@ public class PNController {
      */
     @RequestMapping(method = RequestMethod.POST,value = "/deletePNByPNnumber/{pnnumber}")
     @ResponseBody
+    @ApiOperation("删除PO下的pn信息")
     public Msg deletePNByPNnumber(@PathVariable("pnnumber") Integer pnnumber){
         System.out.println("delete11111");
         PN pn = pnService.getPNBypnnumber(pnnumber);
