@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 //@RequestMapping("/test")
 public class testContorller {
 
-    private String po_detail= "index";
+    private String po_detail= "newone";
 
     @RequestMapping("/hello")
     @ApiOperation("此处是启动页")
