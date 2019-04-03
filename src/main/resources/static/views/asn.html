@@ -71,8 +71,8 @@
 
         nav{
             /*display:inline-block;*/
-            margin:30px auto 15px;
-            background-color:#5597b4;
+            margin:10px auto 10px;
+            background-color:#41B4AB;
             box-shadow:0 1px 1px #ccc;
             border-radius:2px;
         }
@@ -205,6 +205,12 @@
 </head>
 <body>
 <div class="container">
+    <div class="row">
+        <div class="col-xs-2"><img  width="150px" height="40px" src="../img/Lenovo-Logo.png"></div>
+        <div class="col-xs-8"></div>
+        <div class="col-xs-2"><img width="60px" height="40px" src="../img/flower0933.png"></div>
+    </div>
+
     <!--搜索框-->
     <!--<div class="row">
         <br><br>
@@ -275,7 +281,8 @@
     </div>-->
     <!--Po display-->
     <div class="row">
-        <div class="col-xs-2"><p>ASN Display</p></div>
+        <div class="col-xs-1"><img class="pull-right" width="30px" height="30px" src="../img/box1.png"></div>
+        <div class="col-xs-2"><p class="pull-left">ASN Display</p></div>
         <div class="col-xs-3">
             <input type="text" id="searchASN" name="searchASN">
             <button type="button" id="searchASNButton" onclick="getASNonSearch()">search</button>
@@ -310,6 +317,7 @@
             <button onclick="window.location.href='podetail.html'">new</button>
         </div>-->
     </div>
+    <div class="col-xs-1"></div>
     <br>
     <!--table display-->
     <div class="row">
@@ -318,7 +326,7 @@
             <table class="table-bordered table table-hover" id="ASN_List_table">
                 <thead>
                 <tr>
-                    <th>PO#</th>
+                    <th>Order#</th>
                     <th>ASN#</th>
                     <th>Sold to</th>
                     <th>ASN Date</th>

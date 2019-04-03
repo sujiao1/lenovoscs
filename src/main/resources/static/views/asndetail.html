@@ -58,8 +58,8 @@
 
         nav{
             /*display:inline-block;*/
-            margin:30px auto 15px;
-            background-color:#5597b4;
+            margin:10px auto 10px;
+            background-color:#41B4AB;
             box-shadow:0 1px 1px #ccc;
             border-radius:2px;
         }
@@ -183,6 +183,11 @@
 </head>
 <body>
 <div class="container">
+    <div class="row">
+        <div class="col-xs-2"><img  width="150px" height="40px" src="../img/Lenovo-Logo.png"></div>
+        <div class="col-xs-8"></div>
+        <div class="col-xs-2"><img width="60px" height="40px" src="../img/flower0933.png"></div>
+    </div>
 
     <!--搜索框-->
     <!--<div class="row">
@@ -231,27 +236,27 @@
     <!--PO#--><!--Button-->
     <form method="POST" id="POdataForm" name="POdataForm">
         <!--button-->
-        <div class="row">
-            <!--<div class="col-xs-1">
+        <!--<div class="row">
+            &lt;!&ndash;<div class="col-xs-1">
                 <img v-bind:src="../../../static/images/upload.png">
             </div>
             <div class="col-xs-2">
                 <h5>order</h5><p>ASN#</p>
             </div>
-            <div class="col-xs-2"><p>ASN Detail</p></div>-->
+            <div class="col-xs-2"><p>ASN Detail</p></div>&ndash;&gt;
             <div class="col-xs-4"></div>
-            <!--<div class="col-xs-1">
+            &lt;!&ndash;<div class="col-xs-1">
                 <button type="button" id="download" onclick="downloadForm()">Download</button>
-            </div>-->
-            <div class="col-xs-4">
+            </div>&ndash;&gt;
+            &lt;!&ndash;<div class="col-xs-4">
                 <button type="button" id="confirm" onclick="ConfirmPOForm()">confirm</button>
-            </div>
-            <div class="col-xs-4"></div>
-        </div>
+            </div>&ndash;&gt;
+            <div class="col-xs-8"></div>
+        </div>-->
         <!--横线-->
-        <div class="row">
+        <!--<div class="row">
             <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
-        </div>
+        </div>-->
         <!--Po input-->
         <!--action="insertPO"-->
         <div class="row">
@@ -261,25 +266,25 @@
                     <div class="col-xs-10"></div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4">ASN# <input type="text" name="asnnumber" id="asnnumber"></div>
-                    <div class="col-xs-4">Remark <input type="text" id="remark" name="remark"></div>
-                    <div class="col-xs-4">Ship To <input type="text" id="shipTo" name="shipTo"></div>
+                    <div class="col-xs-4">ASN# <input class="pull-right" type="text" name="asnnumber" id="asnnumber"></div>
+                    <div class="col-xs-4">Remark <input class="pull-right" type="text" id="remark" name="remark"></div>
+                    <div class="col-xs-4">Ship To <input class="pull-right" type="text" id="shipTo" name="shipTo"></div>
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-xs-4">Carrier <input type="text" id="carrier" name="carrier"></div>
-                    <div class="col-xs-4">Sold To <input type="text" id="soldTo" name="soldTo"></div>
-                    <div class="col-xs-4">Customer <input type="text" id="customer" name="customer"></div>
+                    <div class="col-xs-4">Carrier <input class="pull-right" type="text" id="carrier" name="carrier"></div>
+                    <div class="col-xs-4">Sold To <input class="pull-right" type="text" id="soldTo" name="soldTo"></div>
+                    <div class="col-xs-4">Customer <input class="pull-right" type="text" id="customer" name="customer"></div>
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-xs-4">Order Type <input type="text" id="orderType" name="orderType"></div>
-                    <div class="col-xs-4">Exchange Provision Item <input type="text" id="exchangeProvisionItem" name="exchangeProvisionItem"></div>
-                    <div class="col-xs-4">Net Due Date <input type="date" id="netDueDate" name="netDueDate"></div>
+                    <div class="col-xs-4">Order Type <input class="pull-right" type="text" id="orderType" name="orderType"></div>
+                    <div class="col-xs-4">Exchange Provision Item <input class="pull-right" type="text" id="exchangeProvisionItem" name="exchangeProvisionItem"></div>
+                    <div class="col-xs-4">Net Due Date <input class="pull-right" type="date" id="netDueDate" name="netDueDate"></div>
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-xs-4">PO#<input type="text" id="ponumber" name="ponumber"></div>
+                    <div class="col-xs-4">Order#<input class="pull-right" type="text" id="ponumber" name="ponumber"></div>
                     <div class="col-xs-4"></div>
                     <div class="col-xs-4"></div>
                 </div>
@@ -291,20 +296,20 @@
             <!--data-->
             <div class="row">
                 <div class="row">
-                    <div class="col-xs-2"><p>Data</p></div>
+                    <div class="col-xs-2"><p>Date</p></div>
                     <div class="col-xs-10"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-2"></div>
-                    <div class="col-xs-5">ASN Date <input type="date" id="poDate" name="poDate"></div>
+                    <div class="col-xs-5">ASN Date <input class="pull-right" type="date" id="poDate" name="poDate"></div>
 
-                    <div class="col-xs-5">Delivery Date <input type="date" id="deliveryDate" name="deliveryDate"></div>
+                    <div class="col-xs-5">Delivery Date <input class="pull-right" type="date" id="deliveryDate" name="deliveryDate"></div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-xs-2"></div>
-                    <div class="col-xs-5">Drop OrderTime <input type="date" id="dropOrderTime" name="dropOrderTime"></div>
-                    <div class="col-xs-5">Target Date <input type="date" id="targetDate" name="targetDate"></div>
+                    <div class="col-xs-5">Drop OrderTime <input class="pull-right" type="date" id="dropOrderTime" name="dropOrderTime"></div>
+                    <div class="col-xs-5">Target Date <input class="pull-right" type="date" id="targetDate" name="targetDate"></div>
                 </div>
             </div>
             <!--横线-->
@@ -318,8 +323,9 @@
                     <div class="col-xs-8"></div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6">createdBy <input type="text" id="createdBy" name="createdBy"></div>
-                    <div class="col-xs-6">lastModifiedBy <input type="text" id="lastModifiedBy" name="lastModifiedBy"></div>
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">createdBy <input class="pull-right" type="text" id="createdBy" name="createdBy"></div>
+                    <div class="col-xs-4">lastModifiedBy <input class="pull-right" type="text" id="lastModifiedBy" name="lastModifiedBy"></div>
                 </div>
             </div>
             <!--横线-->
@@ -343,10 +349,10 @@
                 <div class="col-xs-4"></div>
             </div>
         </div>
-        <div class="col-xs-1" id="PN_add_Button">
+        <!--<div class="col-xs-1" id="PN_add_Button">
             <button>new</button>
-        </div>
-        <div class="col-xs-1"></div>
+        </div>-->
+        <div class="col-xs-2"></div>
     </div>
 
     <!--new弹出框-->
@@ -477,12 +483,12 @@
                     <tr>
                         <th>ASN PN#</th>
                         <th>PN Des</th>
-                        <th>Category</th>
+                        <th>Tax rate</th>
                         <th>Unit</th>
                         <th>Price</th>
                         <th>ASN PN Quantity</th>
-                        <th>Parts Amount</th>
-                        <th>PN Status</th>
+                        <th>Amount</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>

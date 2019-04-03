@@ -26,7 +26,7 @@
 
     body{
         font:15px/1.3 'Open Sans', sans-serif;
-        color: #5e5b64;
+        color: #3E645D;
         text-align:center;
     }
 
@@ -53,10 +53,11 @@
     }
     nav{
         /*display:inline-block;*/
-        margin:30px auto 15px;
-        background-color:#5597b4;
+        margin:10px 0px 10px;
+        background-color:#41B4AB;
         box-shadow:0 1px 1px #ccc;
         border-radius:2px;
+
     }
     ul{
         list-style: none;
@@ -66,7 +67,7 @@
     }
 
     ul li{
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #CFDDDD;
         padding: 0px;
         overflow: hidden;
     }
@@ -74,8 +75,9 @@
         /*display: inline-block;*/
         display: block;
         padding-left: 0;
-        margin: 10px 0;
+        margin: 0px 0;
         border-radius: 4px;
+        background-color: #41B4AB;
     }
     .new{
         width: 50px;
@@ -86,6 +88,11 @@
 <body>
 <div class="container">
     <!--导航条-->
+    <div class="row">
+        <div class="col-xs-2"><img  width="150px" height="40px" src="../img/Lenovo-Logo.png"></div>
+        <div class="col-xs-8"></div>
+        <div class="col-xs-2"><img width="60px" height="40px" src="../img/flower0933.png"></div>
+    </div>
     <div id="bar" class="row">
         <!-- 激活的菜单样式为  active 类 -->
         <!-- 为了阻止链接在点击时跳转，我们使用了 "prevent" 修饰符 (preventDefault 的简称)。 -->
@@ -104,7 +111,7 @@
         <!--<p>您选择了 <b>{{active}} 菜单</b></p>-->
     </div>
     <!--home标题--><!--selected下拉框-->
-    <div class="row">
+    <!--<div class="row">
         <div class="col-xs-3">
             <p>Purchase Order</p>
         </div>
@@ -112,7 +119,7 @@
 
         </div>
         <div class="col-xs-6"></div>
-    </div>
+    </div>-->
     <!--横线-->
     <!--<div class="row">
         <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
@@ -145,15 +152,19 @@
         <div class="col-xs-5"></div>
     </div>-->
     <!--横线-->
-    <div class="row">
+   <!-- <div class="row">
         <hr v-bind:style="height:1px;border:none;border-top:1px;solid:#555555;"/>
-    </div>
+    </div>-->
     <!--Po display-->
     <div class="row">
-        <div class="col-xs-2"><p>PO Display</p></div>
-        <div class="col-xs-9">
-            <div class="col-xs-1">View:</div>
-            <div class="col-xs-1">
+        <div class="col-xs-1">
+            <!--<img width="50px" height="50px" src="http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20190129/170157_yIl3_1767531.jpg"/>-->
+            <img class="pull-right" width="30px" height="30px" src="../img/Order-list.png"/>
+        </div>
+        <div class="col-xs-3"><p class="pull-left">Order Display</p></div>
+        <div class="col-xs-8">
+            <div class="col-xs-1 pull-left">View:</div>
+            <div class="col-xs-1 pull-left">
                 <div id="app">
                     <select v-model="selected" name="POSelect" id="input_select">
                         <option value="">All</option>
@@ -171,7 +182,7 @@
                 <button class="new" onclick="window.location.href='podetail.html'">new</button>
             </div>
         </div>
-        <div class="col-xs-1"></div>
+        <div class="col-lg-2"></div>
     </div>
         <br>
     <!--table display-->
@@ -182,7 +193,7 @@
                 <thead>
                     <tr>
                         <!--<th hidden="hidden">id</th>-->
-                        <th>PO#</th>
+                        <th>Order#</th>
                         <th>PN#</th>
                         <th>Ship to</th>
                         <th>Sold to</th>

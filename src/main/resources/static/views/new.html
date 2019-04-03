@@ -1,80 +1,133 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <title>Index</title>
+    <link rel="stylesheet" href="https://spmtst.lenovo.com/assets/css/common.css">
+    <link rel="stylesheet" href="https://spmtst.lenovo.com/assets/css/elementui.css">
+    <link rel="stylesheet" href="https://spmtst.lenovo.com/assets/css/index.css">
+    <link rel="stylesheet" href="https://spmtst.lenovo.com/assets/css/iconcss/iconfont.css">
 </head>
 <body>
-
-
-<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script>
-    //别忘了导入该用的js文件
-    function subForm(pn) {
-        pn=1;
-        $.ajax({
-            url: "../views/getAllPO",
-            type: 'get', //请求的方式
-            data: "pn="+pn,
-            error:function (data) {
-                alert('请求失败'+data.message);
-            },
-
-            success:function (data) {
-                alert(data.extend.pageInfo.list[0].remark);
-                var str1 = "";
-                //清空table中的html
-                for(var i = 0;i<data.extend.pageInfo.list.length;i++) {
-                    "<tr>" +
-                    "<td>" + data.extend.pageInfo.list[i].ponumber + "</td>" +
-                    "<td>" + data.extend.pageInfo.list[i].pnnumber + "</td>" +
-                    "<td>" + data.extend.pageInfo.list[i].shipTo + "</td>" +
-                    "</tr>";
-                }
-                document.getElementById("test").innerHTML = str1;
-                /*$("#test").html("");
-                for(var i = 0;i<data.extend.pageInfo.list;i++){
-                    str1 = "<tr>" +
-                        "<td>"+data.extend.pageInfo.list[i].ponumber + "</td>" +
-                        "<td>"+data.extend.pageInfo.list[i].pnnumber + "</td>" +
-                        "<td>"+data.extend.pageInfo.list[i].shipTo + "</td>" +
-                        "</tr>";
-                    $("#test").append(str1);
-                }*/
-            }
-        });
-    }
-</script>
-
-
-
-<form onsubmit="return false" id="formAddtr" method="get">
-    <input type="text" name="id">
-    <button id="select1" onclick="subForm(this)">查询</button>
-</form>
-
-
-
-<table class="table-bordered table table-hover" id="PO_List_table">
-    <thead>
-    <tr>
-        <!--<th hidden="hidden">id</th>-->
-        <th>PO#</th>
-        <th>PN#</th>
-        <th>Ship to</th>
-    </tr>
-    </thead>
-
-    <tbody id="test">
-    </tbody>
-
-</table>
-
-
-
-
-
-
-
+<div id="app" v-cloak @click="app">
+    <div class="main">
+        <!--顶部开始-->
+        <div class="top" style="width: 10%;float: left;display:flex;">
+            <img class="lenovoLogo" src="../img/LenovoLogo.png" style="width: 100%;height:100%;">
+        </div>
+        <div class="top" style="width: 19%;float: right;background-color: rgb(84,92,100)">
+            <div class="rightList">
+                <ul>
+                    <li>
+                        <i class="icon iconfont icon-liaotian1" @click="imStart"></i>
+                        <span class="tip" @click="imStart">{{imAllNum}}</span>
+                    </li>
+                    <li  @click.stop="showList(0)" class="gy-li">
+                        <el-dropdown>
+                            <i class="icon iconfont icon-header-user">
+                                <span class="el-dropdown-link user">{{userName}}</span>
+                            </i>
+                            <el-dropdown-menu slot="dropdown">
+                                <div class="min-width-134">
+                                    <el-dropdown-item class="dropdownli" @click.native="updateUserInfo">{{
+                                        $t("userInfo")}}</el-dropdown-item>
+                                </div>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </li>
+                    <li @click.stop="exit" style="cursor: pointer">
+                        <i class="icon iconfont icon-header-logout"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 顶部结束 -->
+        <!-- 一级菜单 -->
+        <el-menu
+                :default-active="activeIndex"
+                class="el-menu"
+                mode="horizontal"
+                @select="handleSelect"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b"
+                style="width: 81%">
+            <!--动态路由到子组件 将不可见的路径隐藏-->
+            <template v-for="item in menuList">
+                <el-submenu :index="item.index">
+                    <!--用el ui 的title进行solt分发菜单-->
+                    <template slot="title">{{item.name}}</template>
+                    <!--item.name和item.children.name来配置菜单栏和子菜单栏的名称-->
+                    <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path">
+                        {{child.name}}
+                    </el-menu-item>
+                </el-submenu>
+            </template>
+        </el-menu>
+        <div class="shareTit" :style="shareTitLeft">
+            <div class="leftButton" @click="left">
+                <i class="icon iconfont icon-tab-beginning"></i>
+            </div>
+            <div class="nav">
+                <div class="tabs" :style="tabStyle">
+		      		<span
+                            :class="{active:spanActiveNum==-1}"
+                            @click="spanClick(-1)"
+                    >
+		      		Work Page
+		      		</span>
+                    <span
+                            v-for="(item,index) in tablist"
+                            class="tabSpan"
+                            :class="{active:spanActiveNum==item.id}"
+                            :id="item.id"
+                            :code="item.code"
+                            @click="spanClick(index,item.id, item)"
+                            @contextmenu.prevent="showMenu"
+                    >
+		      			{{item.name}}
+		      			<i @click.stop="closeOne(item)" :id="item.id" class="icon iconfont icon-tab-close"></i>
+		      		</span>
+                </div>
+            </div>
+            <div class="rightButton" @click="right">
+                <i class="icon iconfont icon-tab-end"></i>
+            </div>
+        </div>
+        <div class="rightMenu" v-show="rightMenuShow" :style="rightMenuStyle">
+            <div @click="closeTag(0)">{{ $t("closeOther") }}</div>
+            <div @click="closeTag(1)">{{ $t("closeAll") }}</div>
+        </div>
+        <!--iframe部分-->
+        <div class="content" :style="contentLeft" id="iframeContent">
+            <iframe id='iframe' v-show="iframeShowNum==-1" src="/index/home" frameborder="0" width="100%"
+                    height="100%">
+            </iframe>
+            <iframe
+                    v-for="item in tablist"
+                    :_id="item.id"
+                    :id="item.id"
+                    :src="item.url"
+                    :key="item.id"
+                    v-show="iframeShowNum==item.id"
+                    frameborder="0" width="100%" height="100%">
+            </iframe>
+        </div>
+    </div>
+    <div v-show="modalShow" class="modal"></div>
+</div>
+<script src="https://spmtst.lenovo.com/assets/javascript/vue.min.js"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/elementui.js"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/axios.min.js"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/jquery-3.0.0.min.js"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/i18n.js"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/common.js"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/stomp.js"></script>
+<script type="text/javascript" src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/sockjs.js"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/axios.js"></script>
+<script src="https://spmtst.lenovo.com/assets/javascript/axiosExt.js"></script>
+<script src="https://spmtst.lenovo.com/modular/system/workPage.js"></script>
 </body>
 </html>

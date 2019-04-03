@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://spm.lenovo.com/assets/css/iconcss/iconfont.css">
+    <link rel="stylesheet" href="https://spm.lenovo.com/assets/css/elementui.css">
+    <link rel="stylesheet" href="https://spm.lenovo.com/assets/css/common.css">
+    <style>
+        .fontDisplay{
+            text-align: left;
+            font-weight: normal;
+            font-size:14px;
+        }
+        .cell {
+            word-break: keep-all !important;
+        }
+        .el-col {
+            text-align: left;
+        }
+        .el-select{
+            width: 100%;
+        }
+        .el-date-editor.el-input, .el-date-editor.el-input__inner {
+            width: 100%;
+        }
+        .buttonDiv{
+            text-align: right;
+        }
+        .el-tabs--border-card>.el-tabs__content {
+            padding: 0 15px 15px 15px;
+        }
+
+        .el-table thead tr th:first-child .cell {
+            display: none;
+        }
+    </style>
+</head>
+
+<body style="width: 100%">
+<div id="app"  :class="{isModal:advancedShow}" v-cloak @click="app" v-loading="isModal" :element-loading-text=modalTxt
+     element-loading-spinner="el-icon-loading"
+     element-loading-background="rgba(0, 0, 0, 0.5)"
+     style="width:90%;margin:0 auto">
+    <!-- 步骤条-->
+    <div style="height: 100%;">
+        <row :gutter="20" style="width: 100%">
+            <el-col :span="20" style="width: 100%">
+                <row :gutter="20">
+                    <el-tabs type="border-card" style="margin-top:1%;">
+                        <el-tab-pane>
+                            <template slot="label">{{pageTitle}}</template>
+                            <div style="position: relative;">
+                                <el-form size="small" :inline="true"
+                                         style="height: 100%">
+                                    <el-row :gutter="20" style="line-height: 55px;padding-top:10px">
+                                        <el-col :span="5" style="">
+                                            <div  style="font-size:14px">
+                                                Transaction Code:
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5" style="">
+                                            <template>
+                                                <el-select v-model="transactionCode"
+                                                           :placeholder="$t('pleaseSelect')">
+                                                    <el-option
+                                                            v-for="item in transactionCodeOptions"
+                                                            :key="item.value"
+                                                            :label="item.label"
+                                                            :value="item.value">
+                                                    </el-option>
+                                                </el-select>
+                                            </template>
+                                        </el-col>
+                                        <el-col style="width:13% ">&nbsp;</el-col>
+                                        <el-col :span="5" style="">
+                                            <div  style="font-size:14px">
+                                                Scan Area:
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5" style="">
+                                            <el-input v-model="scanArea" placeholder="" v-on:input="scanCode"></el-input>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row :gutter="20" style="line-height: 55px">
+                                        <el-col :span="5" style="">
+                                            <div  style="font-size:14px">
+                                                Order Number:
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5" style="">
+                                            <el-input v-model="orderNumber" placeholder="" :disabled="true"></el-input>
+                                        </el-col>
+                                        <el-col style="width:13% ">&nbsp;</el-col>
+                                        <el-col :span="5" style="">
+                                            <div  style="font-size:14px">
+                                                Ship-from:
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5" style="">
+                                            <el-input v-model="shipFrom" placeholder="" v-on:input="scanCode" :disabled="true"></el-input>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row :gutter="20" style="line-height: 55px">
+                                        <el-col :span="5" style="">
+                                            <div  style="font-size:14px">
+                                                Reference Order Number:
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5" style="">
+                                            <el-input v-model="refDocNo" placeholder="" v-on:change="isOrderNo(refDocNo,true)"></el-input>  <!--  v-on:input="scanCode"  -->
+                                        </el-col>
+                                        <el-col style="width:13% ">&nbsp;</el-col>
+                                        <el-col :span="5" style="">
+                                            <div  style="font-size:14px">
+                                                Warehouse:
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5" style="">
+                                            <el-input v-model="warehouse" placeholder="" :disabled="true"></el-input>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row :gutter="20" style="line-height: 55px">
+                                        <el-col :span="5" style="">
+                                            <div  style="font-size:14px">
+                                                Posting Date:
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5" style="">
+                                            <el-date-picker
+                                                    value-format="yyyy-MM-dd"
+                                                    v-model="postingDate"
+                                                    type="date"
+                                                    :picker-options="pickerOptions1"
+                                                    placeholder="">
+                                            </el-date-picker>
+                                        </el-col>
+                                        <el-col style="width:13% ">&nbsp;</el-col>
+                                        <el-col :span="5" style="">
+                                            <div  style="font-size:14px">
+                                                Document Date:
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="5" style="">
+                                            <el-date-picker
+                                                    value-format="yyyy-MM-dd"
+                                                    v-model="documentDate"
+                                                    type="date"
+                                                    :picker-options="pickerOptions1"
+                                                    placeholder="">
+                                            </el-date-picker>
+                                        </el-col>
+                                    </el-row>
+                                </el-form>
+                            </div>
+                        </el-tab-pane>
+                    </el-tabs>
+                </row>
+
+                <div class="buttonDiv" style="margin-top:10px">
+                    <el-button v-show="buttonPermission['wms_goodsReceipt_goodsReceipt_check']" type="primary" style="width:7%" @click="checkClick" size="small" round>
+                        <i class="icon iconfont icon-button-search"></i>{{$t("check")}}
+                    </el-button>
+                    <el-button v-show="buttonPermission['wms_goodsReceipt_goodsReceipt_save']" type="success" style="width:7%" size="small" @click="sendData" round>
+                        <i class="icon iconfont icon-button-preview"></i>{{$t("save")}}
+                    </el-button>
+                </div>
+                <!-- ============================条目==================================    -->
+                <row :gutter="20">
+                    <template>
+                        <el-tabs type="border-card" v-model="activeNameTab" @tab-click="handleTabClick" height="300px">
+                            <!--  ===================  item  ======================   -->
+                            <el-tab-pane name="tabItem">
+                                <template slot="label">Item</template>
+                                <div style="position: relative;">
+                                    <el-form size="small" :inline="true"
+                                             style="height: 100%">
+                                        <div class="tableDiv">
+                                            <el-table ref="multipleTableItem" :data="itemDataList" border stripe
+                                                      style="width: 100%" height="240px" @select="handleSelectionItemChange">
+                                                <el-table-column :reserve-selection="true" label="OK" type="selection" :reserve-selection="true" width="40" align="center">
+                                                </el-table-column>
+                                                <el-table-column label="inbound do number" prop="inboundDoNo" width="90"></el-table-column>
+                                                <el-table-column label="inbound do item number" prop="inboundDoItem" width="100"></el-table-column>
+                                                <el-table-column label="part number" prop="partNo" width="120"></el-table-column>
+                                                <el-table-column label="Description" prop="description" width="150"></el-table-column>
+                                                <el-table-column label="ref doc number" prop="refDocNo" width="90"></el-table-column>
+                                                <el-table-column label="ref doc item number" prop="refDocItem" width="90"></el-table-column>
+                                                <!--<el-table-column label="movement code" prop="movementCode"></el-table-column>-->
+                                                <el-table-column label="warehouse" prop="warehouse" width="90"></el-table-column>
+                                                <el-table-column label="location" prop="location" width="90"></el-table-column>
+                                                <el-table-column label="Storage Area" prop="recStorageAreaDes" width="90"></el-table-column>
+                                                <el-table-column label="Bin Number" prop="recBinNo" width="90"></el-table-column>
+                                                <el-table-column label="New Storage Area" width="120">
+                                                    <template scope="scope">
+                                                        <el-select v-model="scope.row.storageArea" :disabled="scope.row.hasSn" :val="scope.row.storageArea" @click="changeStorageArea($event,scope.row)" >
+                                                            <el-option
+                                                                    v-for="item in scope.row.newStorageAreaList"
+                                                                    :key="item.value"
+                                                                    :label="scope.row.storageAreaMap[item.label]"
+                                                                    :value="item.value">
+                                                            </el-option>
+                                                        </el-select>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column label="New Bin number" width="90">
+                                                    <template scope="scope">
+                                                        <el-input type="input" v-model="scope.row.binNo" :val="scope.row.binNo" :disabled="scope.row.hasSn"></el-input>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column label="stock type" prop="stockType"></el-table-column>
+                                                <el-table-column label="part number" prop="partNo" width="90"></el-table-column>
+                                                <el-table-column label="quantity" prop="quantity" width="90"></el-table-column>
+                                                <el-table-column label="received quantity" prop="receiveQuantity" width="90"></el-table-column>
+                                                <el-table-column label="now receive quantity" prop="nowReceiveQuantity" width="90">
+                                                    <template scope="scope">
+                                                        <el-input type="input" v-model="scope.row.nowReceiveQuantity" :val="scope.row.nowReceiveQuantity"></el-input>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column label="uom" prop="unit of measure"></el-table-column>
+                                                <!--<el-table-column label="delivery date" prop="deliveryDate"></el-table-column>-->
+                                            </el-table>
+                                        </div>
+                                    </el-form>
+                                </div>
+                            </el-tab-pane>
+                            <!--  ======================  sn  ==============================   -->
+                            <el-tab-pane name="tabSn">
+                                <template slot="label" >SN</template>
+                                <div style="position: relative;">
+                                    <el-form size="small" :inline="true"
+                                             style="height: 100%">
+                                        <div class="tableDiv">
+                                            <el-table ref="multipleTableSn" :data="snDataList" border stripe
+                                                      style="width: 100%" height="240px" @select="handleSelectionChange" @select-all="snHandleSelectionChangeAll" :row-key="getRowKeys" >
+                                                <el-table-column :reserve-selection="true" label="OK" type="selection" :reserve-selection="true" width="40" align="center">
+                                                </el-table-column>
+                                                <el-table-column label="Counter" type="index" width="70"></el-table-column>
+                                                <el-table-column label="Item" prop="inboundDoItem" width="70"></el-table-column>
+                                                <el-table-column label="Part Number" prop="partNo" width="100"></el-table-column>
+                                                <el-table-column label="Description" prop="description" width="150"></el-table-column>
+                                                <el-table-column label="S/N" prop="serialNo" width="100"></el-table-column>
+                                                <el-table-column label="Quantity" prop="quantity" width="90"></el-table-column>
+                                                <el-table-column label="New Storage Area" width="120">
+                                                    <template scope="scope">
+                                                        <el-select v-model="scope.row.storageArea" :val="scope.row.storageArea" @click="changeStorageArea($event,scope.row)" >
+                                                            <el-option
+                                                                    v-for="item in scope.row.newStorageAreaList"
+                                                                    :key="item.value"
+                                                                    :label="scope.row.storageAreaMap[item.label]"
+                                                                    :value="item.value">
+                                                            </el-option>
+                                                        </el-select>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column label="New Bin Number" width="120">
+                                                    <template scope="scope">
+                                                        <el-input type="input" v-model="scope.row.binNo" :val="scope.row.binNo" @change="inputBinNo($event, scope.row.serialNo, scope.row)"></el-input>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column label="New Status" width="120">
+                                                    <template scope="scope">
+                                                        <el-select v-model="scope.row.status" :val="scope.row.status" @change="changeStatus($event,scope.row)">
+                                                            <el-option
+                                                                    v-for="item in scope.row.newStatusList"
+                                                                    :key="item.value"
+                                                                    :label="item.label"
+                                                                    :value="item.value">
+                                                            </el-option>
+                                                        </el-select>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column label="New Sub-status" width="120">
+                                                    <template scope="scope">
+                                                        <el-select v-model="scope.row.subStatus" :val="scope.row.subStatus" @change="changeSubStatus($event,scope.row)">
+                                                            <el-option
+                                                                    v-for="item in scope.row.newSubStatusList"
+                                                                    :key="item.value"
+                                                                    :label="item.label"
+                                                                    :value="item.value">
+                                                            </el-option>
+                                                        </el-select>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column label="Warehouse" prop="warehouse" width="90"></el-table-column>
+                                                <el-table-column label="Location" prop="location" width="90"></el-table-column>
+                                                <el-table-column label="Current Storage Area" prop="recStorageAreaDes"></el-table-column>
+                                                <el-table-column label="Current Bin" prop="recBinNo"></el-table-column>
+                                                <el-table-column label="Current Status" prop="recStatus" width="90"></el-table-column>
+                                                <el-table-column label="Current Sub-status" prop="recSubStatus" width="90"></el-table-column>
+                                                <el-table-column label="Add Image">
+                                                    <template scope="scope">
+                                                        <el-button type="primary" @click="showAddImage(scope.row)">Add</el-button>
+                                                    </template>
+                                                </el-table-column>
+                                            </el-table>
+                                        </div>
+                                    </el-form>
+                                </div>
+                            </el-tab-pane>
+                            <!--  ===================  issue list  ======================   -->
+                            <el-tab-pane name="tabIssue">
+                                <template slot="label" >Issue List</template>
+                                <div style="position: relative;">
+                                    <el-form size="small" :inline="true"
+                                             style="height: 100%">
+                                        <div class="tableDiv">
+                                            <el-table ref="multipleTableIssue" :data="issueDataList"  @selection-change="handleSelectionChangeIssue" border stripe
+                                                      style="width: 100%" height="240px">
+                                                <el-table-column :reserve-selection="true" label="OK" type="selection" :reserve-selection="true" width="40" align="center">
+                                                </el-table-column>
+                                                <!--<el-table-column label="Item#" prop="inboundDoItem"></el-table-column>-->
+                                                <el-table-column label="Counter" type="index" width="70"></el-table-column>
+                                                <!--<el-table-column label="Item" prop="inboundDoItem" width="70"></el-table-column>-->
+                                                <el-table-column label="Part Number" prop="partNo" width="100"></el-table-column>
+                                                <el-table-column label="Description" prop="description" width="150"></el-table-column>
+                                                <el-table-column label="S/N" prop="serialNo" width="100"></el-table-column>
+                                                <el-table-column label="Quantity" prop="quantity" width="90"></el-table-column>
+                                                <el-table-column label="Current Warehouse" prop="recIssueWh" width="90"></el-table-column>
+                                                <el-table-column label="Warehouse" prop="warehouse" width="90"></el-table-column>
+                                                <el-table-column label="Current Location" prop="recIssueLoc" width="90"></el-table-column>
+                                                <el-table-column label="Location" prop="location" width="90"></el-table-column>
+                                                <el-table-column label="Storage Area" prop="recStorageArea"></el-table-column>
+                                                <el-table-column label="Bin Number" prop="recBinNo"></el-table-column>
+                                                <el-table-column label="New Storage Area" width="120" prop="storageArea">
+                                                </el-table-column>
+                                                <el-table-column label="New Bin Number" width="120" prop="binNo">
+                                                </el-table-column>
+                                                <el-table-column label="Current Status" prop="recStatus" width="90"></el-table-column>
+                                                <el-table-column label="Current Sub-status" prop="recSubStatus" width="90"></el-table-column>
+                                                <el-table-column label="New Status" width="120" prop="snStatus">
+                                                </el-table-column>
+                                                <el-table-column label="New Sub-status" width="120"prop="snSubStatus">
+                                                </el-table-column>
+                                                <el-table-column label="Add Image">
+                                                    <template scope="scope">
+                                                        <el-button type="primary" @click="showAddImage(scope.row)">Add</el-button>
+                                                    </template>
+                                                </el-table-column>
+                                                <!--<el-table-column label="Counter" type="index"></el-table-column>-->
+                                                <!--<el-table-column label="part number" prop="partNo"></el-table-column>-->
+                                                <!--<el-table-column label="Description" prop="description"></el-table-column>-->
+                                                <!--<el-table-column label="S/N" prop="serialNo"></el-table-column>-->
+                                                <!--<el-table-column label="Quantitys" prop="quantity"></el-table-column>-->
+                                                <!--<el-table-column label="Warehouse" prop="warehouse"></el-table-column>-->
+                                                <!--<el-table-column label="Location" prop="location"></el-table-column>-->
+                                                <!--<el-table-column label="Storage Are" prop="storageAre"></el-table-column>-->
+                                                <!--<el-table-column label="Add Image">-->
+                                                <!--<template scope="scope">-->
+                                                <!--<el-button type="primary" @click="showAddImage(scope.row)">Add</el-button>-->
+                                                <!--</template>-->
+                                                <!--</el-table-column>-->
+                                            </el-table>
+                                        </div>
+                                    </el-form>
+                                </div>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </template>
+                </row>
+            </el-col>
+
+            <el-col :span="4" >
+                <div style="width:100%">
+                    <div style="margin-top:8%;margin-left:5%;float:left;width:7%">
+
+                    </div>
+                    <div style="width:75%;margin-top:5%;float:left;">
+                        <el-collapse v-model="activeNames" v-for="item in collapseList"
+                                     @change="collapseClick(item.name)">
+                            <el-collapse-item>
+                                <template slot="title">{{item .title}}
+                                    <i v-bind:class="item.icon"></i></template>
+                                <template slot="name">{{item.name}}</template>
+                                <div v-for="itemSub in item.child">{{itemSub.text}}
+                                    <i v-bind:class="itemSub.icon"></i></div>
+                            </el-collapse-item>
+                        </el-collapse>
+                    </div>
+                </div>
+                <el-col :span="24">
+                </el-col>
+            </el-col>
+        </row>
+        <el-dialog
+                title="Notice"
+                :visible.sync="changeOrderDialogVisible"
+                width="30%"
+                :before-close="handleClose">
+            <span>{{changeOrderMsg}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="changeOrderDialogVisible = false">{{ $t("CANCEL") }}</el-button>
+                <el-button type="primary" @click="sureChangeOrder">{{ $t("confirm") }}</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                title="Notice"
+                :visible.sync="noticeMsgDialogVisible"
+                width="30%"
+                :before-close="handleClose">
+            <span>{{noticeMsg}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="confirmNoticeMsg">{{ $t("confirm") }}</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                title="Notice"
+                :visible.sync="receiptSuccessVisible"
+                width="30%"
+                :before-close="handleClose">
+            <span>Inventory movement document </span>
+            <a @click="turnToInvMovInfo" class="tableTdHover">{{invMovDocNo}}</a>
+            <span> generated!</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="closeReceiptSuccess">{{ $t("confirm") }}</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+                title="Notice"
+                :visible.sync="noticeIssusMsgDialogVisible"
+                width="30%"
+                :before-close="handleClose">
+            <span>{{noticeIssusMsg}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="addIssusList">{{ $t("confirm") }}</el-button>
+                <el-button type="danger" @click="noticeIssusMsgDialogVisible = false">{{ $t("CANCEL") }}</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog
+                title="Add Image"
+                :before-close="cancleImageAdd"
+                :visible.sync="dialogAddImageVisible"
+                width="30%">
+            <div>
+                Description：
+                <el-input type="input" v-model="addImage.description" :val="addImage.description" ></el-input>
+            </div>
+            <el-upload
+                    class="upload-demo"
+                    action=""
+                    :before-upload="beforeUpload"
+                    :on-success="uploadSuccess"
+                    :on-preview="handlePreview"
+                    :on-remove="handleRemove"
+                    :before-remove="beforeRemove"
+                    multiple
+                    :limit="5"
+                    :on-exceed="handleExceed"
+                    :file-list="fileList">
+                <div>
+                    <el-button size="small" type="primary">Add Image</el-button>
+                </div>
+                <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过10Mb</div>
+            </el-upload>
+            <!--<el-upload  ref="upload" action="/tmsShipmentHead/uploadFile" :show-file-list="false" :before-upload="beforeUpload" :on-success="uploadSuccess">
+                <el-button  icon="el-icon-upload" size="mini" type="primary" >UPLOAD FILE</el-button>
+            </el-upload>-->
+            <span slot="footer" class="dialog-footer">
+                <el-button type="danger" @click="cancleImageAdd">close</el-button>
+                <!--
+                                <el-button type="primary" @click="addImageFunction">Add</el-button>
+                -->
+            </span>
+        </el-dialog>
+    </div>
+</div>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/axios.min.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/axiosExt.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/vue.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/elementui.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/elementui_en.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/i18n.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/common.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/modular/wms/inboundOrder/receipt/goodsReceipt.js"></script>
+</body>
+
+</html>

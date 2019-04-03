@@ -1,75 +1,211 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <title>Document</title>
+    <link rel="stylesheet" href="https://spm.lenovo.com/assets/css/iconcss/iconfont.css">
+    <link rel="stylesheet" href="https://spm.lenovo.com/assets/css/elementui.css">
+    <link rel="stylesheet" href="https://spm.lenovo.com/assets/css/common.css">
+    <style>
+        .el-col {
+            text-align: center;
+            margin-top: 1px;
+            margin-bottom: 1px;
+        }
+
+        .parent {
+            margin-left: 10px;
+            margin-left: 10px;
+            width: 99%;
+        }
+
+        .buttonDiv {
+            margin-bottom: 1px;
+        }
+
+        .search {
+            margin-top: 10px;
+            margin-bottom: 3px;
+        }
+
+        .el-tabs__header {
+            margin: 0 0 5px;
+        }
+
+        .el-tabs__item {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .el-input-group__append {
+            padding: 0 5px;
+        }
+
+        .topStyle {
+            padding-top: 10px;
+        }
+    </style>
+    <!--隐藏多选按钮-->
+    <!--<link rel="stylesheet" href="/assets/css/stock/taskList.css">-->
 </head>
+
 <body>
+<div id="app" :class="{isModal:advancedShow}" v-cloak @click="app">
+    <div class="smallModal" v-show="advancedShow||addShow||confirmShow"></div>
+    <div class="statusDiv">
+            <span @click="statusClick(index)" :class="{'active':statusNum==index}"
+                  v-for="(item,index) in statusList">{{item.name}}</span>
+    </div>
+    <!-- 搜索 -->
+    <div style="margin-top: 10px;margin-left: 10px;">
+        <el-row :gutter="20">
+            <el-col :span="2"> Vendor：</el-col>
+            <el-col :span="4">
+                <el-input size="mini" v-model="formInline.vendor" :disabled="vendorVisible"
+                          :placeholder="$t('Vendor Code')">
+                    <el-button slot="append" icon="icon iconfont icon-liebiao"
+                               @click="openPopover('vendor')"></el-button>
+                </el-input>
+                <el-popover placement="right" width="300" v-model="vendorVisible">
+                    <el-input type="textarea" :rows="8" placeholder="Please input..."
+                              v-model="formInline.vendorPopover"></el-input>
+                    <div style="text-align: right; margin: 0">
+                        <el-button type="primary" size="mini" type="text" @click="closePopover('vendor')">ok
+                        </el-button>
+                    </div>
+                </el-popover>
+            </el-col>
+            <el-col :span="2"> Upload Date:</el-col>
+            <el-col :span="8">
+                <el-date-picker v-model="formInline.dateValue" size="mini" type="daterange" align="left"
+                                style="width: 100%;" :default-time="['00:00:00', '23:59:59']"
+                                format="yyyy/MM/dd" value-format="timestamp" :range-separator="$t('To')"
+                                :start-placeholder="$t('Start Date')" :end-placeholder="$t('End Date')">
+                </el-date-picker>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :span="2"> PO Number：</el-col>
+            <el-col :span="4">
+                <el-input size="mini" v-model="formInline.poNo" :disabled="poNoVisible"
+                          :placeholder="$t('PO No')">
+                    <el-button slot="append" icon="icon iconfont icon-liebiao"
+                               @click="openPopover('poNo')"></el-button>
+                </el-input>
+                <el-popover placement="right" width="300" v-model="poNoVisible">
+                    <el-input type="textarea" :rows="8" placeholder="Please input..."
+                              v-model="formInline.poNoPopover"></el-input>
+                    <div style="text-align: right; margin: 0">
+                        <el-button type="primary" size="mini" type="text" @click="closePopover('poNo')">ok
+                        </el-button>
+                    </div>
+                </el-popover>
+            </el-col>
+            <el-col :span="2"> Part No：</el-col>
+            <el-col :span="4">
+                <el-input size="mini" v-model="formInline.partNo" :disabled="partNoVisible"
+                          :placeholder="$t('Part No')">
+                    <el-button slot="append" icon="icon iconfont icon-liebiao"
+                               @click="openPopover('partNo')"></el-button>
+                </el-input>
+                <el-popover placement="right" width="300" v-model="partNoVisible">
+                    <el-input type="textarea" :rows="8" placeholder="Please input..."
+                              v-model="formInline.partNoPopover"></el-input>
+                    <div style="text-align: right; margin: 0">
+                        <el-button type="primary" size="mini" type="text" @click="closePopover('partNo')">ok
+                        </el-button>
+                    </div>
+                </el-popover>
+            </el-col>
+            <el-col :span="5">
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-button type="primary" size="mini" @click="sureSearch"><i
+                                class="icon iconfont icon-button-search"></i>{{ $t(" Search") }}
+                        </el-button>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-button type="warning" @click="rectPageSeach" size="mini"><i
+                                class="icon iconfont icon-button-reset"></i>{{ $t(" Reset") }}
+                        </el-button>
+                    </el-col>
+                </el-row>
+            </el-col>
+        </el-row>
 
-<table id="tab" border="1">
-    <tbody id="tbody">
-    <tr>
-        <td align="right" colspan="2">
-            <input type="button" value="添加" onclick="add()" />
-            <input type="button" value="删除" onclick="del()" />
-        </td>
-    </tr>
-    <tr>
-        <td>资源名称</td>
-        <td>资源状态</td>
-    </tr>
-    <tr>
-        <td>gfdfdsafsd</td>
-        <td>0</td>
-    </tr>
-    </tbody>
-</table>
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
-<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
-<script>
-    function add(){
-        pn=1;
-        $.ajax({
-            url: "../views/getAllPO",
-            type: 'get', //请求的方式
-            data: "pn=" + pn,
-            error: function (data) {
-                alert('请求失败' + data.message);
-            },
-            success:function (data) {
-                console.log(data);
-                for(var i = 0;i<data.extend.pageInfo.list.length;i++){
-                    console.log("1111")
-                    var table = document.getElementById("tbody");
-                    var tr = document.createElement("tr");
-                    table.appendChild(tr);
-                    var td1 = document.createElement("td");
-                    var td2 = document.createElement("td");
-                    tr.appendChild(td1);
-                    tr.appendChild(td2);
-                    var text =  document.createElement("input");
-                    text.type = "text";
-                    text.name = "ponumber";
+        <el-row :gutter="20">
+            <el-col :span="3">
+                <el-button size="mini"  type="primary" plain style="width:120px" @click="downMethod">
+                    <i class="icon iconfont icon-unie122"></i> {{ $t("Download") }}
+                </el-button>
+            </el-col>
+            <el-col :span="3">
+                <el-upload ref="upload" :show-file-list="false" :before-upload="beforeUpload">
+                    <el-button slot="trigger" type="success" plain icon="el-icon-upload" size="small">Upload File</el-button>
+                </el-upload>
+            </el-col>
+            <el-col :span="4">
+                <el-button size="mini"  type="primary" plain style="width:160px" @click="downTemp">
+                    <i class="icon iconfont icon-unie122"></i> {{ $t("Download Template") }}
+                </el-button>
+            </el-col>
+            <el-col :span="5">
+                <el-button @click="showError"  size="small" style="width: 120px;" v-if="errorBtn" type="danger">
+                    {{ $t("Show ErrorList") }}
+                </el-button>
+            </el-col>
+        </el-row>
+    </div>
+    <!-- 表格内容 -->
+    <el-table ref="multipleTable" size="small" :data="tableData" border stripe @select="selectChange"
+              :height="tableHeight" :row-class-name="addTdClass" @select-all="selectChangeAll">
+        @cell-click="numClick" style="width: 100%">
+        <el-table-column type="selection" width="55">
+        </el-table-column>
+        <el-table-column v-for="item in tableHeadData" :prop="item.name" :label="item.value" v-if="item.isShow"
+                         show-overflow-tooltip="true" :width="item.width"  :formatter="formatterValue">
+        </el-table-column>
+    </el-table>
+    <div class="pageDiv">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                       :current-page="formInline.currentPage" :page-sizes="[20, 50, 100, 150]"
+                       :page-size="formInline.pageSize" layout="total, sizes, prev, pager, next, jumper"
+                       :total="totalSize">
+        </el-pagination>
+    </div>
 
-                    text.add(data.extend.pageInfo.list[i].ponumber);
-                    td1.appendChild(text);
-                    var text2 = document.createElement("input");
-                    text2.add(data.extend.pageInfo.list[i].pnnumber);
-                    td2.appendChild(text2);
-                }
-            }
-        });
-       /* sel.options.add(new Option("预占","0"));
-        sel.options.add(new Option("空闲","1"));*/
-    }
-    function del(){
-        var trs = document.getElementsByTagName("tr");
+    <el-dialog title="Error Message" :visible.sync="dialogTable" :close-on-click-modal="false">
+        <span>
+            <el-table :data="errorData">
+            <el-table-column property="row" label="Row" width="100"></el-table-column>
+            <el-table-column property="poNo" label="PO No." width="100"></el-table-column>
+            <el-table-column property="errorMsg" label="Message"></el-table-column>
+            </el-table>
+            <el-pagination @size-change="handleSizeChangeE" @current-change="handleCurrentChangeE"
+                           :current-page="formInline.currentPageE" :page-sizes="[20, 50, 100]"
+                           :page-size="formInline.pageSizeE" layout="total, sizes, prev, pager, next, jumper"
+                           :total="totalSizeE">
+            </el-pagination>
+        </span>
 
-        var tbody = document.getElementById("tbody");
-        tbody.removeChild(trs[trs.length - 1]);
-    }
-</script>
+        <span slot="footer" class="dialog-footer">
+            <el-button size="mini" @click="dwonloadError">Downlaod</el-button>
+            <el-button size="mini" type="primary" @click="dialogFormVisible(false)">Cancel</el-button>
+        </span>
+    </el-dialog>
+    <!--导出表格用-->
+    <!-- 添加弹窗 -->
+</div>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/axios.min.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/vue.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/elementui.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/i18n.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/common.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/rulesForm.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/assets/javascript/axiosExt.js"></script>
+<script type="text/javascript" src="https://spm.lenovo.com/modular/scs/scsReport/scsOPOPullInUpload.js"></script>
 </body>
+
 </html>
